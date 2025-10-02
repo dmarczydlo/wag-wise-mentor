@@ -92,32 +92,7 @@ jobs:
           github-token: ${{ secrets.CODECOV_TOKEN }}
           title: Coverage Report
 
-      - name: Code Review by GitHub Copilot
-        if: github.event_name == 'pull_request'
-        uses: saadmk11/copilot-review-action@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          review-type: diff
-          review-scope: changed
-          review-languages: |
-            typescript
-            javascript
-            python
-            sql
-            yaml
-            json
-            markdown
-          review-focus: |
-            security
-            performance
-            maintainability
-            best-practices
-            bug-risk
-          max-comments: 20
-          exclude-patterns: |
-            **/node_modules/**
-            **/dist/**
-            **/build/**
-            **/coverage/**
-            **/*.min.js
-            **/*.min.css
+      # Note: GitHub Copilot code review is now built-in and should be configured via:
+      # 1. Repository Settings > Rulesets > New ruleset > "Automatically request Copilot code review"
+      # 2. Or enable in your GitHub profile Copilot settings
+      # 3. This provides AI-powered code reviews without requiring GitHub Actions
