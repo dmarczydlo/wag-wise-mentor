@@ -2,8 +2,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, Heart, Users, Bell, Scale, BookOpen } from "lucide-react";
 import heroPuppy from "@/assets/hero-puppy.jpg";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-gradient-warm">
       {/* Hero Section */}
@@ -26,7 +29,7 @@ const Index = () => {
                 <Button 
                   size="lg" 
                   className="bg-primary hover:bg-primary-light shadow-soft transition-smooth text-lg font-semibold"
-                  onClick={() => window.location.href = "/auth"}
+                  onClick={() => navigate("/auth")}
                 >
                   Get Started Free
                   <Heart className="ml-2 h-5 w-5" />
@@ -35,7 +38,7 @@ const Index = () => {
                   size="lg" 
                   variant="outline"
                   className="border-2 border-primary text-primary hover:bg-primary/10 transition-smooth text-lg font-semibold"
-                  onClick={() => window.location.href = "/auth"}
+                  onClick={() => navigate("/auth")}
                 >
                   Sign In
                 </Button>
@@ -140,7 +143,7 @@ const Index = () => {
                 <Button 
                   size="lg" 
                   className="bg-white text-primary hover:bg-white/90 shadow-soft transition-smooth text-lg font-semibold"
-                  onClick={() => window.location.href = "/auth"}
+                  onClick={() => navigate("/auth")}
                 >
                   Create Free Account
                   <Heart className="ml-2 h-5 w-5" />

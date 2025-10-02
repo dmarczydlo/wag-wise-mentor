@@ -2,37 +2,34 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
-import { Heart, Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { Heart } from "lucide-react";
 import { z } from "zod";
 
-const emailSchema = z.string().email("Please enter a valid email address");
-const passwordSchema = z.string().min(6, "Password must be at least 6 characters");
+const authSchema = z.object({
+  email: z.string().email("Please enter a valid email"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
 
 const Auth = () => {
+  const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [language, setLanguage] = useState<"en" | "pl">("en");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { toast } = useToast();
 
   useEffect(() => {
-    // Check if user is already logged in
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
         navigate("/dashboard");
       }
     });
 
-    // Listen for auth state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (session && event === "SIGNED_IN") {
+      if (session) {
         navigate("/dashboard");
       }
     });
@@ -40,114 +37,61 @@ const Auth = () => {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
-  const validateInputs = () => {
+  const handleAuth = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
     try {
-      emailSchema.parse(email);
-      passwordSchema.parse(password);
-      return true;
+      authSchema.parse({ email, password });
     } catch (error) {
       if (error instanceof z.ZodError) {
-        toast({
-          variant: "destructive",
-          title: "Validation Error",
-          description: error.errors[0].message,
-        });
+        toast.error(error.errors[0].message);
+        return;
       }
-      return false;
     }
-  };
-
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateInputs()) return;
 
     setLoading(true);
+
     try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/dashboard`,
-          data: {
-            language_preference: language,
+      if (isLogin) {
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+
+        if (error) {
+          if (error.message.includes("Invalid login credentials")) {
+            toast.error("Invalid email or password");
+          } else {
+            toast.error(error.message);
+          }
+          return;
+        }
+
+        toast.success("Welcome back!");
+      } else {
+        const redirectUrl = `${window.location.origin}/dashboard`;
+        
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: redirectUrl,
           },
-        },
-      });
-
-      if (error) {
-        if (error.message.includes("already registered")) {
-          toast({
-            variant: "destructive",
-            title: "Account exists",
-            description: "This email is already registered. Please sign in instead.",
-          });
-        } else {
-          toast({
-            variant: "destructive",
-            title: "Sign up failed",
-            description: error.message,
-          });
-        }
-        return;
-      }
-
-      if (data.user) {
-        toast({
-          title: "Account created!",
-          description: "Welcome to Puppy Mentor. Let's set up your puppy profile.",
         });
-      }
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "An unexpected error occurred. Please try again.",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  const handleSignIn = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateInputs()) return;
-
-    setLoading(true);
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) {
-        if (error.message.includes("Invalid login credentials")) {
-          toast({
-            variant: "destructive",
-            title: "Sign in failed",
-            description: "Invalid email or password. Please try again.",
-          });
-        } else {
-          toast({
-            variant: "destructive",
-            title: "Sign in failed",
-            description: error.message,
-          });
+        if (error) {
+          if (error.message.includes("already registered")) {
+            toast.error("This email is already registered. Please sign in instead.");
+          } else {
+            toast.error(error.message);
+          }
+          return;
         }
-        return;
-      }
 
-      if (data.user) {
-        toast({
-          title: "Welcome back!",
-          description: "You've successfully signed in.",
-        });
+        toast.success("Account created! Welcome to Puppy Mentor!");
       }
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "An unexpected error occurred. Please try again.",
-      });
+    } catch (error: any) {
+      toast.error(error.message || "An error occurred");
     } finally {
       setLoading(false);
     }
@@ -155,130 +99,66 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen bg-gradient-warm flex items-center justify-center p-4">
-      <Card className="w-full max-w-md shadow-soft border-border">
+      <Card className="w-full max-w-md shadow-soft animate-scale-in">
         <CardHeader className="text-center space-y-2">
-          <div className="mx-auto w-16 h-16 bg-gradient-hero rounded-2xl flex items-center justify-center mb-2">
-            <Heart className="h-8 w-8 text-white" />
+          <div className="flex justify-center mb-4">
+            <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
+              <Heart className="h-8 w-8 text-primary" />
+            </div>
           </div>
           <CardTitle className="text-3xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-            Puppy Mentor
+            {isLogin ? "Welcome Back" : "Get Started"}
           </CardTitle>
           <CardDescription className="text-base">
-            Your AI-powered puppy care companion
+            {isLogin
+              ? "Sign in to continue your puppy's journey"
+              : "Create an account to start caring for your puppy"}
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger value="signin">Sign In</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
-            </TabsList>
+          <form onSubmit={handleAuth} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="transition-smooth"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="transition-smooth"
+              />
+            </div>
+            <Button
+              type="submit"
+              className="w-full bg-primary hover:bg-primary-light shadow-soft transition-smooth"
+              disabled={loading}
+            >
+              {loading ? "Please wait..." : isLogin ? "Sign In" : "Create Account"}
+            </Button>
+          </form>
 
-            <TabsContent value="signin" className="space-y-4">
-              <form onSubmit={handleSignIn} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="signin-email">Email</Label>
-                  <Input
-                    id="signin-email"
-                    type="email"
-                    placeholder="your@email.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    disabled={loading}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="signin-password">Password</Label>
-                  <Input
-                    id="signin-password"
-                    type="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    disabled={loading}
-                  />
-                </div>
-                <Button
-                  type="submit"
-                  className="w-full bg-primary hover:bg-primary-light transition-smooth"
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Signing in...
-                    </>
-                  ) : (
-                    "Sign In"
-                  )}
-                </Button>
-              </form>
-            </TabsContent>
-
-            <TabsContent value="signup" className="space-y-4">
-              <form onSubmit={handleSignUp} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="signup-email">Email</Label>
-                  <Input
-                    id="signup-email"
-                    type="email"
-                    placeholder="your@email.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    disabled={loading}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="signup-password">Password</Label>
-                  <Input
-                    id="signup-password"
-                    type="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    disabled={loading}
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    Must be at least 6 characters
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="language">Preferred Language</Label>
-                  <Select
-                    value={language}
-                    onValueChange={(value: "en" | "pl") => setLanguage(value)}
-                    disabled={loading}
-                  >
-                    <SelectTrigger id="language">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="en">🇬🇧 English</SelectItem>
-                      <SelectItem value="pl">🇵🇱 Polski</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <Button
-                  type="submit"
-                  className="w-full bg-primary hover:bg-primary-light transition-smooth"
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Creating account...
-                    </>
-                  ) : (
-                    "Create Account"
-                  )}
-                </Button>
-              </form>
-            </TabsContent>
-          </Tabs>
+          <div className="mt-6 text-center">
+            <button
+              onClick={() => setIsLogin(!isLogin)}
+              className="text-sm text-muted-foreground hover:text-primary transition-smooth"
+            >
+              {isLogin ? "Don't have an account? " : "Already have an account? "}
+              <span className="font-semibold">{isLogin ? "Sign Up" : "Sign In"}</span>
+            </button>
+          </div>
         </CardContent>
       </Card>
     </div>

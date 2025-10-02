@@ -3,44 +3,27 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useToast } from "@/hooks/use-toast";
-import { 
-  Heart, 
-  Calendar, 
-  Scale, 
-  BookOpen, 
-  Bell, 
-  Settings, 
-  LogOut,
-  Plus
-} from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Heart, Calendar, Scale, Bell, Plus, LogOut } from "lucide-react";
+import { toast } from "sonner";
 
 const Dashboard = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const { toast } = useToast();
 
   useEffect(() => {
-    // Check authentication
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      
+    supabase.auth.getSession().then(({ data: { session } }) => {
       if (!session) {
         navigate("/auth");
-        return;
+      } else {
+        setUser(session.user);
       }
-      
-      setUser(session.user);
       setLoading(false);
-    };
+    });
 
-    checkAuth();
-
-    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "SIGNED_OUT" || !session) {
+      if (!session) {
         navigate("/auth");
       } else {
         setUser(session.user);
@@ -51,26 +34,16 @@ const Dashboard = () => {
   }, [navigate]);
 
   const handleSignOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to sign out. Please try again.",
-      });
-    } else {
-      toast({
-        title: "Signed out",
-        description: "You've been successfully signed out.",
-      });
-    }
+    await supabase.auth.signOut();
+    toast.success("Signed out successfully");
+    navigate("/");
   };
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-warm flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto" />
+        <div className="text-center">
+          <Heart className="h-12 w-12 text-primary animate-pulse mx-auto mb-4" />
           <p className="text-muted-foreground">Loading...</p>
         </div>
       </div>
@@ -83,22 +56,22 @@ const Dashboard = () => {
       <header className="bg-card border-b border-border shadow-card">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-hero rounded-xl flex items-center justify-center">
-              <Heart className="h-5 w-5 text-white" />
+            <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <Heart className="h-6 w-6 text-primary" />
             </div>
-            <h1 className="text-2xl font-bold text-foreground">Puppy Mentor</h1>
+            <h1 className="text-2xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+              Puppy Mentor
+            </h1>
           </div>
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon">
-              <Bell className="h-5 w-5" />
-            </Button>
-            <Button variant="ghost" size="icon">
-              <Settings className="h-5 w-5" />
-            </Button>
-            <Button variant="ghost" size="icon" onClick={handleSignOut}>
-              <LogOut className="h-5 w-5" />
-            </Button>
-          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleSignOut}
+            className="gap-2"
+          >
+            <LogOut className="h-4 w-4" />
+            Sign Out
+          </Button>
         </div>
       </header>
 
@@ -106,55 +79,56 @@ const Dashboard = () => {
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-foreground mb-2">
-            Welcome back! 👋
+            Welcome back! 🐾
           </h2>
           <p className="text-muted-foreground">
-            Let's take care of your puppy together
+            Let's take care of your puppy today
           </p>
         </div>
 
-        {/* Add Puppy CTA */}
-        <Card className="mb-8 bg-gradient-hero text-white border-0 shadow-glow">
-          <CardContent className="p-8 text-center">
-            <Heart className="h-12 w-12 mx-auto mb-4 opacity-90" />
-            <h3 className="text-2xl font-bold mb-2">Add Your First Puppy</h3>
-            <p className="text-white/90 mb-6">
-              Start your puppy care journey by creating a profile
-            </p>
-            <Button 
-              size="lg" 
-              className="bg-white text-primary hover:bg-white/90 shadow-soft transition-smooth"
-            >
-              <Plus className="mr-2 h-5 w-5" />
-              Add Puppy Profile
+        {/* Get Started Card */}
+        <Card className="mb-8 bg-gradient-card border-2 border-primary/20 shadow-soft">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Heart className="h-6 w-6 text-primary" />
+              Get Started
+            </CardTitle>
+            <CardDescription>
+              Add your first puppy to begin tracking their care journey
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="bg-primary hover:bg-primary-light shadow-soft transition-smooth gap-2">
+              <Plus className="h-5 w-5" />
+              Add Your Puppy
             </Button>
           </CardContent>
         </Card>
 
-        {/* Quick Actions Grid */}
+        {/* Quick Actions */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           <QuickActionCard
-            icon={<Calendar className="h-6 w-6" />}
-            title="Calendar"
-            description="Upcoming appointments"
+            icon={<Heart className="h-8 w-8" />}
+            title="Puppy Profile"
+            description="Manage your puppy's information"
             color="primary"
           />
           <QuickActionCard
-            icon={<Scale className="h-6 w-6" />}
-            title="Feeding"
-            description="Track meals & weight"
+            icon={<Scale className="h-8 w-8" />}
+            title="Feeding Schedule"
+            description="Track meals and portions"
             color="secondary"
           />
           <QuickActionCard
-            icon={<BookOpen className="h-6 w-6" />}
-            title="Training"
-            description="Exercises & progress"
+            icon={<Calendar className="h-8 w-8" />}
+            title="Appointments"
+            description="Upcoming vet visits"
             color="accent"
           />
           <QuickActionCard
-            icon={<Heart className="h-6 w-6" />}
-            title="Health"
-            description="Medical records"
+            icon={<Bell className="h-8 w-8" />}
+            title="Reminders"
+            description="Set up notifications"
             color="success"
           />
         </div>
@@ -179,14 +153,16 @@ const QuickActionCard = ({ icon, title, description, color }: QuickActionCardPro
   };
 
   return (
-    <Card className="bg-gradient-card border-border hover:shadow-soft transition-smooth cursor-pointer group">
-      <CardHeader>
-        <div className={`w-12 h-12 rounded-xl ${colorClasses[color]} flex items-center justify-center mb-3 group-hover:scale-110 transition-bounce`}>
+    <Card className="bg-gradient-card hover:shadow-soft transition-smooth cursor-pointer group">
+      <CardContent className="p-6 space-y-4">
+        <div className={`w-16 h-16 rounded-2xl ${colorClasses[color]} flex items-center justify-center group-hover:scale-110 transition-bounce`}>
           {icon}
         </div>
-        <CardTitle className="text-lg">{title}</CardTitle>
-        <p className="text-sm text-muted-foreground">{description}</p>
-      </CardHeader>
+        <div>
+          <h3 className="text-lg font-semibold text-foreground mb-1">{title}</h3>
+          <p className="text-sm text-muted-foreground">{description}</p>
+        </div>
+      </CardContent>
     </Card>
   );
 };
