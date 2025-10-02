@@ -37,6 +37,7 @@ bun run dev
 ```
 
 The application will be available at:
+
 - **Frontend**: http://localhost:8081
 - **Backend**: http://localhost:3001
 
@@ -61,6 +62,7 @@ wag-wise-mentor/
 ### Technology Stack
 
 **Frontend**
+
 - **React 18** with TypeScript
 - **Vite** for fast development and building
 - **Tailwind CSS** for styling
@@ -70,18 +72,21 @@ wag-wise-mentor/
 - **Supabase** for authentication and database
 
 **Backend** (Planned)
+
 - **NestJS** with TypeScript
 - **PostgreSQL** via Supabase
 - **JWT** authentication
 - **RESTful API** design
 
 **Testing**
+
 - **Vitest** for frontend unit tests
 - **Mocha + Chai** for backend tests
 - **Playwright** for E2E testing
 - **Browser MCP** integration
 
 **Development**
+
 - **Bun** for package management and running
 - **TypeScript** for type safety
 - **ESLint** for code quality
@@ -92,12 +97,14 @@ wag-wise-mentor/
 We follow a **behavior-driven testing approach** with comprehensive coverage:
 
 ### Test Types
+
 - **Unit Tests**: Individual functions and components
 - **Integration Tests**: API endpoints and service interactions
 - **E2E Tests**: Complete user workflows
 - **Component Tests**: React component behavior
 
 ### Coverage Requirements
+
 - **Backend**: 90% line coverage
 - **Frontend**: 85% line coverage
 - **E2E**: 100% critical user flows
@@ -171,6 +178,7 @@ bun run lint             # Run ESLint
 Copy `.env.example` to `.env` and configure:
 
 ### Required Variables
+
 ```bash
 # Supabase Configuration
 VITE_SUPABASE_URL="https://your-project.supabase.co"
@@ -182,6 +190,7 @@ ANTHROPIC_API_KEY="your-anthropic-key"
 ```
 
 ### Optional Variables
+
 ```bash
 # Additional AI Providers
 OPENAI_API_KEY="your-openai-key"
@@ -215,6 +224,7 @@ bun pm ls
 ## 🚀 Deployment
 
 ### Frontend (Vercel/Netlify)
+
 ```bash
 cd apps/frontend
 bun run build
@@ -222,6 +232,7 @@ bun run build
 ```
 
 ### Backend (Railway/Render)
+
 ```bash
 cd apps/backend
 bun run build
@@ -229,6 +240,7 @@ bun run build
 ```
 
 ### Database (Supabase)
+
 - Database migrations are in `supabase/migrations/`
 - Deploy via Supabase CLI or dashboard
 
@@ -268,6 +280,7 @@ task-master add-task --prompt="Your task description"
 ## 🎯 Features
 
 ### Current Features
+
 - ✅ **Monorepo Structure**: Bun workspaces with apps and packages
 - ✅ **Frontend**: React + Vite with Tailwind CSS and shadcn/ui
 - ✅ **Authentication**: Supabase Auth integration
@@ -275,6 +288,7 @@ task-master add-task --prompt="Your task description"
 - ✅ **Type Safety**: Comprehensive TypeScript configuration
 
 ### Planned Features
+
 - 🔄 **Backend API**: NestJS with comprehensive endpoints
 - 🔄 **Puppy Profiles**: Complete puppy management system
 - 🔄 **Feeding Schedules**: AI-powered feeding recommendations
@@ -295,6 +309,7 @@ task-master add-task --prompt="Your task description"
 ### Common Issues
 
 **Frontend won't start**
+
 ```bash
 # Check if port is available
 lsof -i :8081
@@ -305,6 +320,7 @@ bun install
 ```
 
 **Environment variables not loading**
+
 ```bash
 # Ensure .env file exists in apps/frontend/
 ls apps/frontend/.env
@@ -314,6 +330,7 @@ ls -la apps/frontend/.env
 ```
 
 **Tests failing**
+
 ```bash
 # Run tests with verbose output
 bun run test --verbose
