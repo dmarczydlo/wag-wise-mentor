@@ -25,6 +25,8 @@
     "test:e2e:headed": "playwright test --headed",
     "test:e2e:debug": "playwright test --debug",
     "test:e2e:coverage": "COLLECT_COVERAGE=true playwright test",
+    "test:e2e:local": "E2E_BACKEND_URL=http://localhost:3001 playwright test",
+    "test:e2e:staging": "E2E_BACKEND_URL=$STAGING_BACKEND_URL E2E_BASE_URL=$STAGING_FRONTEND_URL playwright test",
     "coverage:report": "bun run coverage:report:frontend && bun run coverage:report:backend",
     "coverage:report:frontend": "cd apps/frontend && bun run coverage:report",
     "coverage:report:backend": "cd apps/backend && bun run coverage:report",

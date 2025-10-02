@@ -5,7 +5,7 @@ import { defineConfig, devices } from "@playwright/test";
  */
 export default defineConfig({
   testDir: "./e2e/tests",
-  testMatch: process.env.CI 
+  testMatch: process.env.CI
     ? ["**/simple-flow.spec.ts", "**/index-simple.spec.ts", "**/basic.spec.ts"]
     : ["**/*.spec.ts"],
   /* Run tests in files in parallel */
@@ -51,24 +51,26 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"] },
     },
     // Only run additional browsers locally, not in CI for faster execution
-    ...(process.env.CI ? [] : [
-      {
-        name: "firefox",
-        use: { ...devices["Desktop Firefox"] },
-      },
-      {
-        name: "webkit",
-        use: { ...devices["Desktop Safari"] },
-      },
-      {
-        name: "Mobile Chrome",
-        use: { ...devices["Pixel 5"] },
-      },
-      {
-        name: "Mobile Safari",
-        use: { ...devices["iPhone 12"] },
-      },
-    ]),
+    ...(process.env.CI
+      ? []
+      : [
+          {
+            name: "firefox",
+            use: { ...devices["Desktop Firefox"] },
+          },
+          {
+            name: "webkit",
+            use: { ...devices["Desktop Safari"] },
+          },
+          {
+            name: "Mobile Chrome",
+            use: { ...devices["Pixel 5"] },
+          },
+          {
+            name: "Mobile Safari",
+            use: { ...devices["iPhone 12"] },
+          },
+        ]),
   ],
 
   /* Run your local dev server before starting the tests */
@@ -79,6 +81,10 @@ export default defineConfig({
     timeout: 120 * 1000,
     stdout: "pipe",
     stderr: "pipe",
+    env: {
+      NODE_ENV: "test",
+      VITE_API_URL: process.env.E2E_BACKEND_URL || "http://localhost:3001",
+    },
   },
 
   /* Global setup and teardown */
