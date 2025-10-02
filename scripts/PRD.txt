@@ -1,0 +1,204 @@
+# Wag Wise Mentor - Product Requirements Document
+
+## Overview
+Wag Wise Mentor is a comprehensive puppy care management platform that solves the challenge of new puppy parents struggling to track essential care milestones, feeding schedules, veterinary appointments, and training progress. The platform serves puppy owners who need expert guidance and automated reminders to ensure their puppies receive optimal care throughout their critical development stages. The value proposition centers on AI-powered personalized care plans that adapt to each puppy's breed, age, and individual progress, eliminating guesswork and ensuring no critical care moments are missed.
+
+## Core Features
+
+### Puppy Profile Management
+- **What it does**: Comprehensive puppy registration with breed, birthday, weight tracking, medical history, and photo management
+- **Why it's important**: Forms the foundation for all personalized recommendations and care plans
+- **How it works**: Multi-step onboarding wizard with breed-specific templates and AI-powered setup suggestions
+
+### Smart Calendar System
+- **What it does**: Automated scheduling for veterinary visits, vaccinations, breed-specific health checks, and milestone tracking
+- **Why it's important**: Prevents missed appointments and ensures timely preventive care
+- **How it works**: Integration with veterinary databases, breed-specific health timelines, and automated reminder system
+
+### Daily Routine Management
+- **What it does**: Age-appropriate feeding schedules, exercise routines, and behavioral guidance
+- **Why it's important**: Establishes healthy habits and prevents common puppy care mistakes
+- **How it works**: Dynamic scheduling based on puppy age, breed characteristics, and individual progress tracking
+
+### Training & Exercise Library
+- **What it does**: Comprehensive library of training exercises, behavioral games, and skill development modules
+- **Why it's important**: Ensures proper socialization and prevents behavioral issues
+- **How it works**: Progressive difficulty levels, video demonstrations, and progress tracking with AI recommendations
+
+### Smart Reminder System
+- **What it does**: Push notifications for feeding times, medication schedules, training sessions, and important milestones
+- **Why it's important**: Maintains consistency in care routines and prevents missed critical moments
+- **How it works**: Supabase-based push notifications with customizable timing and frequency settings
+
+### Family Sharing & Collaboration
+- **What it does**: Multi-user access for household members to coordinate puppy care
+- **Why it's important**: Ensures consistent care across all family members and prevents double-feeding or missed tasks
+- **How it works**: Role-based access control with admin and owner permissions, real-time updates across devices
+
+### AI-Powered Care Plans
+- **What it does**: Personalized recommendations that evolve based on puppy progress, breed characteristics, and user feedback
+- **Why it's important**: Provides expert-level guidance without requiring veterinary consultation for routine care
+- **How it works**: Machine learning algorithms that analyze puppy data, breed standards, and user interactions to suggest optimal care adjustments
+
+## User Experience
+
+### User Personas
+- **Primary**: New puppy parents (ages 25-45) with limited dog experience seeking comprehensive care guidance
+- **Secondary**: Experienced dog owners wanting organized tracking and family coordination
+- **Tertiary**: Multi-pet households needing centralized management for multiple puppies
+
+### Key User Flows
+1. **Onboarding Flow**: Account creation → Puppy profile setup → AI-generated care plan → Calendar configuration → Family invitation
+2. **Daily Care Flow**: Morning routine check → Feeding reminders → Training session → Progress logging → Evening routine
+3. **Health Management Flow**: Symptom logging → Vet appointment scheduling → Medication tracking → Recovery monitoring
+4. **Family Coordination Flow**: Task assignment → Progress sharing → Communication → Schedule synchronization
+
+### UI/UX Considerations
+- Mobile-first responsive design for on-the-go access
+- Intuitive dashboard with clear visual hierarchy
+- Quick action buttons for common tasks
+- Progress visualization through charts and milestones
+- Offline capability for basic functions
+- Accessibility compliance for diverse user needs
+
+## Technical Architecture
+
+### System Components
+- **Frontend**: React 18 with TypeScript, Tailwind CSS, Radix UI components
+- **Backend**: NestJS with TypeScript, RESTful APIs, WebSocket for real-time updates
+- **Database**: Supabase (PostgreSQL) with real-time subscriptions
+- **Authentication**: Supabase Auth with role-based access control
+- **File Storage**: Supabase Storage for puppy photos and documents
+- **Push Notifications**: Supabase Edge Functions with web push API
+- **AI Integration**: Flexible AI service layer supporting multiple providers (OpenAI, Anthropic, local models)
+
+### Data Models
+- **Users**: id, email, role (admin/owner), profile data, preferences
+- **Puppies**: id, name, breed, birthday, weight_history, medical_records, photos
+- **Care Plans**: id, puppy_id, plan_type, schedule, ai_recommendations, progress_tracking
+- **Events**: id, puppy_id, event_type, scheduled_date, completed, notes, reminders
+- **Training Sessions**: id, puppy_id, exercise_id, completion_status, progress_notes, difficulty_level
+- **Family Groups**: id, admin_user_id, members, permissions, shared_puppies
+
+### APIs and Integrations
+- **Veterinary Database API**: Breed-specific health information and vaccination schedules
+- **AI Service APIs**: Multiple provider support for care recommendations and training suggestions
+- **Calendar Integration**: Google Calendar, Apple Calendar for appointment synchronization
+- **Push Notification Services**: Web Push API, mobile push notifications
+- **Payment Processing**: Stripe integration for premium features (future)
+
+### Infrastructure Requirements
+- **Hosting**: Vercel for frontend, Railway/Render for backend
+- **Database**: Supabase cloud instance with automated backups
+- **CDN**: Cloudflare for static asset delivery
+- **Monitoring**: Sentry for error tracking, PostHog for analytics
+- **CI/CD**: GitHub Actions for automated testing and deployment
+
+## Development Roadmap
+
+### Phase 1: Foundation & Core Features (MVP)
+- **Authentication & User Management**: Complete Supabase auth setup with role-based access
+- **Puppy Profile System**: Basic puppy registration with breed selection and photo upload
+- **Simple Calendar**: Basic event scheduling for vet visits and vaccinations
+- **Manual Reminders**: Simple notification system for feeding times and appointments
+- **Basic Dashboard**: Overview of upcoming events and recent activities
+- **Mobile Responsive Design**: Ensure all features work seamlessly on mobile devices
+
+### Phase 2: Enhanced Care Management
+- **AI-Powered Setup**: Automated care plan generation based on breed and age
+- **Advanced Calendar**: Breed-specific health timelines and automated scheduling
+- **Training Library**: Basic exercise library with progress tracking
+- **Weight Tracking**: Growth monitoring with breed-specific benchmarks
+- **Family Sharing**: Multi-user access with basic permission controls
+- **Push Notifications**: Real-time reminders for all scheduled events
+
+### Phase 3: Advanced Features & Intelligence
+- **Smart Recommendations**: AI-driven suggestions based on puppy progress and behavior
+- **Advanced Training Modules**: Interactive training programs with video guides
+- **Health Monitoring**: Symptom tracking and vet communication tools
+- **Social Features**: Community features for puppy parents to share experiences
+- **Analytics Dashboard**: Comprehensive insights into puppy development and care patterns
+- **Integration Ecosystem**: Third-party integrations with vet clinics and pet stores
+
+### Phase 4: Scale & Optimization
+- **Multi-Pet Support**: Management of multiple puppies in one account
+- **Advanced AI Features**: Predictive health insights and behavioral analysis
+- **Premium Features**: Advanced analytics, priority support, custom care plans
+- **API Platform**: Public API for third-party developers and integrations
+- **International Expansion**: Multi-language support and regional customization
+
+## Logical Dependency Chain
+
+### Foundation Layer (Must Build First)
+1. **Database Schema**: Complete Supabase setup with all core tables and relationships
+2. **Authentication System**: User registration, login, and role management
+3. **Basic UI Framework**: Component library and responsive design system
+4. **API Infrastructure**: NestJS backend with core CRUD operations
+
+### Core Functionality Layer (Build Upon Foundation)
+1. **Puppy Profile Management**: Essential for all other features
+2. **Basic Calendar System**: Foundation for scheduling and reminders
+3. **Simple Dashboard**: Central hub for user interaction
+4. **Mobile Optimization**: Critical for daily use scenarios
+
+### Enhanced Features Layer (Build Upon Core)
+1. **AI Integration**: Requires stable data models and user interactions
+2. **Advanced Calendar Features**: Builds on basic calendar with breed-specific data
+3. **Training System**: Requires puppy profiles and progress tracking
+4. **Family Sharing**: Needs stable user management and data models
+
+### Advanced Intelligence Layer (Final Phase)
+1. **Smart Recommendations**: Requires rich data history and user feedback
+2. **Predictive Analytics**: Needs comprehensive usage patterns and puppy data
+3. **Community Features**: Requires stable user base and engagement patterns
+
+## Risks and Mitigations
+
+### Technical Challenges
+- **Risk**: AI service costs escalating with usage
+- **Mitigation**: Implement flexible AI provider system, usage monitoring, and fallback to rule-based recommendations
+
+- **Risk**: Real-time synchronization complexity across multiple users
+- **Mitigation**: Use Supabase real-time subscriptions, implement conflict resolution strategies, and offline-first architecture
+
+- **Risk**: Mobile performance with complex data operations
+- **Mitigation**: Implement data pagination, lazy loading, and efficient caching strategies
+
+### MVP Definition and Scope
+- **Risk**: Feature creep delaying initial launch
+- **Mitigation**: Strict MVP definition focusing on core puppy care essentials, deferring advanced features to later phases
+
+- **Risk**: Over-engineering AI features before validating core functionality
+- **Mitigation**: Start with simple rule-based recommendations, gradually introduce AI as user base grows
+
+### Resource Constraints
+- **Risk**: Limited development resources for comprehensive feature set
+- **Mitigation**: Prioritize features based on user impact, consider open-source contributions for non-core features
+
+- **Risk**: Database scaling costs with user growth
+- **Mitigation**: Implement efficient data archiving, optimize queries, and consider tiered pricing model
+
+## Appendix
+
+### Research Findings
+- **Market Analysis**: Pet care app market growing 15% annually, with puppy-specific tools showing highest engagement
+- **User Behavior**: 78% of puppy owners use mobile devices for care tracking, 65% want AI-powered recommendations
+- **Veterinary Insights**: Breed-specific care timelines reduce health issues by 40% in first year
+
+### Technical Specifications
+- **Performance Requirements**: <2s page load times, <500ms API response times
+- **Scalability Targets**: Support 10,000 concurrent users, 100,000 registered puppies
+- **Security Standards**: SOC 2 compliance, GDPR compliance, encrypted data transmission
+- **Browser Support**: Chrome 90+, Safari 14+, Firefox 88+, Edge 90+
+
+### Integration Requirements
+- **Veterinary Databases**: Integration with major breed registries and health databases
+- **Calendar Systems**: Google Calendar, Apple Calendar, Outlook compatibility
+- **Payment Systems**: Stripe integration for future premium features
+- **Analytics**: PostHog for user behavior tracking, Sentry for error monitoring
+
+### Success Metrics
+- **User Engagement**: Daily active users, session duration, feature adoption rates
+- **Care Quality**: Reduction in missed appointments, improved puppy health outcomes
+- **Business Metrics**: User retention, referral rates, premium conversion rates
+- **Technical Metrics**: System uptime, response times, error rates
