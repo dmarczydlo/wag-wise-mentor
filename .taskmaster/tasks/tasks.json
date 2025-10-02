@@ -242,22 +242,22 @@
       },
       {
         "id": "6",
-        "title": "Initialize NestJS backend structure",
-        "description": "Create NestJS application in apps/backend with basic module structure",
-        "details": "Use NestJS CLI to generate apps/backend/. Create module structure: auth, puppies, calendar, training, ai, analytics. Configure environment variables. Set up Supabase client integration. Configure CORS for frontend communication.",
-        "testStrategy": "Backend starts successfully and can connect to Supabase database",
+        "title": "Initialize NestJS backend structure with DDD architecture",
+        "description": "Create NestJS application in apps/backend with Domain-Driven Design architecture",
+        "details": "Use NestJS CLI to generate apps/backend/. Implement DDD architecture with Domain Layer (entities, value objects, domain services), Application Layer (use cases, application services), Infrastructure Layer (repositories, controllers, adapters). Configure dependency injection with proper abstraction layers. Set up Supabase client integration. Configure environment variables and CORS for frontend communication.",
+        "testStrategy": "Backend starts successfully, DDD architecture is properly implemented, dependency injection works, and comprehensive tests pass with AAA pattern using in-memory providers",
         "priority": "high",
         "dependencies": ["1"],
         "status": "pending",
         "subtasks": [
           {
             "id": 1,
-            "title": "Generate NestJS application structure",
-            "description": "Use NestJS CLI to create the backend application in apps/backend directory",
+            "title": "Generate NestJS application structure with DDD layers",
+            "description": "Use NestJS CLI to create the backend application with DDD architecture",
             "dependencies": [],
-            "details": "Run 'nest new backend' in apps/ directory. Configure package.json with proper workspace settings. Set up TypeScript configuration. Install necessary NestJS dependencies including @nestjs/core, @nestjs/common, @nestjs/platform-express.",
+            "details": "Run 'nest new backend' in apps/ directory. Create Domain Layer (src/domain/) with entities, value objects, and domain services. Create Application Layer (src/application/) with use cases and application services. Create Infrastructure Layer (src/infrastructure/) with repositories, controllers, and adapters. Configure dependency injection with proper abstraction layers.",
             "status": "pending",
-            "testStrategy": "",
+            "testStrategy": "DDD layers are properly structured and dependency injection works",
             "parentId": "undefined"
           },
           {
@@ -388,45 +388,49 @@
       },
       {
         "id": "8",
-        "title": "Implement puppies backend module",
-        "description": "Create CRUD operations for puppy management",
-        "details": "Build puppies controller with full CRUD operations. Implement breed data service with validation. Create photo upload endpoints using Supabase Storage. Build weight records management. Implement medical history tracking endpoints.",
-        "testStrategy": "All puppy CRUD operations work and photo uploads succeed",
+        "title": "Implement puppies backend module with DDD architecture",
+        "description": "Create comprehensive puppy management with Domain-Driven Design",
+        "details": "Implement Domain Layer: Puppy entity, Breed value object, Weight tracking domain service. Build Application Layer: CreatePuppyUseCase, UpdatePuppyUseCase, GetPuppiesByOwnerUseCase. Create Infrastructure Layer: Supabase repository implementation, photo upload adapter. Implement breed data management with proper domain modeling. Create weight records and medical history management with business logic. Write comprehensive tests using AAA pattern and in-memory providers.",
+        "testStrategy": "All puppy CRUD operations work with DDD architecture, business logic is properly tested with AAA pattern, in-memory providers work correctly, and photo uploads succeed",
         "priority": "medium",
         "dependencies": ["7"],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
-            "title": "Create puppy CRUD controller and routes",
-            "description": "Build REST API endpoints for puppy management operations",
+            "title": "Create puppy domain layer with entities and value objects",
+            "description": "Implement Domain Layer with Puppy entity, Breed value object, and domain services",
             "dependencies": [],
-            "details": "Create Express routes for GET /puppies, POST /puppies, PUT /puppies/:id, DELETE /puppies/:id. Implement controller methods with proper validation and error handling. Include breed validation and data sanitization.",
-            "status": "pending",
-            "testStrategy": "",
-            "parentId": "undefined"
+            "details": "Create Puppy entity with business logic (age calculation, feeding frequency). Implement Breed, Weight, BirthDate value objects with validation. Create domain services for weight tracking and medical history. Follow DDD principles with proper encapsulation and business rules.",
+            "status": "done",
+            "testStrategy": "Domain entities and value objects work correctly with comprehensive AAA pattern tests",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-02T10:36:51.428Z"
           },
           {
             "id": 2,
-            "title": "Implement photo upload service with Supabase Storage",
-            "description": "Create photo management endpoints for puppy images",
+            "title": "Build application layer with use cases",
+            "description": "Create Application Layer with use cases and application services",
             "dependencies": ["8.1"],
-            "details": "Build POST /puppies/:id/photos and DELETE /puppies/:id/photos/:photoId endpoints. Integrate with Supabase Storage for secure file uploads. Implement image validation, resizing, and metadata storage.",
-            "status": "pending",
-            "testStrategy": "",
-            "parentId": "undefined"
+            "details": "Implement CreatePuppyUseCase, UpdatePuppyUseCase, GetPuppiesByOwnerUseCase. Create command/result DTOs. Implement proper error handling and validation. Use dependency injection with repository interfaces.",
+            "status": "done",
+            "testStrategy": "Use cases work correctly with in-memory providers and AAA pattern tests",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-02T10:36:55.207Z"
           },
           {
             "id": 3,
-            "title": "Build weight tracking and medical history endpoints",
-            "description": "Create endpoints for puppy health data management",
-            "dependencies": ["8.1"],
-            "details": "Implement POST/GET /puppies/:id/weight-records for weight tracking. Create POST/GET /puppies/:id/medical-history for health records. Include data validation and proper timestamp handling.",
-            "status": "pending",
-            "testStrategy": "",
-            "parentId": "undefined"
+            "title": "Create infrastructure layer with repositories and controllers",
+            "description": "Implement Infrastructure Layer with repositories, controllers, and adapters",
+            "dependencies": ["8.2"],
+            "details": "Create Supabase repository implementation and in-memory provider for testing. Build REST API controller with proper error handling. Implement photo upload adapter. Configure dependency injection with proper abstraction layers.",
+            "status": "done",
+            "testStrategy": "API endpoints work correctly, repository implementations are tested with AAA pattern",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-02T10:36:58.765Z"
           }
-        ]
+        ],
+        "updatedAt": "2025-10-02T10:36:58.765Z"
       },
       {
         "id": "9",
@@ -1110,7 +1114,7 @@
         "testStrategy": "All test suites run successfully, coverage reports generated, E2E tests pass in CI/CD",
         "priority": "high",
         "dependencies": [],
-        "status": "pending",
+        "status": "in-progress",
         "subtasks": [
           {
             "id": 1,
@@ -1118,10 +1122,10 @@
             "description": "Configure Mocha and Chai for backend unit and integration testing",
             "dependencies": [],
             "details": "Install mocha, chai, chai-http, sinon. Configure test scripts in package.json. Set up test database for integration tests. Create test utilities and helpers.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Mocha tests run successfully, test database setup works",
             "parentId": "32",
-            "updatedAt": "2025-10-02T12:00:00.000Z"
+            "updatedAt": "2025-10-02T10:20:00.922Z"
           },
           {
             "id": 2,
@@ -1129,10 +1133,10 @@
             "description": "Configure Vitest for React component and utility testing",
             "dependencies": [],
             "details": "Install vitest, @testing-library/react, @testing-library/jest-dom, jsdom. Configure vitest.config.ts. Set up test utilities and custom render functions.",
-            "status": "pending",
+            "status": "in-progress",
             "testStrategy": "Vitest tests run successfully, React components render correctly",
             "parentId": "32",
-            "updatedAt": "2025-10-02T12:00:00.000Z"
+            "updatedAt": "2025-10-02T10:20:04.744Z"
           },
           {
             "id": 3,
@@ -1167,7 +1171,8 @@
             "parentId": "32",
             "updatedAt": "2025-10-02T12:00:00.000Z"
           }
-        ]
+        ],
+        "updatedAt": "2025-10-02T10:20:04.744Z"
       },
       {
         "id": "33",
@@ -1205,9 +1210,9 @@
     ],
     "metadata": {
       "version": "1.0.0",
-      "lastModified": "2025-10-02T12:00:00.000Z",
-      "taskCount": 35,
-      "completedCount": 1,
+      "lastModified": "2025-10-02T10:36:58.766Z",
+      "taskCount": 36,
+      "completedCount": 2,
       "tags": ["master"]
     }
   }
