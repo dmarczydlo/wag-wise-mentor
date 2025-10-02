@@ -156,6 +156,10 @@
           }
         ]
       },
+      {
+        "id": "4",
+        "title": "Create packages/shared foundation",
+        "description": "Initialize shared types and utilities package for monorepo",
         "details": "Create packages/shared/ with TypeScript configuration. Set up build scripts using Bun. Create basic package.json with proper exports. Configure tsconfig.json for shared package compilation.",
         "testStrategy": "Shared package builds successfully and can be imported by other workspace packages",
         "priority": "high",
@@ -195,7 +199,7 @@
         ]
       },
       {
-        "id": "4",
+        "id": "5",
         "title": "Create packages/ui foundation",
         "description": "Initialize shared UI components package",
         "details": "Create packages/ui/ for reusable React components. Move current components/ui/ to packages/ui/. Configure build process for UI package. Set up proper exports in package.json for component importing.",
@@ -237,7 +241,7 @@
         ]
       },
       {
-        "id": "5",
+        "id": "6",
         "title": "Initialize NestJS backend structure",
         "description": "Create NestJS application in apps/backend with basic module structure",
         "details": "Use NestJS CLI to generate apps/backend/. Create module structure: auth, puppies, calendar, training, ai, analytics. Configure environment variables. Set up Supabase client integration. Configure CORS for frontend communication.",
@@ -279,13 +283,13 @@
         ]
       },
       {
-        "id": "6",
+        "id": "7",
         "title": "Implement shared type definitions",
         "description": "Create comprehensive TypeScript types based on existing Supabase schema",
         "details": "Extract database types from existing types.ts into packages/shared/. Create API DTOs for request/response interfaces. Build Zod validation schemas for all data models. Define enums and constants. Export all types properly.",
         "testStrategy": "Types compile without errors and can be imported in frontend and backend",
         "priority": "high",
-        "dependencies": ["3"],
+        "dependencies": ["4"],
         "status": "pending",
         "subtasks": [
           {
@@ -344,8 +348,8 @@
         "id": "7",
         "title": "Build authentication backend module",
         "description": "Implement NestJS auth module with Supabase integration",
-        "details": "Create auth module with JWT guards. Implement Supabase Auth integration. Build role-based access control guards. Create user registration/login endpoints. Implement password reset functionality. Add email verification endpoints. Write comprehensive unit and integration tests using Mocha + Chai.",
-        "testStrategy": "Authentication endpoints work correctly, JWT tokens validate properly, all auth logic has >90% test coverage",
+        "details": "Create auth module with JWT guards. Implement Supabase Auth integration. Build role-based access control guards. Create user registration/login endpoints. Implement password reset functionality. Add email verification endpoints.",
+        "testStrategy": "Authentication endpoints work correctly and JWT tokens validate properly",
         "priority": "high",
         "dependencies": ["5", "6"],
         "status": "pending",
