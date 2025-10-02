@@ -99,5 +99,5 @@ jobs:
             apps/backend/coverage/lcov.info
             apps/frontend/coverage/lcov.info
           delete-old-comments: true
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.CODECOV_TOKEN }}
           title: Coverage Report
