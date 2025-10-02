@@ -26,6 +26,7 @@ const Index = () => {
                 <Button 
                   size="lg" 
                   className="bg-primary hover:bg-primary-light shadow-soft transition-smooth text-lg font-semibold"
+                  onClick={() => window.location.href = "/auth"}
                 >
                   Get Started Free
                   <Heart className="ml-2 h-5 w-5" />
@@ -34,8 +35,9 @@ const Index = () => {
                   size="lg" 
                   variant="outline"
                   className="border-2 border-primary text-primary hover:bg-primary/10 transition-smooth text-lg font-semibold"
+                  onClick={() => window.location.href = "/auth"}
                 >
-                  Learn More
+                  Sign In
                 </Button>
               </div>
             </div>
@@ -138,6 +140,7 @@ const Index = () => {
                 <Button 
                   size="lg" 
                   className="bg-white text-primary hover:bg-white/90 shadow-soft transition-smooth text-lg font-semibold"
+                  onClick={() => window.location.href = "/auth"}
                 >
                   Create Free Account
                   <Heart className="ml-2 h-5 w-5" />
