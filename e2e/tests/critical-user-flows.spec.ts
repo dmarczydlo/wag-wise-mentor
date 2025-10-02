@@ -9,7 +9,9 @@ test.describe("Critical User Flows - E2E Tests", () => {
     // Arrange
     indexPage = new IndexPage(page);
     await indexPage.goto();
-    await indexPage.waitForPageLoad();
+    // Wait for page to load without complex selectors
+    await page.waitForLoadState("networkidle");
+    await page.waitForSelector("h1", { timeout: 10000 });
   });
 
   test.describe("Landing Page to Authentication Flow", () => {
@@ -28,8 +30,8 @@ test.describe("Critical User Flows - E2E Tests", () => {
 
       // Assert
       await TestUtils.expectPageToHaveURL(page, authURL);
-      await TestUtils.expectElementToBeVisible(page, "h1");
-      await TestUtils.expectElementToContainText(page, "h1", "Welcome Back");
+      await TestUtils.expectElementToBeVisible(page, "h3");
+      await TestUtils.expectElementToContainText(page, "h3", "Welcome Back");
     });
 
     test("should navigate from landing page to auth page via Sign In button", async ({
@@ -47,8 +49,8 @@ test.describe("Critical User Flows - E2E Tests", () => {
 
       // Assert
       await TestUtils.expectPageToHaveURL(page, authURL);
-      await TestUtils.expectElementToBeVisible(page, "h1");
-      await TestUtils.expectElementToContainText(page, "h1", "Welcome Back");
+      await TestUtils.expectElementToBeVisible(page, "h3");
+      await TestUtils.expectElementToContainText(page, "h3", "Welcome Back");
     });
 
     test("should navigate from landing page to auth page via Create Account button", async ({
@@ -66,8 +68,8 @@ test.describe("Critical User Flows - E2E Tests", () => {
 
       // Assert
       await TestUtils.expectPageToHaveURL(page, authURL);
-      await TestUtils.expectElementToBeVisible(page, "h1");
-      await TestUtils.expectElementToContainText(page, "h1", "Welcome Back");
+      await TestUtils.expectElementToBeVisible(page, "h3");
+      await TestUtils.expectElementToContainText(page, "h3", "Get Started");
     });
   });
 
