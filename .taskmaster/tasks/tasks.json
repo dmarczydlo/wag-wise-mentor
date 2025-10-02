@@ -1233,12 +1233,112 @@
         ],
         "status": "pending",
         "subtasks": []
+      },
+      {
+        "id": "32",
+        "title": "Setup comprehensive testing infrastructure",
+        "description": "Implement complete testing strategy with Mocha (BE), Vitest (FE), and Playwright (E2E)",
+        "details": "Configure testing frameworks for all layers: Backend unit/integration tests with Mocha+Chai, Frontend component tests with Vitest, E2E tests with Playwright. Focus on behavior testing over mocking. Set up test coverage reporting and CI/CD integration.",
+        "testStrategy": "All test suites run successfully, coverage reports generated, E2E tests pass in CI/CD",
+        "priority": "high",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Setup Backend testing with Mocha + Chai",
+            "description": "Configure Mocha and Chai for backend unit and integration testing",
+            "dependencies": [],
+            "details": "Install mocha, chai, chai-http, sinon. Configure test scripts in package.json. Set up test database for integration tests. Create test utilities and helpers.",
+            "status": "pending",
+            "testStrategy": "Mocha tests run successfully, test database setup works",
+            "parentId": "32",
+            "updatedAt": "2025-10-02T12:00:00.000Z"
+          },
+          {
+            "id": 2,
+            "title": "Setup Frontend testing with Vitest",
+            "description": "Configure Vitest for React component and utility testing",
+            "dependencies": [],
+            "details": "Install vitest, @testing-library/react, @testing-library/jest-dom, jsdom. Configure vitest.config.ts. Set up test utilities and custom render functions.",
+            "status": "pending",
+            "testStrategy": "Vitest tests run successfully, React components render correctly",
+            "parentId": "32",
+            "updatedAt": "2025-10-02T12:00:00.000Z"
+          },
+          {
+            "id": 3,
+            "title": "Setup Playwright E2E testing",
+            "description": "Configure Playwright for end-to-end testing with browser MCP integration",
+            "dependencies": [],
+            "details": "Install playwright, configure playwright.config.ts. Set up browser MCP integration for automated testing. Create E2E test utilities and page objects.",
+            "status": "pending",
+            "testStrategy": "Playwright tests run successfully, browser MCP integration works",
+            "parentId": "32",
+            "updatedAt": "2025-10-02T12:00:00.000Z"
+          },
+          {
+            "id": 4,
+            "title": "Implement test coverage reporting",
+            "description": "Set up comprehensive test coverage reporting for all test types",
+            "dependencies": ["32.1", "32.2"],
+            "details": "Configure coverage tools: nyc for Mocha, @vitest/coverage for Vitest. Set up coverage thresholds and reporting. Integrate with CI/CD for coverage tracking.",
+            "status": "pending",
+            "testStrategy": "Coverage reports generated, thresholds met, CI/CD integration works",
+            "parentId": "32",
+            "updatedAt": "2025-10-02T12:00:00.000Z"
+          },
+          {
+            "id": 5,
+            "title": "Create comprehensive test suites",
+            "description": "Write extensive test suites for all business logic and critical paths",
+            "dependencies": ["32.1", "32.2", "32.3"],
+            "details": "Write unit tests for all services, utilities, and business logic. Create integration tests for API endpoints. Write component tests for React components. Create E2E tests for critical user flows.",
+            "status": "pending",
+            "testStrategy": "All business logic covered by tests, critical user flows tested end-to-end",
+            "parentId": "32",
+            "updatedAt": "2025-10-02T12:00:00.000Z"
+          }
+        ]
+      },
+      {
+        "id": "33",
+        "title": "Implement Backend unit and integration tests",
+        "description": "Write comprehensive tests for all backend services, controllers, and business logic",
+        "details": "Create unit tests for all services (puppies, feeding, notifications, analytics). Write integration tests for API endpoints. Test database operations and external service integrations. Focus on behavior testing over mocking.",
+        "testStrategy": "All backend services have >90% test coverage, integration tests pass",
+        "priority": "high",
+        "dependencies": ["32.1"],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": "34",
+        "title": "Implement Frontend component and utility tests",
+        "description": "Write comprehensive tests for React components, hooks, and utility functions",
+        "details": "Create component tests for all UI components. Test custom hooks and utility functions. Write integration tests for complex user interactions. Test form validation and state management.",
+        "testStrategy": "All React components have tests, utility functions covered, user interactions tested",
+        "priority": "high",
+        "dependencies": ["32.2"],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": "35",
+        "title": "Implement E2E tests for critical user flows",
+        "description": "Create end-to-end tests for complete user journeys using Playwright",
+        "details": "Write E2E tests for user registration, puppy profile creation, feeding schedule setup, notification management, and dashboard interactions. Test cross-browser compatibility and responsive design.",
+        "testStrategy": "All critical user flows tested end-to-end, cross-browser compatibility verified",
+        "priority": "high",
+        "dependencies": ["32.3"],
+        "status": "pending",
+        "subtasks": []
       }
     ],
     "metadata": {
       "version": "1.0.0",
-      "lastModified": "2025-10-02T09:54:42.776Z",
-      "taskCount": 31,
+      "lastModified": "2025-10-02T12:00:00.000Z",
+      "taskCount": 35,
       "completedCount": 1,
       "tags": [
         "master"
