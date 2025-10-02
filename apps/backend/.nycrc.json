@@ -1,0 +1,28 @@
+{
+  "all": true,
+  "check-coverage": true,
+  "lines": 90,
+  "functions": 90,
+  "branches": 60,
+  "statements": 90,
+  "reporter": ["text", "text-summary", "html", "json", "lcov"],
+  "report-dir": "coverage",
+  "temp-dir": ".nyc_output",
+  "include": ["src/**/*.ts"],
+  "exclude": [
+    "src/**/*.spec.ts",
+    "src/**/*.test.ts",
+    "src/**/*.e2e-spec.ts",
+    "src/**/*.interface.ts",
+    "src/**/*.dto.ts",
+    "src/**/*.entity.ts",
+    "src/main.ts",
+    "src/app.module.ts"
+  ],
+  "extension": [".ts"],
+  "require": ["ts-node/register", "tsconfig-paths/register"],
+  "sourceMap": true,
+  "instrument": true,
+  "cache": true,
+  "produce-source-map": true
+}

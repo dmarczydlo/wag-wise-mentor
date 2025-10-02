@@ -12,7 +12,10 @@
     "test:ui": "vitest --ui",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "test:watch": "vitest --watch"
+    "test:watch": "vitest --watch",
+    "coverage:report": "vitest run --coverage --reporter=html",
+    "coverage:check": "vitest run --coverage --reporter=verbose",
+    "coverage:clean": "rm -rf coverage"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

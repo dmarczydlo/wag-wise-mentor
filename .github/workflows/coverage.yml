@@ -1,0 +1,73 @@
+name: Test Coverage
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Run backend tests with coverage
+        run: |
+          cd apps/backend
+          bun run test:coverage
+
+      - name: Run frontend tests with coverage
+        run: |
+          cd apps/frontend
+          bun run test:coverage
+
+      - name: Run E2E tests
+        run: bun run test:e2e
+
+      - name: Upload backend coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./apps/backend/coverage/lcov.info
+          flags: backend
+          name: backend-coverage
+
+      - name: Upload frontend coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./apps/frontend/coverage/lcov.info
+          flags: frontend
+          name: frontend-coverage
+
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-reports
+          path: |
+            apps/backend/coverage/
+            apps/frontend/coverage/
+
+      - name: Comment PR with coverage
+        if: github.event_name == 'pull_request'
+        uses: romeovs/lcov-reporter-action@v0.3.1
+        with:
+          lcov-file: |
+            apps/backend/coverage/lcov.info
+            apps/frontend/coverage/lcov.info
+          delete-old-comments: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          title: Coverage Report

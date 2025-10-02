@@ -1,0 +1,47 @@
+{
+  "name": "Wag Wise Mentor Coverage Configuration",
+  "version": "1.0.0",
+  "description": "Comprehensive test coverage configuration for the monorepo",
+  "scripts": {
+    "coverage:all": "bun run test:coverage",
+    "coverage:report": "bun run coverage:report",
+    "coverage:check": "bun run coverage:check",
+    "coverage:clean": "bun run coverage:clean"
+  },
+  "coverage": {
+    "thresholds": {
+      "backend": {
+        "lines": 90,
+        "functions": 90,
+        "branches": 70,
+        "statements": 90
+      },
+      "frontend": {
+        "lines": 85,
+        "functions": 85,
+        "branches": 80,
+        "statements": 85
+      },
+      "e2e": {
+        "critical_paths": 100
+      }
+    },
+    "reports": {
+      "formats": ["text", "html", "json", "lcov"],
+      "directory": "coverage",
+      "exclude": [
+        "**/*.test.ts",
+        "**/*.spec.ts",
+        "**/*.e2e-spec.ts",
+        "**/*.d.ts",
+        "**/test/**/*",
+        "**/node_modules/**/*"
+      ]
+    },
+    "ci": {
+      "upload_to_codecov": true,
+      "comment_on_pr": true,
+      "fail_on_threshold": true
+    }
+  }
+}
