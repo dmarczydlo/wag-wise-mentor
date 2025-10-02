@@ -10,7 +10,8 @@ async function globalSetup(config: FullConfig) {
 
     try {
       // Wait for the frontend to be ready with retries
-      const baseURL = config.projects[0].use?.baseURL || "http://localhost:5173";
+      const baseURL =
+        config.projects[0].use?.baseURL || "http://localhost:5173";
       console.log(`📡 Checking frontend availability at ${baseURL}`);
 
       let retries = 10;
@@ -35,13 +36,13 @@ async function globalSetup(config: FullConfig) {
       await browser.close();
     }
   } catch (error) {
-    // If browser launch fails (e.g., browsers not installed), 
+    // If browser launch fails (e.g., browsers not installed),
     // just check if the frontend is available via HTTP
     console.log("⚠️ Browser not available, checking frontend via HTTP...");
-    
+
     const baseURL = config.projects[0].use?.baseURL || "http://localhost:5173";
     console.log(`📡 Checking frontend availability at ${baseURL}`);
-    
+
     try {
       const response = await fetch(baseURL);
       if (response.ok) {

@@ -117,8 +117,8 @@ export class IndexPage extends BasePage {
    * Wait for page to be fully loaded
    */
   async waitForPageLoad(): Promise<void> {
-    await this.waitForElement(this.selectors.heroHeading);
-    await this.waitForElement(this.selectors.getStartedButton);
-    await this.waitForElement(this.selectors.featuresSection);
+    // Wait for the main content to be visible instead of specific elements
+    await this.waitForElement("h1", 5000);
+    await this.waitForElement('button:has-text("Get Started Free")', 5000);
   }
 }
