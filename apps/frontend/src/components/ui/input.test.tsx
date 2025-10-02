@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "../../test/test-utils";
+import { render, screen, fireEvent } from "@/test/test-utils";
 import { Input } from "./input";
 import { describe, it, expect } from "vitest";
 
