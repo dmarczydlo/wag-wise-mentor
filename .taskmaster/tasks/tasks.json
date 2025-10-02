@@ -186,7 +186,7 @@
         "dependencies": [
           "1"
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -222,7 +222,8 @@
             "testStrategy": "",
             "parentId": "undefined"
           }
-        ]
+        ],
+        "updatedAt": "2025-10-02T17:31:42.996Z"
       },
       {
         "id": "5",
@@ -1448,9 +1449,9 @@
     ],
     "metadata": {
       "version": "1.0.0",
-      "lastModified": "2025-10-02T17:25:50.695Z",
+      "lastModified": "2025-10-02T17:31:42.997Z",
       "taskCount": 38,
-      "completedCount": 5,
+      "completedCount": 6,
       "tags": [
         "master"
       ]
