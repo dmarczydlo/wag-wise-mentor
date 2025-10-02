@@ -18,14 +18,35 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+          cache: 'npm'
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
 
+      - name: Cache Bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.bun/install/cache
+            node_modules
+            apps/*/node_modules
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+
       - name: Install dependencies
         run: bun install
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
 
       - name: Install Playwright browsers
         run: bunx playwright install --with-deps
@@ -42,6 +63,17 @@ jobs:
 
       - name: Run E2E tests
         run: bun run test:e2e
+
+      - name: Cache test results
+        uses: actions/cache@v4
+        with:
+          path: |
+            test-results/
+            playwright-report/
+            coverage/
+          key: ${{ runner.os }}-test-results-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-test-results-
 
       - name: Upload backend coverage to Codecov
         uses: codecov/codecov-action@v3
