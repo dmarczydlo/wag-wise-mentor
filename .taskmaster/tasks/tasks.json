@@ -26,9 +26,7 @@
             "id": 2,
             "title": "Configure root package.json with Bun workspaces",
             "description": "Update the root package.json to include Bun workspace configuration",
-            "dependencies": [
-              "1.1"
-            ],
+            "dependencies": ["1.1"],
             "details": "Add workspaces field to package.json with patterns for apps/* and packages/*. Configure Bun-specific workspace settings.",
             "status": "done",
             "testStrategy": "",
@@ -39,9 +37,7 @@
             "id": 3,
             "title": "Move existing src/ content to apps/frontend/",
             "description": "Relocate current source code from src/ directory to apps/frontend/ structure",
-            "dependencies": [
-              "1.1"
-            ],
+            "dependencies": ["1.1"],
             "details": "Move all existing src/ files and folders to apps/frontend/src/. Update any relative import paths that may be affected by the directory change.",
             "status": "done",
             "testStrategy": "",
@@ -52,10 +48,7 @@
             "id": 4,
             "title": "Validate workspace configuration and commands",
             "description": "Test that Bun workspace commands work correctly with the new structure",
-            "dependencies": [
-              "1.2",
-              "1.3"
-            ],
+            "dependencies": ["1.2", "1.3"],
             "details": "Run bun install to verify workspace detection. Test bun run commands work from root and individual workspaces. Verify package resolution works correctly across workspaces.",
             "status": "done",
             "testStrategy": "",
@@ -67,14 +60,68 @@
       },
       {
         "id": "2",
+        "title": "Setup comprehensive testing infrastructure",
+        "description": "Implement complete testing strategy with Mocha (BE), Vitest (FE), and Playwright (E2E)",
+        "details": "Configure testing frameworks for all layers: Backend unit/integration tests with Mocha+Chai, Frontend component tests with Vitest, E2E tests with Playwright. Focus on behavior testing over mocking. Set up test coverage reporting and CI/CD integration.",
+        "testStrategy": "All test suites run successfully, coverage reports generated, E2E tests pass in CI/CD",
+        "priority": "high",
+        "dependencies": ["1"],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Setup Backend testing with Mocha + Chai",
+            "description": "Configure Mocha and Chai for backend unit and integration testing",
+            "dependencies": [],
+            "details": "Install mocha, chai, chai-http, sinon. Configure test scripts in package.json. Set up test database for integration tests. Create test utilities and helpers.",
+            "status": "pending",
+            "testStrategy": "Mocha tests run successfully, test database setup works",
+            "parentId": "2",
+            "updatedAt": "2025-10-02T12:00:00.000Z"
+          },
+          {
+            "id": 2,
+            "title": "Setup Frontend testing with Vitest",
+            "description": "Configure Vitest for React component and utility testing",
+            "dependencies": [],
+            "details": "Install vitest, @testing-library/react, @testing-library/jest-dom, jsdom. Configure vitest.config.ts. Set up test utilities and custom render functions.",
+            "status": "pending",
+            "testStrategy": "Vitest tests run successfully, React components render correctly",
+            "parentId": "2",
+            "updatedAt": "2025-10-02T12:00:00.000Z"
+          },
+          {
+            "id": 3,
+            "title": "Setup Playwright E2E testing",
+            "description": "Configure Playwright for end-to-end testing with browser MCP integration",
+            "dependencies": [],
+            "details": "Install playwright, configure playwright.config.ts. Set up browser MCP integration for automated testing. Create E2E test utilities and page objects.",
+            "status": "pending",
+            "testStrategy": "Playwright tests run successfully, browser MCP integration works",
+            "parentId": "2",
+            "updatedAt": "2025-10-02T12:00:00.000Z"
+          },
+          {
+            "id": 4,
+            "title": "Implement test coverage reporting",
+            "description": "Set up comprehensive test coverage reporting for all test types",
+            "dependencies": ["2.1", "2.2"],
+            "details": "Configure coverage tools: nyc for Mocha, @vitest/coverage for Vitest. Set up coverage thresholds and reporting. Integrate with CI/CD for coverage tracking.",
+            "status": "pending",
+            "testStrategy": "Coverage reports generated, thresholds met, CI/CD integration works",
+            "parentId": "2",
+            "updatedAt": "2025-10-02T12:00:00.000Z"
+          }
+        ]
+      },
+      {
+        "id": "3",
         "title": "Move existing frontend to apps/frontend",
         "description": "Relocate current React frontend code to new monorepo structure",
         "details": "Move src/, public/, index.html, vite.config.ts to apps/frontend/. Update all import paths to use absolute imports. Update package.json scripts for frontend-specific commands. Configure TypeScript paths for workspace packages.",
         "testStrategy": "Frontend builds and runs successfully from new location",
         "priority": "high",
-        "dependencies": [
-          "1"
-        ],
+        "dependencies": ["1"],
         "status": "pending",
         "subtasks": [
           {
@@ -85,44 +132,34 @@
             "details": "Create apps/frontend/ directory. Move src/, public/, index.html, and vite.config.ts from root to apps/frontend/. Update package.json to reflect new structure. Ensure all static assets and configuration files are properly relocated.",
             "status": "pending",
             "testStrategy": "",
-            "parentId": "undefined"
+            "parentId": "3"
           },
           {
             "id": 2,
             "title": "Update import paths and TypeScript configuration",
             "description": "Convert relative imports to absolute imports and configure TypeScript paths for workspace packages",
-            "dependencies": [
-              "2.1"
-            ],
+            "dependencies": ["3.1"],
             "details": "Update all import statements in src/ to use absolute paths. Configure tsconfig.json with baseUrl and paths mapping for workspace packages. Update vite.config.ts to handle new import structure. Ensure TypeScript can resolve imports from packages/shared and other workspace packages.",
             "status": "pending",
             "testStrategy": "",
-            "parentId": "undefined"
+            "parentId": "3"
           },
           {
             "id": 3,
             "title": "Update build scripts and validate frontend functionality",
             "description": "Configure package.json scripts for frontend-specific commands and verify everything works",
-            "dependencies": [
-              "2.2"
-            ],
+            "dependencies": ["3.2"],
             "details": "Update package.json scripts to work from apps/frontend/ location. Configure build, dev, and test scripts. Update any CI/CD references to new frontend path. Test that frontend builds successfully, dev server starts, and all imports resolve correctly from new location.",
             "status": "pending",
             "testStrategy": "",
-            "parentId": "undefined"
+            "parentId": "3"
           }
         ]
       },
-      {
-        "id": "3",
-        "title": "Create packages/shared foundation",
-        "description": "Initialize shared types and utilities package for monorepo",
         "details": "Create packages/shared/ with TypeScript configuration. Set up build scripts using Bun. Create basic package.json with proper exports. Configure tsconfig.json for shared package compilation.",
         "testStrategy": "Shared package builds successfully and can be imported by other workspace packages",
         "priority": "high",
-        "dependencies": [
-          "1"
-        ],
+        "dependencies": ["1"],
         "status": "pending",
         "subtasks": [
           {
@@ -139,9 +176,7 @@
             "id": 2,
             "title": "Configure TypeScript compilation for shared package",
             "description": "Set up TypeScript configuration and build system for the shared package",
-            "dependencies": [
-              "3.1"
-            ],
+            "dependencies": ["3.1"],
             "details": "Create tsconfig.json with appropriate compiler options for a shared library. Configure build scripts using Bun for TypeScript compilation. Set up proper output directories and declaration file generation.",
             "status": "pending",
             "testStrategy": "",
@@ -151,9 +186,7 @@
             "id": 3,
             "title": "Create initial shared types and utilities structure",
             "description": "Implement basic shared types and utility functions for the monorepo",
-            "dependencies": [
-              "3.2"
-            ],
+            "dependencies": ["3.2"],
             "details": "Create src/types/ directory with common TypeScript interfaces and types. Create src/utils/ directory with shared utility functions. Set up index.ts files for proper exports. Ensure all exports are properly configured in package.json.",
             "status": "pending",
             "testStrategy": "",
@@ -168,9 +201,7 @@
         "details": "Create packages/ui/ for reusable React components. Move current components/ui/ to packages/ui/. Configure build process for UI package. Set up proper exports in package.json for component importing.",
         "testStrategy": "UI package builds and components can be imported from other packages",
         "priority": "high",
-        "dependencies": [
-          "1"
-        ],
+        "dependencies": ["1"],
         "status": "pending",
         "subtasks": [
           {
@@ -187,9 +218,7 @@
             "id": 2,
             "title": "Move existing components from components/ui to packages/ui",
             "description": "Migrate current UI components to the new packages/ui location while preserving functionality",
-            "dependencies": [
-              "4.1"
-            ],
+            "dependencies": ["4.1"],
             "details": "Move all files from components/ui/ to packages/ui/src/. Update import paths throughout the codebase to use the new package location. Ensure all existing UI components remain functional after the move.",
             "status": "pending",
             "testStrategy": "",
@@ -199,9 +228,7 @@
             "id": 3,
             "title": "Configure build process and exports for UI package",
             "description": "Set up build tooling and proper package exports for the UI components package",
-            "dependencies": [
-              "4.2"
-            ],
+            "dependencies": ["4.2"],
             "details": "Configure Bun build scripts for the UI package. Set up proper module exports in package.json to allow importing components from other packages. Configure TypeScript declaration file generation. Test that components can be imported from other workspace packages.",
             "status": "pending",
             "testStrategy": "",
@@ -216,9 +243,7 @@
         "details": "Use NestJS CLI to generate apps/backend/. Create module structure: auth, puppies, calendar, training, ai, analytics. Configure environment variables. Set up Supabase client integration. Configure CORS for frontend communication.",
         "testStrategy": "Backend starts successfully and can connect to Supabase database",
         "priority": "high",
-        "dependencies": [
-          "1"
-        ],
+        "dependencies": ["1"],
         "status": "pending",
         "subtasks": [
           {
@@ -235,9 +260,7 @@
             "id": 2,
             "title": "Create core module structure",
             "description": "Generate and configure the main application modules for auth, puppies, calendar, training, ai, and analytics",
-            "dependencies": [
-              "5.1"
-            ],
+            "dependencies": ["5.1"],
             "details": "Use NestJS CLI to generate modules: nest g module auth, nest g module puppies, nest g module calendar, nest g module training, nest g module ai, nest g module analytics. Create basic service and controller files for each module. Configure module imports in app.module.ts.",
             "status": "pending",
             "testStrategy": "",
@@ -247,9 +270,7 @@
             "id": 3,
             "title": "Configure environment and external integrations",
             "description": "Set up environment variables, Supabase client integration, and CORS configuration",
-            "dependencies": [
-              "5.2"
-            ],
+            "dependencies": ["5.2"],
             "details": "Create .env configuration files for development and production. Install and configure @supabase/supabase-js client. Set up ConfigModule for environment variable management. Configure CORS settings in main.ts for frontend communication. Create Supabase service provider for database operations.",
             "status": "pending",
             "testStrategy": "",
@@ -264,9 +285,7 @@
         "details": "Extract database types from existing types.ts into packages/shared/. Create API DTOs for request/response interfaces. Build Zod validation schemas for all data models. Define enums and constants. Export all types properly.",
         "testStrategy": "Types compile without errors and can be imported in frontend and backend",
         "priority": "high",
-        "dependencies": [
-          "3"
-        ],
+        "dependencies": ["3"],
         "status": "pending",
         "subtasks": [
           {
@@ -283,9 +302,7 @@
             "id": 2,
             "title": "Create API DTO interfaces",
             "description": "Define request and response interfaces for all API endpoints",
-            "dependencies": [
-              "6.1"
-            ],
+            "dependencies": ["6.1"],
             "details": "Create comprehensive DTO (Data Transfer Object) interfaces for all API request and response payloads. Include user authentication, dog profiles, care plans, notifications, and other domain-specific DTOs.",
             "status": "pending",
             "testStrategy": "",
@@ -295,10 +312,7 @@
             "id": 3,
             "title": "Build Zod validation schemas",
             "description": "Create Zod schemas for runtime validation of all data models",
-            "dependencies": [
-              "6.1",
-              "6.2"
-            ],
+            "dependencies": ["6.1", "6.2"],
             "details": "Implement Zod validation schemas that correspond to the database types and API DTOs. Include proper validation rules for all fields, including optional fields, enums, and complex nested objects.",
             "status": "pending",
             "testStrategy": "",
@@ -308,9 +322,7 @@
             "id": 4,
             "title": "Define application enums and constants",
             "description": "Create shared enums and constants used across the application",
-            "dependencies": [
-              "6.1"
-            ],
+            "dependencies": ["6.1"],
             "details": "Define all application-wide enums (user roles, notification types, care plan statuses, etc.) and constants (validation limits, default values, configuration options) in a centralized location.",
             "status": "pending",
             "testStrategy": "",
@@ -320,12 +332,7 @@
             "id": 5,
             "title": "Configure package exports and TypeScript compilation",
             "description": "Set up proper package.json exports and TypeScript configuration for the shared types package",
-            "dependencies": [
-              "6.1",
-              "6.2",
-              "6.3",
-              "6.4"
-            ],
+            "dependencies": ["6.1", "6.2", "6.3", "6.4"],
             "details": "Configure package.json with proper exports mapping, set up TypeScript compilation with appropriate tsconfig.json, ensure all types are properly exported and can be imported by both frontend and backend packages.",
             "status": "pending",
             "testStrategy": "",
@@ -337,13 +344,10 @@
         "id": "7",
         "title": "Build authentication backend module",
         "description": "Implement NestJS auth module with Supabase integration",
-        "details": "Create auth module with JWT guards. Implement Supabase Auth integration. Build role-based access control guards. Create user registration/login endpoints. Implement password reset functionality. Add email verification endpoints.",
-        "testStrategy": "Authentication endpoints work correctly and JWT tokens validate properly",
+        "details": "Create auth module with JWT guards. Implement Supabase Auth integration. Build role-based access control guards. Create user registration/login endpoints. Implement password reset functionality. Add email verification endpoints. Write comprehensive unit and integration tests using Mocha + Chai.",
+        "testStrategy": "Authentication endpoints work correctly, JWT tokens validate properly, all auth logic has >90% test coverage",
         "priority": "high",
-        "dependencies": [
-          "5",
-          "6"
-        ],
+        "dependencies": ["5", "6"],
         "status": "pending",
         "subtasks": [
           {
@@ -360,9 +364,7 @@
             "id": 2,
             "title": "Implement user authentication endpoints and guards",
             "description": "Build registration, login, password reset, and email verification endpoints with JWT guards",
-            "dependencies": [
-              "7.1"
-            ],
+            "dependencies": ["7.1"],
             "details": "Create user registration endpoint with Supabase Auth signup. Implement login endpoint with JWT token generation. Build password reset functionality using Supabase Auth. Create email verification endpoints. Implement JWT guards for protected routes. Add input validation and error handling.",
             "status": "pending",
             "testStrategy": "",
@@ -372,9 +374,7 @@
             "id": 3,
             "title": "Build role-based access control system",
             "description": "Implement RBAC guards and decorators for fine-grained authorization",
-            "dependencies": [
-              "7.2"
-            ],
+            "dependencies": ["7.2"],
             "details": "Create role-based guard using JWT payload. Implement role decorator for controller methods. Build permission checking service. Create admin, user, and moderator role definitions. Add role assignment functionality. Implement route-level authorization controls.",
             "status": "pending",
             "testStrategy": "",
@@ -389,9 +389,7 @@
         "details": "Build puppies controller with full CRUD operations. Implement breed data service with validation. Create photo upload endpoints using Supabase Storage. Build weight records management. Implement medical history tracking endpoints.",
         "testStrategy": "All puppy CRUD operations work and photo uploads succeed",
         "priority": "medium",
-        "dependencies": [
-          "7"
-        ],
+        "dependencies": ["7"],
         "status": "pending",
         "subtasks": [
           {
@@ -408,9 +406,7 @@
             "id": 2,
             "title": "Implement photo upload service with Supabase Storage",
             "description": "Create photo management endpoints for puppy images",
-            "dependencies": [
-              "8.1"
-            ],
+            "dependencies": ["8.1"],
             "details": "Build POST /puppies/:id/photos and DELETE /puppies/:id/photos/:photoId endpoints. Integrate with Supabase Storage for secure file uploads. Implement image validation, resizing, and metadata storage.",
             "status": "pending",
             "testStrategy": "",
@@ -420,9 +416,7 @@
             "id": 3,
             "title": "Build weight tracking and medical history endpoints",
             "description": "Create endpoints for puppy health data management",
-            "dependencies": [
-              "8.1"
-            ],
+            "dependencies": ["8.1"],
             "details": "Implement POST/GET /puppies/:id/weight-records for weight tracking. Create POST/GET /puppies/:id/medical-history for health records. Include data validation and proper timestamp handling.",
             "status": "pending",
             "testStrategy": "",
@@ -437,9 +431,7 @@
         "details": "Create events controller with CRUD operations. Implement recurring event logic. Build breed-specific health timeline generator. Create vaccination scheduling service. Implement Google Calendar integration service.",
         "testStrategy": "Events can be created, recurring events generate properly, calendar sync works",
         "priority": "medium",
-        "dependencies": [
-          "7"
-        ],
+        "dependencies": ["7"],
         "status": "pending",
         "subtasks": [
           {
@@ -456,9 +448,7 @@
             "id": 2,
             "title": "Implement recurring event logic and scheduling service",
             "description": "Build service to handle recurring events and vaccination scheduling with breed-specific timelines",
-            "dependencies": [
-              "9.1"
-            ],
+            "dependencies": ["9.1"],
             "details": "Create RecurringEventsService to generate event instances from recurring patterns (daily, weekly, monthly, yearly). Build VaccinationScheduleService with breed-specific health timeline templates. Implement logic to auto-generate vaccination events based on puppy breed and birthdate. Handle timezone considerations and daylight saving time.",
             "status": "pending",
             "testStrategy": "",
@@ -468,9 +458,7 @@
             "id": 3,
             "title": "Build Google Calendar integration service",
             "description": "Implement two-way sync with Google Calendar API for event management",
-            "dependencies": [
-              "9.2"
-            ],
+            "dependencies": ["9.2"],
             "details": "Create GoogleCalendarService with OAuth2 authentication. Implement sync methods to push events to Google Calendar and pull external events. Build webhook handlers for real-time calendar updates. Add conflict resolution for overlapping events. Include proper error handling for API rate limits and network failures.",
             "status": "pending",
             "testStrategy": "",
@@ -485,9 +473,7 @@
         "details": "Build feeding schedules controller. Create feeding logs tracking service. Implement weight-based portion calculation algorithms. Build food types and assignments management. Create feeding history aggregation endpoints.",
         "testStrategy": "Feeding schedules create correctly and portion calculations are accurate",
         "priority": "medium",
-        "dependencies": [
-          "7"
-        ],
+        "dependencies": ["7"],
         "status": "pending",
         "subtasks": [
           {
@@ -504,9 +490,7 @@
             "id": 2,
             "title": "Implement feeding logs tracking service and portion calculations",
             "description": "Create feeding logs tracking system with weight-based portion calculation algorithms",
-            "dependencies": [
-              "10.1"
-            ],
+            "dependencies": ["10.1"],
             "details": "Build feeding logs tracking service to record actual feeding events. Implement weight-based portion calculation algorithms that adjust serving sizes based on pet weight, age, and activity level. Create validation for feeding log entries and automatic portion recommendations. Include business logic for calculating optimal feeding amounts.",
             "status": "pending",
             "testStrategy": "",
@@ -516,9 +500,7 @@
             "id": 3,
             "title": "Create feeding history aggregation endpoints",
             "description": "Build API endpoints for feeding history reports and analytics",
-            "dependencies": [
-              "10.2"
-            ],
+            "dependencies": ["10.2"],
             "details": "Implement feeding history aggregation endpoints that provide comprehensive feeding analytics. Create endpoints for daily, weekly, and monthly feeding summaries. Build feeding pattern analysis and trend reporting. Include feeding compliance tracking and missed feeding alerts. Provide data export capabilities for feeding history.",
             "status": "pending",
             "testStrategy": "",
@@ -533,9 +515,7 @@
         "details": "Create training exercises database service. Implement training progress tracking. Build training session management endpoints. Create behavioral milestones tracking. Implement training recommendation algorithms.",
         "testStrategy": "Training sessions track correctly and recommendations generate appropriately",
         "priority": "medium",
-        "dependencies": [
-          "7"
-        ],
+        "dependencies": ["7"],
         "status": "pending",
         "subtasks": [
           {
@@ -552,9 +532,7 @@
             "id": 2,
             "title": "Implement training progress tracking system",
             "description": "Build progress tracking service and behavioral milestones management",
-            "dependencies": [
-              "11.1"
-            ],
+            "dependencies": ["11.1"],
             "details": "Create training session entity to track completed exercises. Implement progress calculation algorithms based on completion rates and improvement metrics. Build behavioral milestones tracking with configurable goals. Create progress aggregation endpoints for analytics.",
             "status": "pending",
             "testStrategy": "",
@@ -564,10 +542,7 @@
             "id": 3,
             "title": "Build training session management and recommendation endpoints",
             "description": "Create API endpoints for session management and implement training recommendation algorithms",
-            "dependencies": [
-              "11.1",
-              "11.2"
-            ],
+            "dependencies": ["11.1", "11.2"],
             "details": "Build REST endpoints for creating, updating, and managing training sessions. Implement recommendation algorithms based on puppy age, breed, and progress history. Create session scheduling and reminder system. Build endpoints for retrieving personalized training plans.",
             "status": "pending",
             "testStrategy": "",
@@ -582,11 +557,7 @@
         "details": "Create Supabase Edge Functions for notifications. Build notification scheduling service. Implement web push notification handlers. Create email notification service integration. Build notification preferences management.",
         "testStrategy": "Notifications send correctly via all channels and preferences are respected",
         "priority": "medium",
-        "dependencies": [
-          "8",
-          "9",
-          "10"
-        ],
+        "dependencies": ["8", "9", "10"],
         "status": "pending",
         "subtasks": [
           {
@@ -603,9 +574,7 @@
             "id": 2,
             "title": "Implement notification scheduling service",
             "description": "Build service to schedule and queue notifications for delivery",
-            "dependencies": [
-              "12.1"
-            ],
+            "dependencies": ["12.1"],
             "details": "Create scheduling logic for delayed notifications, recurring reminders, and batch processing. Implement queue management and priority handling.",
             "status": "pending",
             "testStrategy": "",
@@ -615,9 +584,7 @@
             "id": 3,
             "title": "Set up web push notification handlers",
             "description": "Implement web push notification infrastructure and handlers",
-            "dependencies": [
-              "12.1"
-            ],
+            "dependencies": ["12.1"],
             "details": "Configure VAPID keys, implement push notification subscription management, and create handlers for different notification types.",
             "status": "pending",
             "testStrategy": "",
@@ -627,9 +594,7 @@
             "id": 4,
             "title": "Integrate email notification service",
             "description": "Set up email delivery service and templates",
-            "dependencies": [
-              "12.1"
-            ],
+            "dependencies": ["12.1"],
             "details": "Integrate with email service provider, create email templates for different notification types, and implement delivery tracking.",
             "status": "pending",
             "testStrategy": "",
@@ -639,10 +604,7 @@
             "id": 5,
             "title": "Build notification preferences management",
             "description": "Create system for managing user notification preferences",
-            "dependencies": [
-              "12.3",
-              "12.4"
-            ],
+            "dependencies": ["12.3", "12.4"],
             "details": "Implement preference storage, user interface integration, and respect for opt-out settings across all notification channels.",
             "status": "pending",
             "testStrategy": "",
@@ -652,11 +614,7 @@
             "id": 6,
             "title": "Create notification delivery tracking and retry logic",
             "description": "Implement tracking and retry mechanisms for failed notifications",
-            "dependencies": [
-              "12.2",
-              "12.3",
-              "12.4"
-            ],
+            "dependencies": ["12.2", "12.3", "12.4"],
             "details": "Build delivery status tracking, implement exponential backoff retry logic, and create monitoring for notification success rates.",
             "status": "pending",
             "testStrategy": "",
@@ -671,9 +629,7 @@
         "details": "Create family groups management service. Implement invitation system with email tokens. Build RBAC for family member permissions. Implement real-time updates with Supabase subscriptions. Create activity logging and audit trail.",
         "testStrategy": "Family invitations work, permissions enforce correctly, real-time updates function",
         "priority": "medium",
-        "dependencies": [
-          "7"
-        ],
+        "dependencies": ["7"],
         "status": "pending",
         "subtasks": [
           {
@@ -690,9 +646,7 @@
             "id": 2,
             "title": "Build invitation system with email tokens",
             "description": "Implement secure invitation flow with email verification and token management",
-            "dependencies": [
-              "13.1"
-            ],
+            "dependencies": ["13.1"],
             "details": "Create invitation tokens table with expiration dates and security tokens. Implement email service integration for sending family invitations. Build invitation acceptance endpoint with token validation. Add invitation status tracking (pending, accepted, expired, revoked). Create rate limiting for invitation sending.",
             "status": "pending",
             "testStrategy": "",
@@ -702,9 +656,7 @@
             "id": 3,
             "title": "Implement RBAC and real-time features",
             "description": "Build role-based access control system and real-time updates with activity logging",
-            "dependencies": [
-              "13.2"
-            ],
+            "dependencies": ["13.2"],
             "details": "Create family member roles system (admin, member, viewer) with permission matrices. Implement middleware for role-based endpoint protection. Set up Supabase real-time subscriptions for family data changes. Create activity logging service for audit trail of family actions. Build notification system for family updates.",
             "status": "pending",
             "testStrategy": "",
@@ -719,12 +671,7 @@
         "details": "Create AI service abstraction layer. Implement OpenAI and Anthropic provider integrations. Build care plan generation service. Create feeding plan optimization algorithms. Implement training progression suggestion engine.",
         "testStrategy": "AI services generate meaningful recommendations and care plans",
         "priority": "low",
-        "dependencies": [
-          "8",
-          "9",
-          "10",
-          "11"
-        ],
+        "dependencies": ["8", "9", "10", "11"],
         "status": "pending",
         "subtasks": [
           {
@@ -741,9 +688,7 @@
             "id": 2,
             "title": "Implement OpenAI provider integration",
             "description": "Build OpenAI-specific implementation of AI service interfaces",
-            "dependencies": [
-              "14.1"
-            ],
+            "dependencies": ["14.1"],
             "details": "Implement OpenAI SDK integration. Build chat completion service with GPT models. Create structured output handlers using function calling. Implement error handling and rate limiting. Add configuration for API keys and model selection.",
             "status": "pending",
             "testStrategy": "",
@@ -753,9 +698,7 @@
             "id": 3,
             "title": "Implement Anthropic provider integration",
             "description": "Build Anthropic Claude-specific implementation of AI service interfaces",
-            "dependencies": [
-              "14.1"
-            ],
+            "dependencies": ["14.1"],
             "details": "Implement Anthropic SDK integration. Build Claude chat completion service. Create structured output handlers using tool use. Implement error handling and rate limiting. Add configuration for API keys and model selection.",
             "status": "pending",
             "testStrategy": "",
@@ -765,10 +708,7 @@
             "id": 4,
             "title": "Build care plan generation algorithms",
             "description": "Create AI-powered pet care plan generation service",
-            "dependencies": [
-              "14.2",
-              "14.3"
-            ],
+            "dependencies": ["14.2", "14.3"],
             "details": "Design prompt templates for care plan generation based on pet profiles. Implement context processing to include pet health, age, breed, and medical history. Build structured output parsing for care recommendations. Create validation logic for generated plans.",
             "status": "pending",
             "testStrategy": "",
@@ -778,10 +718,7 @@
             "id": 5,
             "title": "Create feeding and training recommendation engines",
             "description": "Implement AI services for feeding schedules and training progression",
-            "dependencies": [
-              "14.2",
-              "14.3"
-            ],
+            "dependencies": ["14.2", "14.3"],
             "details": "Build feeding plan optimization using pet nutritional needs and activity levels. Create training progression algorithms based on pet behavior and learning patterns. Implement context-aware recommendations using historical data. Build feedback loops for recommendation improvement.",
             "status": "pending",
             "testStrategy": "",
@@ -796,10 +733,7 @@
         "details": "Create weight tracking analytics service. Implement growth prediction algorithms. Build breed comparison service. Create trend analysis and alerting system. Implement data aggregation for dashboards.",
         "testStrategy": "Analytics generate accurate insights and predictions",
         "priority": "medium",
-        "dependencies": [
-          "8",
-          "10"
-        ],
+        "dependencies": ["8", "10"],
         "status": "pending",
         "subtasks": [
           {
@@ -816,9 +750,7 @@
             "id": 2,
             "title": "Implement growth prediction algorithms",
             "description": "Develop algorithms to predict puppy growth patterns and adult size estimation",
-            "dependencies": [
-              "15.1"
-            ],
+            "dependencies": ["15.1"],
             "details": "Create GrowthPredictionService with machine learning or statistical models for predicting adult weight based on current growth patterns. Implement breed-specific growth curves and prediction accuracy metrics. Include confidence intervals and prediction validation against historical data.",
             "status": "pending",
             "testStrategy": "",
@@ -828,10 +760,7 @@
             "id": 3,
             "title": "Build analytics aggregation and reporting endpoints",
             "description": "Create API endpoints for analytics data aggregation and dashboard reporting",
-            "dependencies": [
-              "15.1",
-              "15.2"
-            ],
+            "dependencies": ["15.1", "15.2"],
             "details": "Implement AnalyticsController with endpoints for breed comparison data, trend analysis results, and dashboard metrics. Create data aggregation services for generating summary statistics, alerts for unusual patterns, and export functionality for reports. Include caching for performance optimization.",
             "status": "pending",
             "testStrategy": "",
@@ -846,9 +775,7 @@
         "details": "Create date/time utilities. Build formatting helpers. Implement validation utilities. Create calculation helpers for weight, portions, etc. Build error handling utilities. Add logging utilities.",
         "testStrategy": "All utilities work correctly and are properly exported",
         "priority": "medium",
-        "dependencies": [
-          "6"
-        ],
+        "dependencies": ["6"],
         "status": "pending",
         "subtasks": [
           {
@@ -865,9 +792,7 @@
             "id": 2,
             "title": "Build validation and calculation utilities",
             "description": "Create validation functions and pet-specific calculation helpers",
-            "dependencies": [
-              "16.1"
-            ],
+            "dependencies": ["16.1"],
             "details": "Implement validation utilities (email, phone, required fields, etc.). Create weight conversion functions (pounds to kg, etc.). Build portion calculation helpers for pet feeding. Add age calculation utilities for pets. Create breed-specific validation functions.",
             "status": "pending",
             "testStrategy": "",
@@ -877,10 +802,7 @@
             "id": 3,
             "title": "Implement error handling and logging utilities",
             "description": "Create centralized error handling and logging infrastructure",
-            "dependencies": [
-              "16.1",
-              "16.2"
-            ],
+            "dependencies": ["16.1", "16.2"],
             "details": "Build custom error classes for different error types. Create error formatting and reporting utilities. Implement structured logging functions with different log levels. Add error boundary helpers for React components. Create API error response formatters.",
             "status": "pending",
             "testStrategy": "",
@@ -895,10 +817,7 @@
         "details": "Configure React Router for navigation. Set up React Query for API integration with proper error handling. Configure react-hook-form with Zod validation. Implement authentication context and hooks. Set up error boundary and global error handling.",
         "testStrategy": "Routing works, API calls succeed, forms validate correctly",
         "priority": "high",
-        "dependencies": [
-          "2",
-          "4"
-        ],
+        "dependencies": ["2", "4"],
         "status": "pending",
         "subtasks": [
           {
@@ -915,9 +834,7 @@
             "id": 2,
             "title": "Set up React Query for API state management",
             "description": "Configure React Query with proper error handling and caching",
-            "dependencies": [
-              "17.1"
-            ],
+            "dependencies": ["17.1"],
             "details": "Install and configure React Query client. Set up query client with default options for caching and retries. Implement global error handling for API calls. Create custom hooks for common API patterns. Configure dev tools for debugging.",
             "status": "pending",
             "testStrategy": "",
@@ -927,9 +844,7 @@
             "id": 3,
             "title": "Implement form handling and authentication context",
             "description": "Set up react-hook-form with Zod validation and authentication system",
-            "dependencies": [
-              "17.2"
-            ],
+            "dependencies": ["17.2"],
             "details": "Configure react-hook-form with Zod schema validation. Create reusable form components and validation patterns. Implement authentication context with login/logout functionality. Create protected route wrapper components. Set up error boundaries for global error handling.",
             "status": "pending",
             "testStrategy": "",
@@ -944,9 +859,7 @@
         "details": "Build Button, Input, Select components with variants. Create Card, Modal, Toast components. Implement Form components with validation display. Build responsive layout components. Create data display components like Tables and Charts.",
         "testStrategy": "All components render correctly and are responsive",
         "priority": "high",
-        "dependencies": [
-          "4"
-        ],
+        "dependencies": ["4"],
         "status": "pending",
         "subtasks": [
           {
@@ -963,9 +876,7 @@
             "id": 2,
             "title": "Configure UI package build process and exports",
             "description": "Set up build configuration and package exports for the UI components package",
-            "dependencies": [
-              "18.1"
-            ],
+            "dependencies": ["18.1"],
             "details": "Create package.json for packages/ui with proper exports configuration. Set up TypeScript build configuration (tsconfig.json). Configure build scripts using Bun. Create index.ts files to export all components. Set up proper module resolution and build output structure.",
             "status": "pending",
             "testStrategy": "",
@@ -975,9 +886,7 @@
             "id": 3,
             "title": "Update import paths across application to use UI package",
             "description": "Refactor all component imports throughout the application to use the new package structure",
-            "dependencies": [
-              "18.2"
-            ],
+            "dependencies": ["18.2"],
             "details": "Search and replace all import statements that reference the old shadcn/ui component paths. Update imports to use the new packages/ui package structure (e.g., import { Button } from '@wag-wise/ui'). Verify all components still work correctly after the import path updates. Test that the application builds and runs successfully.",
             "status": "pending",
             "testStrategy": "",
@@ -992,10 +901,7 @@
         "details": "Create puppy registration wizard with step-by-step flow. Build breed selection with autocomplete. Implement photo upload component with crop/resize. Create puppy profile view/edit forms. Build weight tracking charts. Implement medical history forms.",
         "testStrategy": "Puppy registration completes successfully, profiles display correctly",
         "priority": "medium",
-        "dependencies": [
-          "17",
-          "18"
-        ],
+        "dependencies": ["17", "18"],
         "status": "pending",
         "subtasks": [
           {
@@ -1032,11 +938,7 @@
             "id": 4,
             "title": "Create puppy profile view and edit forms",
             "description": "Build comprehensive profile display and editing interface",
-            "dependencies": [
-              "19.1",
-              "19.2",
-              "19.3"
-            ],
+            "dependencies": ["19.1", "19.2", "19.3"],
             "details": "Create profile view component showing all puppy information. Build edit forms for updating puppy details. Implement form validation and error handling. Add save/cancel functionality with optimistic updates.",
             "status": "pending",
             "testStrategy": "",
@@ -1071,10 +973,7 @@
         "details": "Create calendar component using react-day-picker. Build event creation/editing modal forms. Implement recurring event UI with options. Create vaccination schedule interface. Build appointment management with reminders.",
         "testStrategy": "Calendar displays events correctly, event creation works, recurring events show properly",
         "priority": "medium",
-        "dependencies": [
-          "17",
-          "18"
-        ],
+        "dependencies": ["17", "18"],
         "status": "pending",
         "subtasks": []
       },
@@ -1085,10 +984,7 @@
         "details": "Create feeding schedule creation forms with time pickers. Build meal logging interface with quick actions. Implement portion tracking charts using recharts. Create feeding history visualization. Build feeding reminders UI.",
         "testStrategy": "Feeding schedules create correctly, logging works, charts display data",
         "priority": "medium",
-        "dependencies": [
-          "17",
-          "18"
-        ],
+        "dependencies": ["17", "18"],
         "status": "pending",
         "subtasks": []
       },
@@ -1099,10 +995,7 @@
         "details": "Create training exercise library with search/filter. Build progress tracking interface with charts. Create training session scheduler. Implement milestone tracking UI. Build exercise video player components.",
         "testStrategy": "Training library loads, progress tracks correctly, videos play",
         "priority": "medium",
-        "dependencies": [
-          "17",
-          "18"
-        ],
+        "dependencies": ["17", "18"],
         "status": "pending",
         "subtasks": []
       },
@@ -1113,12 +1006,7 @@
         "details": "Build main dashboard layout with responsive design. Create daily agenda view with timeline. Implement routine management UI. Build quick action cards for common tasks. Create progress widgets and summary stats.",
         "testStrategy": "Dashboard loads quickly, agenda displays correctly, routines function",
         "priority": "high",
-        "dependencies": [
-          "19",
-          "20",
-          "21",
-          "22"
-        ],
+        "dependencies": ["19", "20", "21", "22"],
         "status": "pending",
         "subtasks": []
       },
@@ -1129,10 +1017,7 @@
         "details": "Implement notification permission request UI. Create notification preferences interface. Build in-app notification center. Implement notification toasts with actions. Create notification history view.",
         "testStrategy": "Notifications display correctly, preferences save, permission requests work",
         "priority": "medium",
-        "dependencies": [
-          "17",
-          "18"
-        ],
+        "dependencies": ["17", "18"],
         "status": "pending",
         "subtasks": []
       },
@@ -1143,10 +1028,7 @@
         "details": "Build family invitation UI with email forms. Create family member management interface. Implement role-based UI controls and permissions. Build activity feed component. Create family communication interface.",
         "testStrategy": "Family invitations send, member management works, activity feed updates",
         "priority": "medium",
-        "dependencies": [
-          "17",
-          "18"
-        ],
+        "dependencies": ["17", "18"],
         "status": "pending",
         "subtasks": []
       },
@@ -1157,10 +1039,7 @@
         "details": "Create care plan display components with sections. Implement AI recommendation UI with accept/reject. Build care plan customization interface. Create feedback collection forms for AI improvements.",
         "testStrategy": "Care plans display correctly, recommendations can be accepted, feedback submits",
         "priority": "low",
-        "dependencies": [
-          "17",
-          "18"
-        ],
+        "dependencies": ["17", "18"],
         "status": "pending",
         "subtasks": []
       },
@@ -1171,10 +1050,7 @@
         "details": "Build weight tracking charts with recharts. Create growth comparison visualizations. Implement trend analysis displays with filters. Build export functionality for reports. Create sharing features for reports.",
         "testStrategy": "Charts render correctly, exports work, sharing functions properly",
         "priority": "medium",
-        "dependencies": [
-          "17",
-          "18"
-        ],
+        "dependencies": ["17", "18"],
         "status": "pending",
         "subtasks": []
       },
@@ -1185,9 +1061,7 @@
         "details": "Configure Vite PWA plugin with proper manifest. Set up service worker for offline caching. Create app manifest with icons and metadata. Implement offline data synchronization. Build app install prompts and badges.",
         "testStrategy": "App installs as PWA, works offline, sync resumes when online",
         "priority": "medium",
-        "dependencies": [
-          "23"
-        ],
+        "dependencies": ["23"],
         "status": "pending",
         "subtasks": []
       },
@@ -1198,9 +1072,7 @@
         "details": "Create mobile navigation components with drawer. Implement touch gestures for interactions. Build mobile-optimized forms with better UX. Create responsive layouts for all features. Implement mobile-specific UI patterns.",
         "testStrategy": "All interfaces work properly on mobile devices and tablets",
         "priority": "high",
-        "dependencies": [
-          "23"
-        ],
+        "dependencies": ["23"],
         "status": "pending",
         "subtasks": []
       },
@@ -1211,13 +1083,7 @@
         "details": "Connect all frontend components to backend APIs. Implement error handling and retry logic. Build loading states and skeleton screens. Create integration tests for API endpoints. Implement E2E testing with Playwright.",
         "testStrategy": "All API calls work correctly, error handling functions, tests pass",
         "priority": "high",
-        "dependencies": [
-          "8",
-          "9",
-          "10",
-          "11",
-          "23"
-        ],
+        "dependencies": ["8", "9", "10", "11", "23"],
         "status": "pending",
         "subtasks": []
       },
@@ -1228,9 +1094,7 @@
         "details": "Implement code splitting and lazy loading. Optimize bundle sizes with analysis. Set up image optimization. Implement caching strategies. Configure CI/CD pipeline. Set up frontend deployment (Vercel) and backend deployment (Railway/Render).",
         "testStrategy": "Performance metrics meet targets, deployments succeed, monitoring active",
         "priority": "high",
-        "dependencies": [
-          "30"
-        ],
+        "dependencies": ["30"],
         "status": "pending",
         "subtasks": []
       },
@@ -1340,9 +1204,7 @@
       "lastModified": "2025-10-02T12:00:00.000Z",
       "taskCount": 35,
       "completedCount": 1,
-      "tags": [
-        "master"
-      ]
+      "tags": ["master"]
     }
   }
 }
