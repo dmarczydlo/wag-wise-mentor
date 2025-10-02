@@ -1,0 +1,346 @@
+# Wag Wise Mentor - Monorepo Implementation PRD
+
+## Project Structure
+
+This PRD defines tasks for implementing Wag Wise Mentor as a Bun-based monorepo with separated frontend and backend applications.
+
+### Monorepo Architecture
+
+```
+wag-wise-mentor/
+├── apps/
+│   ├── frontend/           # React + Vite + TypeScript
+│   └── backend/            # NestJS + TypeScript
+├── packages/
+│   ├── shared/            # Shared types and utilities
+│   └── ui/                # Shared UI components
+└── supabase/              # Database migrations and Edge Functions
+```
+
+## Phase 0: Monorepo Foundation
+
+### Task Group: Monorepo Setup
+**Priority: Critical - Must complete first**
+
+1. **Create Monorepo Directory Structure**
+   - Create apps/, packages/, and supabase/ directories
+   - Set up Bun workspace configuration in root package.json
+   - Move existing frontend code to apps/frontend/
+   - Update all import paths and configurations
+   - Configure TypeScript path mappings for workspace packages
+
+2. **Initialize Shared Packages**
+   - Create packages/shared/ for types and utilities
+   - Set up TypeScript configuration for shared package
+   - Create packages/ui/ for reusable React components
+   - Configure build scripts for shared packages
+   - Set up development watch mode for packages
+
+3. **Initialize NestJS Backend Structure**
+   - Create apps/backend/ with NestJS CLI
+   - Configure NestJS modules structure (auth, puppies, calendar, training, ai)
+   - Set up Supabase client integration in backend
+   - Configure environment variables and config module
+   - Set up backend development server
+
+## Phase 1: Backend Infrastructure
+
+### Task Group: Database & Authentication Backend
+**Dependencies: Phase 0 complete**
+
+4. **Implement Supabase Database Schema**
+   - Create database migration files for all tables
+   - Set up Row Level Security (RLS) policies
+   - Create database functions and triggers
+   - Implement indexes for performance optimization
+   - Set up database backup and recovery procedures
+
+5. **Build Authentication Backend Module**
+   - Create NestJS auth module with Supabase integration
+   - Implement JWT token validation middleware
+   - Build role-based access control (RBAC) guards
+   - Create user registration and login endpoints
+   - Implement password reset and email verification
+
+### Task Group: Core Backend APIs
+**Dependencies: Database & Auth complete**
+
+6. **Implement Puppies Backend Module**
+   - Create NestJS puppies module with CRUD operations
+   - Build breed data management service
+   - Implement photo upload handling with Supabase Storage
+   - Create weight records API endpoints
+   - Build medical history management endpoints
+
+7. **Build Calendar & Events Backend Module**
+   - Create events module with CRUD operations
+   - Implement recurring event logic in backend
+   - Build breed-specific health timeline generator
+   - Create vaccination scheduling service
+   - Implement Google Calendar integration service
+
+8. **Implement Feeding Backend Module**
+   - Create feeding schedules module
+   - Build feeding logs tracking service
+   - Implement weight-based portion calculation algorithms
+   - Create food types and assignments management
+   - Build feeding history aggregation endpoints
+
+9. **Build Training Backend Module**
+   - Create training exercises database service
+   - Implement training progress tracking
+   - Build training session management endpoints
+   - Create behavioral milestones tracking
+   - Implement training recommendation algorithms
+
+### Task Group: Advanced Backend Features
+**Dependencies: Core APIs complete**
+
+10. **Implement Notification Backend System**
+    - Create Supabase Edge Functions for notifications
+    - Build notification scheduling service
+    - Implement web push notification handlers
+    - Create email notification service integration
+    - Build notification preferences management
+    - Implement notification history tracking
+
+11. **Build Family Sharing Backend Module**
+    - Create family groups management service
+    - Implement invitation system with email tokens
+    - Build RBAC for family member permissions
+    - Implement real-time updates with Supabase subscriptions
+    - Create activity logging and audit trail
+    - Build conflict resolution for concurrent updates
+
+12. **Implement AI Service Integration Backend**
+    - Create AI service abstraction layer
+    - Implement OpenAI and Anthropic provider integrations
+    - Build care plan generation service
+    - Create feeding plan optimization algorithms
+    - Implement training progression suggestion engine
+    - Build health milestone prediction service
+
+13. **Build Analytics Backend Module**
+    - Create weight tracking analytics service
+    - Implement growth prediction algorithms
+    - Build breed comparison service
+    - Create trend analysis and alerting system
+    - Implement data aggregation for dashboards
+
+## Phase 2: Shared Types & Utilities
+
+### Task Group: Shared Package Development
+**Dependencies: Backend APIs defined**
+
+14. **Create Shared Type Definitions**
+    - Define all database model types in packages/shared/
+    - Create API request/response DTOs
+    - Build validation schemas with Zod
+    - Define enums and constants
+    - Create utility type helpers
+
+15. **Build Shared Utility Functions**
+    - Create date/time utilities
+    - Build formatting helpers
+    - Implement validation utilities
+    - Create calculation helpers
+    - Build error handling utilities
+
+## Phase 3: Frontend Application
+
+### Task Group: Frontend Foundation
+**Dependencies: Shared packages ready**
+
+16. **Set Up Frontend Architecture**
+    - Configure React Router for navigation
+    - Set up React Query for API integration
+    - Configure form handling with react-hook-form
+    - Implement authentication context and hooks
+    - Set up error boundary and error handling
+
+17. **Build Core UI Components Package**
+    - Create design system in packages/ui/
+    - Build Button, Input, Select components
+    - Create Card, Modal, Toast components
+    - Implement Form components with validation
+    - Build responsive layout components
+
+### Task Group: Feature Implementation - Frontend
+**Dependencies: Frontend foundation + Backend APIs**
+
+18. **Implement Puppy Profile Frontend**
+    - Create puppy registration wizard components
+    - Build breed selection dropdown
+    - Implement photo upload component
+    - Create puppy profile view/edit forms
+    - Build weight tracking UI components
+    - Implement medical history forms
+
+19. **Build Calendar & Events Frontend**
+    - Create calendar component with react-day-picker
+    - Build event creation/editing forms
+    - Implement recurring event UI
+    - Create vaccination schedule interface
+    - Build appointment management UI
+    - Implement calendar sync settings
+
+20. **Implement Feeding Schedule Frontend**
+    - Create feeding schedule creation forms
+    - Build meal logging interface
+    - Implement portion tracking charts
+    - Create feeding history visualization
+    - Build feeding reminders UI
+
+21. **Build Training Library Frontend**
+    - Create training exercise library UI
+    - Implement video player components
+    - Build progress tracking interface
+    - Create training session scheduler
+    - Implement milestone tracking UI
+
+22. **Implement Dashboard & Routines Frontend**
+    - Build main dashboard layout
+    - Create daily agenda view
+    - Implement routine management UI
+    - Build quick action cards
+    - Create progress widgets
+    - Implement daily checklist component
+
+23. **Build Notification Frontend**
+    - Implement notification permission UI
+    - Create notification preferences interface
+    - Build in-app notification center
+    - Implement notification toasts
+    - Create notification history view
+
+24. **Implement Family Sharing Frontend**
+    - Build family invitation UI
+    - Create family member management interface
+    - Implement role-based UI controls
+    - Build activity feed component
+    - Create family communication interface
+
+25. **Build AI Care Plans Frontend**
+    - Create care plan display components
+    - Implement AI recommendation UI
+    - Build care plan customization interface
+    - Create feedback collection forms
+
+26. **Implement Analytics & Reports Frontend**
+    - Build weight tracking charts with recharts
+    - Create growth comparison visualizations
+    - Implement trend analysis displays
+    - Build export and sharing features
+
+## Phase 4: Mobile & PWA
+
+### Task Group: Mobile Optimization
+**Dependencies: Core features complete**
+
+27. **Implement PWA Features**
+    - Configure Vite PWA plugin
+    - Set up service worker for offline caching
+    - Create app manifest and icons
+    - Implement offline data synchronization
+    - Build app install prompts
+
+28. **Build Mobile-First UI**
+    - Create mobile navigation components
+    - Implement touch gestures
+    - Build mobile-optimized forms
+    - Create responsive layouts for all features
+    - Implement mobile-specific UI patterns
+
+## Phase 5: Integration & Testing
+
+### Task Group: System Integration
+**Dependencies: Frontend and Backend complete**
+
+29. **API Integration & Testing**
+    - Connect all frontend components to backend APIs
+    - Implement error handling and retry logic
+    - Build loading states and skeletons
+    - Create integration tests
+    - Implement E2E testing with Playwright
+
+30. **Performance Optimization**
+    - Implement code splitting and lazy loading
+    - Optimize bundle sizes
+    - Set up image optimization
+    - Implement caching strategies
+    - Build performance monitoring
+
+31. **Deployment & DevOps**
+    - Configure CI/CD pipeline
+    - Set up frontend deployment (Vercel)
+    - Configure backend deployment (Railway/Render)
+    - Set up monitoring and logging
+    - Implement automated testing in CI
+
+## Success Criteria
+
+Each phase must meet these criteria before moving to the next:
+
+### Phase 0 Success:
+- ✅ Monorepo structure created
+- ✅ All workspaces install and build successfully
+- ✅ Development mode works for all packages
+
+### Phase 1 Success:
+- ✅ All backend APIs documented and tested
+- ✅ Database schema fully implemented
+- ✅ Authentication working
+- ✅ API documentation generated
+
+### Phase 2 Success:
+- ✅ Shared types compile without errors
+- ✅ Types imported correctly in frontend and backend
+- ✅ All utilities tested
+
+### Phase 3 Success:
+- ✅ All frontend features functional
+- ✅ UI components responsive
+- ✅ Forms validated correctly
+- ✅ API integration working
+
+### Phase 4 Success:
+- ✅ PWA installable
+- ✅ Offline mode functional
+- ✅ Mobile UI fully responsive
+- ✅ Touch interactions working
+
+### Phase 5 Success:
+- ✅ All tests passing
+- ✅ Performance metrics met
+- ✅ Successfully deployed
+- ✅ Monitoring active
+
+## Technical Stack Summary
+
+### Frontend (apps/frontend/)
+- React 18 + TypeScript
+- Vite build tool
+- React Router for navigation
+- React Query for state management
+- React Hook Form + Zod validation
+- Tailwind CSS + Radix UI
+- Recharts for visualizations
+
+### Backend (apps/backend/)
+- NestJS + TypeScript
+- Supabase client
+- REST API architecture
+- WebSocket for real-time
+- JWT authentication
+
+### Shared (packages/)
+- TypeScript
+- Zod for schemas
+- Shared types and utilities
+
+### Infrastructure
+- Bun for monorepo management
+- Supabase for database and auth
+- Vercel for frontend hosting
+- Railway/Render for backend hosting
+- GitHub Actions for CI/CD
