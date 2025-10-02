@@ -77,6 +77,7 @@ jobs:
           file: ./apps/backend/coverage/lcov.info
           flags: backend
           name: backend-coverage
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload frontend coverage to Codecov
         uses: codecov/codecov-action@v3
@@ -84,6 +85,7 @@ jobs:
           file: ./apps/frontend/coverage/lcov.info
           flags: frontend
           name: frontend-coverage
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload coverage reports
         uses: actions/upload-artifact@v4
