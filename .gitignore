@@ -46,3 +46,4 @@ node_modules/
 # tasks/ 
 
 test-results/
+playwright-report/

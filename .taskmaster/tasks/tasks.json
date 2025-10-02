@@ -75,7 +75,7 @@
         "dependencies": [
           "1"
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -83,10 +83,10 @@
             "description": "Configure Mocha and Chai for backend unit and integration testing",
             "dependencies": [],
             "details": "Install mocha, chai, chai-http, sinon. Configure test scripts in package.json. Set up test database for integration tests. Create test utilities and helpers.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Mocha tests run successfully, test database setup works",
             "parentId": "2",
-            "updatedAt": "2025-10-02T12:00:00.000Z"
+            "updatedAt": "2025-10-02T17:10:02.689Z"
           },
           {
             "id": 2,
@@ -94,10 +94,10 @@
             "description": "Configure Vitest for React component and utility testing",
             "dependencies": [],
             "details": "Install vitest, @testing-library/react, @testing-library/jest-dom, jsdom. Configure vitest.config.ts. Set up test utilities and custom render functions.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Vitest tests run successfully, React components render correctly",
             "parentId": "2",
-            "updatedAt": "2025-10-02T12:00:00.000Z"
+            "updatedAt": "2025-10-02T17:10:25.515Z"
           },
           {
             "id": 3,
@@ -105,10 +105,10 @@
             "description": "Configure Playwright for end-to-end testing with browser MCP integration",
             "dependencies": [],
             "details": "Install playwright, configure playwright.config.ts. Set up browser MCP integration for automated testing. Create E2E test utilities and page objects.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Playwright tests run successfully, browser MCP integration works",
             "parentId": "2",
-            "updatedAt": "2025-10-02T12:00:00.000Z"
+            "updatedAt": "2025-10-02T17:19:58.835Z"
           },
           {
             "id": 4,
@@ -119,12 +119,13 @@
               "2.2"
             ],
             "details": "Configure coverage tools: nyc for Mocha, @vitest/coverage for Vitest. Set up coverage thresholds and reporting. Integrate with CI/CD for coverage tracking.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Coverage reports generated, thresholds met, CI/CD integration works",
             "parentId": "2",
-            "updatedAt": "2025-10-02T12:00:00.000Z"
+            "updatedAt": "2025-10-02T17:20:34.817Z"
           }
-        ]
+        ],
+        "updatedAt": "2025-10-02T17:20:34.817Z"
       },
       {
         "id": "3",
@@ -1428,13 +1429,27 @@
         ],
         "priority": "medium",
         "subtasks": []
+      },
+      {
+        "id": "37",
+        "title": "Setup i18n internationalization support",
+        "description": "Implement comprehensive internationalization infrastructure supporting Polish and English languages with translation management, locale formatting, and RTL/LTR support for both frontend and backend.",
+        "details": "Frontend: Install react-i18next, i18next, and i18next-browser-languagedetector. Configure i18next with namespace support for different app sections (common, dashboard, auth, feeding, training). Create translation files in public/locales/{en,pl}/ directories. Implement useTranslation hooks throughout React components. Add language switcher component in main navigation. Configure date-fns locale support for Polish date formatting. Setup number and currency formatting for locale-specific display. Backend: Install i18next, i18next-fs-backend, and i18next-http-middleware for NestJS. Create backend translation files for API responses, validation messages, and email templates. Implement i18n decorator for controller methods. Configure locale detection from Accept-Language headers. Setup email template localization for notifications. Shared: Create TypeScript interfaces for translation keys to ensure type safety. Implement locale persistence in localStorage and user preferences. Setup proper RTL/LTR CSS support with Tailwind directives. Configure build pipeline to validate translation completeness across locales.",
+        "testStrategy": "Verify language switching updates all UI text immediately. Test translation key validation prevents missing translations. Confirm date/number formatting respects selected locale. Validate API responses return localized error messages. Test email templates render correctly in both languages. Ensure localStorage persists language preference across sessions.",
+        "status": "pending",
+        "dependencies": [
+          "17",
+          "6"
+        ],
+        "priority": "high",
+        "subtasks": []
       }
     ],
     "metadata": {
       "version": "1.0.0",
-      "lastModified": "2025-10-02T16:40:12.451Z",
-      "taskCount": 37,
-      "completedCount": 3,
+      "lastModified": "2025-10-02T17:20:34.818Z",
+      "taskCount": 38,
+      "completedCount": 4,
       "tags": [
         "master"
       ]
