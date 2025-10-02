@@ -1307,7 +1307,7 @@
         "testStrategy": "All test suites run successfully, coverage reports generated, E2E tests pass in CI/CD",
         "priority": "high",
         "dependencies": [],
-        "status": "in-progress",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -1366,13 +1366,13 @@
               "32.3"
             ],
             "details": "Write unit tests for all services, utilities, and business logic. Create integration tests for API endpoints. Write component tests for React components. Create E2E tests for critical user flows.",
-            "status": "in-progress",
+            "status": "done",
             "testStrategy": "All business logic covered by tests, critical user flows tested end-to-end",
             "parentId": "32",
-            "updatedAt": "2025-10-02T13:31:22.556Z"
+            "updatedAt": "2025-10-02T16:40:12.449Z"
           }
         ],
-        "updatedAt": "2025-10-02T13:31:22.556Z"
+        "updatedAt": "2025-10-02T16:40:12.449Z"
       },
       {
         "id": "33",
@@ -1412,13 +1412,29 @@
         ],
         "status": "pending",
         "subtasks": []
+      },
+      {
+        "id": "36",
+        "title": "Define comprehensive E2E testing strategy for FE + BE integration",
+        "description": "Establish complete end-to-end testing framework with environment setup, database management, authentication flows, critical user journeys, API integration testing, cross-browser support, and CI/CD integration for comprehensive system validation.",
+        "details": "Implement comprehensive E2E testing strategy building on existing Playwright infrastructure:\n\n**1. Test Environment Setup**\n- Configure dedicated test environment with isolated frontend (localhost:5174) and backend (localhost:3002) instances\n- Set up test-specific environment variables in `.env.test` with proper database isolation\n- Create Docker Compose configuration for consistent test environment across local and CI\n- Implement test environment health checks and startup/teardown scripts\n\n**2. Database Setup and Seeding**\n- Create separate test database instance with automated migration and seeding\n- Implement database cleanup and reset between test suites using transactions or database recreation\n- Build test data factories for consistent, realistic test data (users, puppies, feeding schedules)\n- Set up database connection pooling and isolation for parallel test execution\n\n**3. Authentication Flow Testing**\n- Test complete user registration, login, logout flows\n- Validate JWT token handling, refresh token mechanisms\n- Test password reset and email verification flows\n- Verify session persistence and security boundaries\n\n**4. Critical User Journey Testing**\n- **Puppy Management**: Registration → Profile creation → Medical history → Weight tracking\n- **Feeding Schedules**: Creation → Modification → Notifications → Completion tracking\n- **Dashboard Interactions**: Navigation → Data visualization → Quick actions\n- **Notifications**: Creation → Delivery → User preferences → Read/unread states\n\n**5. API Integration Testing**\n- Test all CRUD operations for puppies, feeding, notifications, analytics modules\n- Validate request/response formats, error handling, and status codes\n- Test file upload functionality (puppy photos, medical documents)\n- Verify real-time features using WebSocket/SSE connections\n\n**6. Cross-Browser Testing Setup**\n- Configure Playwright for Chrome, Firefox, Safari, and mobile viewports\n- Implement responsive design testing across device types\n- Set up browser-specific configuration and capability testing\n- Create visual regression testing for UI consistency\n\n**7. CI/CD Integration**\n- Extend existing GitHub Actions workflow with E2E test stage\n- Configure test parallelization and retry mechanisms\n- Implement test result reporting with screenshots/videos on failure\n- Set up test environment provisioning and cleanup in CI\n- Add E2E test coverage reporting and integration with existing coverage system\n\n**Test Structure:**\n```\ne2e/\n├── fixtures/           # Test data and mock files\n├── page-objects/       # Page object models\n├── tests/\n│   ├── auth/          # Authentication flows\n│   ├── puppies/       # Puppy management\n│   ├── feeding/       # Feeding schedules\n│   ├── notifications/ # Notification system\n│   └── integration/   # Full user journeys\n├── utils/             # Test utilities and helpers\n├── global-setup.ts    # Environment setup\n└── global-teardown.ts # Cleanup\n```",
+        "testStrategy": "1. Verify test environment spins up both FE and BE correctly with isolated test database, 2. Validate all authentication flows work end-to-end with real JWT tokens, 3. Test complete user journeys from registration to advanced features, 4. Verify API integration with real HTTP calls and database operations, 5. Ensure cross-browser compatibility across Chrome, Firefox, Safari, and mobile, 6. Confirm CI/CD pipeline runs E2E tests successfully with proper reporting, 7. Validate test data seeding and cleanup works consistently, 8. Test error scenarios and edge cases in real environment conditions",
+        "status": "pending",
+        "dependencies": [
+          "2",
+          "32",
+          "33",
+          "34"
+        ],
+        "priority": "medium",
+        "subtasks": []
       }
     ],
     "metadata": {
       "version": "1.0.0",
-      "lastModified": "2025-10-02T13:31:22.557Z",
-      "taskCount": 36,
-      "completedCount": 2,
+      "lastModified": "2025-10-02T16:40:12.451Z",
+      "taskCount": 37,
+      "completedCount": 3,
       "tags": [
         "master"
       ]
