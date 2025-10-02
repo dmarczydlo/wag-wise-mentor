@@ -35,6 +35,13 @@
     "userId": "1234567890"
   },
   "claudeCode": {},
+  "cursor": {
+    "enabled": true,
+    "mcpServerName": "task-master-ai",
+    "defaultModel": "claude-3-5-sonnet",
+    "timeout": 120000,
+    "workingDirectory": null
+  },
   "grokCli": {
     "timeout": 120000,
     "workingDirectory": null,

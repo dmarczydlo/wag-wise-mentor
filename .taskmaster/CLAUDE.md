@@ -35,6 +35,38 @@ task-master validate-dependencies                            # Check for depende
 task-master generate                                         # Update task markdown files (usually auto-called)
 ```
 
+## AI Provider Options
+
+TaskMaster supports multiple AI providers:
+
+### 1. Claude (Anthropic) - Recommended
+
+- **Provider**: `claude-code`
+- **Models**: `sonnet`, `opus`, `haiku`
+- **API Key**: `ANTHROPIC_API_KEY`
+- **Best for**: Code generation, complex reasoning
+
+### 2. Cursor IDE - Alternative
+
+- **Provider**: `cursor`
+- **Models**: Uses Cursor's integrated models
+- **Setup**: MCP integration with Cursor IDE
+- **Best for**: Integrated development experience
+
+### 3. OpenAI GPT
+
+- **Provider**: `openai`
+- **Models**: `gpt-4-turbo`, `gpt-3.5-turbo`
+- **API Key**: `OPENAI_API_KEY`
+- **Best for**: General purpose tasks
+
+### 4. Other Providers
+
+- **Google**: `google` (Gemini models)
+- **Perplexity**: `perplexity` (Research features)
+- **Mistral**: `mistral` (Open source models)
+- **OpenRouter**: `openrouter` (Multiple providers)
+
 ## Key Files & Project Structure
 
 ### Core Files
@@ -127,6 +159,86 @@ update; // = task-master update
 analyze_project_complexity; // = task-master analyze-complexity
 complexity_report; // = task-master complexity-report
 ```
+
+## Cursor IDE Integration
+
+### Setup Cursor as AI Provider
+
+1. **Install Prerequisites**
+
+   ```bash
+   # Install TaskMaster globally
+   npm install -g task-master-ai
+
+   # Ensure Cursor IDE is installed
+   # Download from cursor.sh
+   ```
+
+2. **Configure Cursor MCP**
+
+   - Open Cursor Settings (Cmd/Ctrl + ,)
+   - Navigate to **Features** → **MCP**
+   - Add MCP server configuration:
+
+   ```json
+   {
+     "mcpServers": {
+       "task-master-ai": {
+         "command": "npx",
+         "args": ["-y", "task-master-ai"],
+         "env": {
+           "CURSOR_ENABLED": "true",
+           "CURSOR_MCP_SERVER": "task-master-ai"
+         }
+       }
+     }
+   }
+   ```
+
+3. **Enable TaskMaster in Cursor**
+
+   - Toggle **Enable MCP** to `true`
+   - Enable the `task-master-ai` server
+   - Restart Cursor IDE
+
+4. **Configure TaskMaster for Cursor**
+
+   ```bash
+   # Set Cursor as primary provider
+   task-master models --provider=cursor --setup
+
+   # Initialize in your project
+   task-master init
+   ```
+
+### Using TaskMaster in Cursor
+
+Once configured, use TaskMaster commands directly in Cursor's AI chat:
+
+```
+# Initialize project
+task-master init
+
+# Parse PRD and generate tasks
+task-master parse-prd .taskmaster/docs/prd.txt
+
+# Get next task
+task-master next
+
+# Show task details
+task-master show 1.2
+
+# Mark task complete
+task-master set-status --id=1.2 --status=done
+```
+
+### Benefits of Cursor Integration
+
+- **No API Keys Required** - Uses your Cursor subscription
+- **Integrated Experience** - Work directly in your IDE
+- **Context Awareness** - Cursor understands your codebase
+- **Cost Effective** - No additional API costs
+- **Real-time Collaboration** - Share context with AI assistant
 
 ## Claude Code Workflow Integration
 
@@ -227,7 +339,9 @@ Add to `.claude/settings.json`:
 
 ### API Keys Required
 
-At least **one** of these API keys must be configured:
+At least **one** of these API keys must be configured, OR use Cursor IDE integration:
+
+**Option 1: External API Keys**
 
 - `ANTHROPIC_API_KEY` (Claude models) - **Recommended**
 - `PERPLEXITY_API_KEY` (Research features) - **Highly recommended**
@@ -236,6 +350,13 @@ At least **one** of these API keys must be configured:
 - `MISTRAL_API_KEY` (Mistral models)
 - `OPENROUTER_API_KEY` (Multiple models)
 - `XAI_API_KEY` (Grok models)
+
+**Option 2: Cursor IDE Integration**
+
+- No API keys required
+- Uses Cursor subscription
+- Configure via MCP integration
+- See "Cursor IDE Integration" section above
 
 An API key is required for any provider used across any of the 3 roles defined in the `models` command.
 

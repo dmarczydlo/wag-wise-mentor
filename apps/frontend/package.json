@@ -1,25 +1,14 @@
 {
-  "name": "wag-wise-mentor",
+  "name": "@wag-wise-mentor/frontend",
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
   "scripts": {
-    "dev": "bun run dev:frontend",
-    "dev:frontend": "bun --cwd apps/frontend dev",
-    "dev:backend": "bun --cwd apps/backend start:dev",
-    "build": "bun run build:frontend",
-    "build:frontend": "bun --cwd apps/frontend build",
-    "build:backend": "bun --cwd apps/backend build",
-    "lint": "bun run lint:frontend",
-    "lint:frontend": "bun --cwd apps/frontend lint",
-    "lint:backend": "bun --cwd apps/backend lint",
-    "type-check": "bun run type-check:frontend",
-    "type-check:frontend": "bun --cwd apps/frontend type-check",
-    "type-check:backend": "bun --cwd apps/backend type-check"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -74,8 +63,6 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
-    "@eslint/js": "^9.32.0",
-    "@tailwindcss/typography": "^0.5.16",
     "@types/node": "^22.16.5",
     "@types/react": "^18.3.23",
     "@types/react-dom": "^18.3.7",
@@ -85,7 +72,6 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^15.15.0",
-    "lovable-tagger": "^1.1.10",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.8.3",
