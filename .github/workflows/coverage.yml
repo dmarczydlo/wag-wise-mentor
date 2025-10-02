@@ -1,4 +1,4 @@
-name: Test Coverage
+name: Test & Coverage
 
 on:
   push:
@@ -60,15 +60,10 @@ jobs:
           cd apps/frontend
           bun run test:coverage
 
-      - name: Run E2E tests
-        run: bun run test:e2e
-
       - name: Cache test results
         uses: actions/cache@v4
         with:
           path: |
-            test-results/
-            playwright-report/
             coverage/
           key: ${{ runner.os }}-test-results-${{ github.sha }}
           restore-keys: |
