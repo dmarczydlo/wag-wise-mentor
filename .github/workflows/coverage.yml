@@ -91,3 +91,33 @@ jobs:
           delete-old-comments: true
           github-token: ${{ secrets.CODECOV_TOKEN }}
           title: Coverage Report
+
+      - name: Code Review by GitHub Copilot
+        if: github.event_name == 'pull_request'
+        uses: github/copilot-action@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          review-type: diff
+          review-scope: changed
+          review-languages: |
+            typescript
+            javascript
+            python
+            sql
+            yaml
+            json
+            markdown
+          review-focus: |
+            security
+            performance
+            maintainability
+            best-practices
+            bug-risk
+          max-comments: 20
+          exclude-patterns: |
+            **/node_modules/**
+            **/dist/**
+            **/build/**
+            **/coverage/**
+            **/*.min.js
+            **/*.min.css
