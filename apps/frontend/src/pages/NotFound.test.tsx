@@ -20,7 +20,9 @@ vi.mock("react-router-dom", async () => {
 });
 
 // Mock console.error to track error logging
-const mockConsoleError = vi.spyOn(console, "error").mockImplementation(() => {});
+const mockConsoleError = vi
+  .spyOn(console, "error")
+  .mockImplementation(() => {});
 
 describe("NotFound Component", () => {
   beforeEach(() => {
@@ -73,7 +75,7 @@ describe("NotFound Component", () => {
     it("should log different pathname when location changes", () => {
       // Arrange
       const { rerender } = render(<NotFound />);
-      
+
       // Act - Simulate location change
       vi.mocked(mockLocation).pathname = "/another-missing-route";
       rerender(<NotFound />);
@@ -92,8 +94,14 @@ describe("NotFound Component", () => {
       render(<NotFound />);
 
       // Assert
-      const container = screen.getByText("404").closest("div");
-      expect(container).toHaveClass("flex", "min-h-screen", "items-center", "justify-center", "bg-gray-100");
+      const container = screen.getByText("404").closest("div")?.parentElement;
+      expect(container).toHaveClass(
+        "flex",
+        "min-h-screen",
+        "items-center",
+        "justify-center",
+        "bg-gray-100"
+      );
     });
 
     it("should have centered content", () => {
@@ -123,7 +131,11 @@ describe("NotFound Component", () => {
 
       // Assert
       const homeLink = screen.getByRole("link", { name: "Return to Home" });
-      expect(homeLink).toHaveClass("text-blue-500", "underline", "hover:text-blue-700");
+      expect(homeLink).toHaveClass(
+        "text-blue-500",
+        "underline",
+        "hover:text-blue-700"
+      );
     });
   });
 
@@ -189,8 +201,13 @@ describe("NotFound Component", () => {
       render(<NotFound />);
 
       // Assert
-      const container = screen.getByText("404").closest("div");
-      expect(container).toHaveClass("flex", "min-h-screen", "items-center", "justify-center");
+      const container = screen.getByText("404").closest("div")?.parentElement;
+      expect(container).toHaveClass(
+        "flex",
+        "min-h-screen",
+        "items-center",
+        "justify-center"
+      );
     });
   });
 
@@ -198,13 +215,13 @@ describe("NotFound Component", () => {
     it("should render consistently", () => {
       // Arrange & Act
       const { rerender } = render(<NotFound />);
-      
+
       // Assert - First render
       expect(screen.getByText("404")).toBeInTheDocument();
-      
+
       // Act - Re-render
       rerender(<NotFound />);
-      
+
       // Assert - Should still render correctly
       expect(screen.getByText("404")).toBeInTheDocument();
     });
@@ -212,7 +229,7 @@ describe("NotFound Component", () => {
     it("should handle different route paths", () => {
       // Arrange
       vi.mocked(mockLocation).pathname = "/some/deep/nested/route";
-      
+
       // Act
       render(<NotFound />);
 

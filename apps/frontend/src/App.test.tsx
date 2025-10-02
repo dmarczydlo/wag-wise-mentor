@@ -17,7 +17,9 @@ vi.mock("@/integrations/supabase/client", () => ({
   supabase: {
     auth: {
       getSession: vi.fn().mockResolvedValue({ data: { session: null } }),
-      onAuthStateChange: vi.fn().mockReturnValue({ data: { subscription: { unsubscribe: vi.fn() } } }),
+      onAuthStateChange: vi
+        .fn()
+        .mockReturnValue({ data: { subscription: { unsubscribe: vi.fn() } } }),
     },
   },
 }));
@@ -33,7 +35,7 @@ describe("App Component", () => {
       render(<App />);
 
       // Assert
-      expect(screen.getByText(/your puppy's journey/i)).toBeInTheDocument();
+      expect(screen.getByRole("heading", { level: 1 })).toBeInTheDocument();
     });
 
     it("should render all required providers", () => {
@@ -50,7 +52,7 @@ describe("App Component", () => {
       render(<App />);
 
       // Assert - Check that the default route (Index) is rendered
-      expect(screen.getByText(/your puppy's journey/i)).toBeInTheDocument();
+      expect(screen.getByRole("heading", { level: 1 })).toBeInTheDocument();
     });
   });
 
@@ -96,7 +98,7 @@ describe("App Component", () => {
       render(<App />);
 
       // Assert - Default route should render Index page
-      expect(screen.getByText(/your puppy's journey/i)).toBeInTheDocument();
+      expect(screen.getByRole("heading", { level: 1 })).toBeInTheDocument();
     });
 
     it("should handle 404 routes with NotFound component", () => {

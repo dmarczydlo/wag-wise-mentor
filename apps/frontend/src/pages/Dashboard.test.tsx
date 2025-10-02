@@ -2,6 +2,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import Dashboard from "./Dashboard";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 // Mock react-router-dom
 const mockNavigate = vi.fn();
@@ -14,25 +15,21 @@ vi.mock("react-router-dom", async () => {
 });
 
 // Mock Supabase client
-const mockSupabase = {
-  auth: {
-    getSession: vi.fn(),
-    onAuthStateChange: vi.fn(),
-    signOut: vi.fn(),
-  },
-};
-
 vi.mock("@/integrations/supabase/client", () => ({
-  supabase: mockSupabase,
+  supabase: {
+    auth: {
+      getSession: vi.fn(),
+      onAuthStateChange: vi.fn(),
+      signOut: vi.fn(),
+    },
+  },
 }));
 
 // Mock sonner toast
-const mockToast = {
-  success: vi.fn(),
-};
-
 vi.mock("sonner", () => ({
-  toast: mockToast,
+  toast: {
+    success: vi.fn(),
+  },
 }));
 
 describe("Dashboard Component", () => {
@@ -45,11 +42,13 @@ describe("Dashboard Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockNavigate.mockClear();
-    mockSupabase.auth.getSession.mockResolvedValue({ data: { session: { user: mockUser } } });
-    mockSupabase.auth.onAuthStateChange.mockReturnValue({
+    vi.mocked(supabase.auth.getSession).mockResolvedValue({
+      data: { session: { user: mockUser } },
+    });
+    vi.mocked(supabase.auth.onAuthStateChange).mockReturnValue({
       data: { subscription: { unsubscribe: vi.fn() } },
     });
-    mockSupabase.auth.signOut.mockResolvedValue({ error: null });
+    vi.mocked(supabase.auth.signOut).mockResolvedValue({ error: null });
   });
 
   describe("Component Rendering", () => {
@@ -60,7 +59,9 @@ describe("Dashboard Component", () => {
       // Assert
       await waitFor(() => {
         expect(screen.getByText("Welcome back! 🐾")).toBeInTheDocument();
-        expect(screen.getByText("Let's take care of your puppy today")).toBeInTheDocument();
+        expect(
+          screen.getByText("Let's take care of your puppy today")
+        ).toBeInTheDocument();
       });
     });
 
@@ -71,7 +72,9 @@ describe("Dashboard Component", () => {
       // Assert
       await waitFor(() => {
         expect(screen.getByText("Puppy Mentor")).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: /sign out/i })).toBeInTheDocument();
+        expect(
+          screen.getByRole("button", { name: /sign out/i })
+        ).toBeInTheDocument();
       });
     });
 
@@ -82,8 +85,14 @@ describe("Dashboard Component", () => {
       // Assert
       await waitFor(() => {
         expect(screen.getByText("Get Started")).toBeInTheDocument();
-        expect(screen.getByText("Add your first puppy to begin tracking their care journey")).toBeInTheDocument();
-        expect(screen.getByRole("button", { name: "Add Your Puppy" })).toBeInTheDocument();
+        expect(
+          screen.getByText(
+            "Add your first puppy to begin tracking their care journey"
+          )
+        ).toBeInTheDocument();
+        expect(
+          screen.getByRole("button", { name: "Add Your Puppy" })
+        ).toBeInTheDocument();
       });
     });
 
@@ -108,14 +117,16 @@ describe("Dashboard Component", () => {
       const sessionPromise = new Promise((resolve) => {
         resolveSession = resolve;
       });
-      mockSupabase.auth.getSession.mockReturnValue(sessionPromise);
+      vi.mocked(supabase.auth.getSession).mockReturnValue(sessionPromise);
 
       // Act
       render(<Dashboard />);
 
       // Assert
       expect(screen.getByText("Loading...")).toBeInTheDocument();
-      expect(screen.getByRole("img", { hidden: true })).toBeInTheDocument(); // Heart icon
+      expect(
+        screen.getByText("Loading...").closest("div")?.querySelector("svg")
+      ).toBeInTheDocument(); // Heart icon
     });
 
     it("should hide loading state after session is loaded", async () => {
@@ -133,7 +144,9 @@ describe("Dashboard Component", () => {
   describe("Authentication", () => {
     it("should redirect to auth page if no session", async () => {
       // Arrange
-      mockSupabase.auth.getSession.mockResolvedValue({ data: { session: null } });
+      vi.mocked(supabase.auth.getSession).mockResolvedValue({
+        data: { session: null },
+      });
 
       // Act
       render(<Dashboard />);
@@ -149,16 +162,18 @@ describe("Dashboard Component", () => {
       render(<Dashboard />);
 
       // Assert
-      expect(mockSupabase.auth.onAuthStateChange).toHaveBeenCalled();
+      expect(supabase.auth.onAuthStateChange).toHaveBeenCalled();
     });
 
     it("should redirect to auth page on auth state change to no session", async () => {
       // Arrange
       const mockOnAuthStateChange = vi.fn();
-      mockSupabase.auth.onAuthStateChange.mockImplementation((callback) => {
-        mockOnAuthStateChange.mockImplementation(callback);
-        return { data: { subscription: { unsubscribe: vi.fn() } } };
-      });
+      vi.mocked(supabase.auth.onAuthStateChange).mockImplementation(
+        (callback) => {
+          mockOnAuthStateChange.mockImplementation(callback);
+          return { data: { subscription: { unsubscribe: vi.fn() } } };
+        }
+      );
 
       render(<Dashboard />);
 
@@ -176,15 +191,19 @@ describe("Dashboard Component", () => {
     it("should handle sign out successfully", async () => {
       // Arrange
       render(<Dashboard />);
-      const signOutButton = await screen.findByRole("button", { name: /sign out/i });
+      const signOutButton = await screen.findByRole("button", {
+        name: /sign out/i,
+      });
 
       // Act
       fireEvent.click(signOutButton);
 
       // Assert
       await waitFor(() => {
-        expect(mockSupabase.auth.signOut).toHaveBeenCalled();
-        expect(mockToast.success).toHaveBeenCalledWith("Signed out successfully");
+        expect(supabase.auth.signOut).toHaveBeenCalled();
+        expect(vi.mocked(toast.success)).toHaveBeenCalledWith(
+          "Signed out successfully"
+        );
         expect(mockNavigate).toHaveBeenCalledWith("/");
       });
     });
@@ -194,7 +213,9 @@ describe("Dashboard Component", () => {
       render(<Dashboard />);
 
       // Assert
-      const signOutButton = await screen.findByRole("button", { name: /sign out/i });
+      const signOutButton = await screen.findByRole("button", {
+        name: /sign out/i,
+      });
       expect(signOutButton).toBeInTheDocument();
       expect(signOutButton).toHaveClass("gap-2");
     });
@@ -209,11 +230,15 @@ describe("Dashboard Component", () => {
       await waitFor(() => {
         // Puppy Profile
         expect(screen.getByText("Puppy Profile")).toBeInTheDocument();
-        expect(screen.getByText("Manage your puppy's information")).toBeInTheDocument();
+        expect(
+          screen.getByText("Manage your puppy's information")
+        ).toBeInTheDocument();
 
         // Feeding Schedule
         expect(screen.getByText("Feeding Schedule")).toBeInTheDocument();
-        expect(screen.getByText("Track meals and portions")).toBeInTheDocument();
+        expect(
+          screen.getByText("Track meals and portions")
+        ).toBeInTheDocument();
 
         // Appointments
         expect(screen.getByText("Appointments")).toBeInTheDocument();
@@ -257,7 +282,9 @@ describe("Dashboard Component", () => {
 
       // Assert
       await waitFor(() => {
-        const addPuppyButton = screen.getByRole("button", { name: "Add Your Puppy" });
+        const addPuppyButton = screen.getByRole("button", {
+          name: "Add Your Puppy",
+        });
         expect(addPuppyButton).toBeInTheDocument();
         expect(addPuppyButton).toHaveClass("bg-primary");
       });
@@ -295,8 +322,13 @@ describe("Dashboard Component", () => {
 
       // Assert
       await waitFor(() => {
-        const dashboardContainer = screen.getByText("Welcome back! 🐾").closest("div");
-        expect(dashboardContainer).toHaveClass("min-h-screen", "bg-gradient-warm");
+        const dashboardContainer = screen
+          .getByText("Welcome back! 🐾")
+          .closest("div")?.parentElement?.parentElement; // Go up to the main container
+        expect(dashboardContainer).toHaveClass(
+          "min-h-screen",
+          "bg-gradient-warm"
+        );
       });
     });
   });
@@ -308,8 +340,11 @@ describe("Dashboard Component", () => {
 
       // Assert
       await waitFor(() => {
-        const heartIcons = screen.getAllByRole("img", { hidden: true });
-        expect(heartIcons.length).toBeGreaterThan(0);
+        const heartIcons = screen
+          .getByText("Welcome back! 🐾")
+          .closest("div")
+          ?.parentElement?.querySelectorAll("svg");
+        expect(heartIcons?.length).toBeGreaterThan(0);
       });
     });
 
@@ -319,7 +354,9 @@ describe("Dashboard Component", () => {
 
       // Assert
       await waitFor(() => {
-        const addPuppyButton = screen.getByRole("button", { name: "Add Your Puppy" });
+        const addPuppyButton = screen.getByRole("button", {
+          name: "Add Your Puppy",
+        });
         expect(addPuppyButton).toBeInTheDocument();
         // The plus icon should be present (hidden for screen readers)
         const plusIcon = addPuppyButton.querySelector("svg");
@@ -350,8 +387,10 @@ describe("Dashboard Component", () => {
       // Assert
       await waitFor(() => {
         const signOutButton = screen.getByRole("button", { name: /sign out/i });
-        const addPuppyButton = screen.getByRole("button", { name: "Add Your Puppy" });
-        
+        const addPuppyButton = screen.getByRole("button", {
+          name: "Add Your Puppy",
+        });
+
         expect(signOutButton).toBeInTheDocument();
         expect(addPuppyButton).toBeInTheDocument();
       });
