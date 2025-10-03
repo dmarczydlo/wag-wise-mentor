@@ -13,6 +13,7 @@ This document outlines the comprehensive testing strategy for the Wag Wise Mento
 3. **Real Environment Testing**: Use real databases, services, and integrations where possible
 4. **Automated Testing**: All tests must run in CI/CD pipeline
 5. **Fast Feedback**: Tests should provide quick feedback during development
+6. **Abstract Class Pattern**: Use abstract classes for repositories and services to enable clean dependency injection without string tokens
 
 ## Testing Stack
 
@@ -180,6 +181,44 @@ e2e/
    afterEach(async () => {
      await queryRunner.rollbackTransaction();
    });
+   ```
+
+4. **Abstract Class Repository Pattern**
+
+   ```typescript
+   // Domain Layer - Abstract Repository
+   export abstract class PuppyRepository {
+     abstract save(puppy: Puppy): Promise<Puppy>;
+     abstract findById(id: PuppyId): Promise<Puppy | null>;
+     abstract findByOwnerId(ownerId: string): Promise<Puppy[]>;
+   }
+
+   // Infrastructure Layer - Concrete Implementation
+   @Injectable()
+   export class InMemoryPuppyRepository extends PuppyRepository {
+     async save(puppy: Puppy): Promise<Puppy> {
+       // Implementation
+     }
+     
+     async findById(id: PuppyId): Promise<Puppy | null> {
+       // Implementation
+     }
+     
+     async findByOwnerId(ownerId: string): Promise<Puppy[]> {
+       // Implementation
+     }
+   }
+
+   // Module Configuration - No string tokens needed
+   @Module({
+     providers: [
+       {
+         provide: PuppyRepository,
+         useClass: InMemoryPuppyRepository,
+       },
+     ],
+   })
+   export class PuppyModule {}
    ```
 
 ### Frontend Testing (Dual App Structure)

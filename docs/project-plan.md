@@ -115,14 +115,14 @@ wag-wise-mentor/
 3. **Initialize NestJS Backend Structure with DDD Architecture** ✅
    - Create apps/backend/ with NestJS CLI
    - Implement Domain-Driven Design (DDD) architecture:
-     - **Domain Layer**: Entities, Value Objects, Domain Services, Repository Interfaces
+     - **Domain Layer**: Entities, Value Objects, Domain Services, Abstract Repository Classes
      - **Application Layer**: Use Cases, Application Services, Command/Query DTOs
-     - **Infrastructure Layer**: Repository Implementations, Controllers, External Service Adapters
+     - **Infrastructure Layer**: Concrete Repository Implementations, Controllers, External Service Adapters
    - Configure NestJS modules structure (auth, puppies, calendar, training, ai)
    - Set up Supabase client integration in backend
    - Configure environment variables and config module
    - Set up backend development server
-   - Implement dependency injection with proper abstraction layers
+   - Implement dependency injection using abstract classes (no string tokens)
 
 ### Phase 0.5: Testing Infrastructure Setup ✅ COMPLETED
 
@@ -137,7 +137,7 @@ wag-wise-mentor/
    - Set up test database for integration tests
    - Create test utilities and helpers
    - Implement AAA (Arrange-Act-Assert) pattern in all tests
-   - Use in-memory providers for repository testing
+   - Use concrete implementations of abstract classes for repository testing
 
 5. **Setup Frontend Testing with Vitest** ✅
    - Configure Vitest for React component and utility testing
@@ -206,7 +206,7 @@ wag-wise-mentor/
     - Create Infrastructure Layer: Supabase repository implementation, photo upload adapter
     - Implement breed data management with proper domain modeling
     - Create weight records and medical history management with business logic
-    - Write comprehensive tests using AAA pattern and in-memory providers
+    - Write comprehensive tests using AAA pattern and concrete implementations of abstract classes
 
 37. **Build Calendar & Events Backend Module with DDD** 🔄
     - Create Domain Layer: Event entity, RecurringEvent value object, Schedule domain service
@@ -533,7 +533,7 @@ The project will implement a dual-application architecture to optimize for both 
 - **E2E**: Playwright with Browser MCP integration + Page Object Models
 - **Pattern**: AAA (Arrange-Act-Assert) for all tests
 - **Strategy**: Behavior testing over mocking
-- **Providers**: In-memory implementations for backend testing
+- **Providers**: Concrete implementations of abstract classes for backend testing
 - **Page Objects**: Service-oriented design following [Selenium best practices](https://www.selenium.dev/documentation/test_practices/encouraged/page_object_models/)
 
 ### Infrastructure
