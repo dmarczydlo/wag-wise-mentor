@@ -81,7 +81,7 @@ wag-wise-mentor/
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    Package Dependencies                        │
+│                    Package Dependencies                         │
 └─────────────────────────────────────────────────────────────────┘
 
 apps/backend ──┐
@@ -102,14 +102,14 @@ apps/marketing ┘
 
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │    Domain       │    │   Application   │    │ Infrastructure  │
-│    Layer        │    │     Layer      │    │     Layer       │
+│    Layer        │    │     Layer       │    │     Layer       │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
          │                       │                       │
-    ┌─────────┐            ┌─────────┐            ┌─────────┐
-    │Entities │            │Use Cases│            │Controllers│
+    ┌─────────┐            ┌─────────┐            ┌────────────┐
+    │Entities │            │Use Cases│            │Controllers │
     │Value    │            │Commands │            │Repositories│
-    │Objects  │            │Queries  │            │Services   │
-    └─────────┘            └─────────┘            └─────────┘
+    │Objects  │            │Queries  │            │Services    │
+    └─────────┘            └─────────┘            └────────────┘
 ```
 
 ### Module Structure
@@ -152,7 +152,7 @@ src/
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                Dependency Injection Pattern                    │
+│                Dependency Injection Pattern                     │
 └─────────────────────────────────────────────────────────────────┘
 
 Use Case ──► @Inject(SYMBOL_TOKEN) ──► Abstract Repository
@@ -170,7 +170,7 @@ Use Case ──► @Inject(SYMBOL_TOKEN) ──► Abstract Repository
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    Frontend Architecture                       │
+│                    Frontend Architecture                        │
 └─────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────┐    ┌─────────────────┐
@@ -178,9 +178,9 @@ Use Case ──► @Inject(SYMBOL_TOKEN) ──► Abstract Repository
 │   Website       │    │   Application   │
 │                 │    │                 │
 │ ┌─────────────┐ │    │ ┌─────────────┐ │
-│ │   Next.js    │ │    │ │    React    │ │
-│ │     SSR      │ │    │ │     SPA     │ │
-│ │   SEO Ready  │ │    │ │  Auth Req   │ │
+│ │   Next.js   │ │    │ │    React    │ │
+│ │     SSR     │ │    │ │     SPA     │ │
+│ │   SEO Ready │ │    │ │  Auth Req   │ │
 │ └─────────────┘ │    │ └─────────────┘ │
 └─────────────────┘    └─────────────────┘
          │                       │
@@ -265,8 +265,8 @@ Puppies ──┐
 
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │     Vercel      │    │     Vercel      │    │   Railway/      │
-│   Marketing     │    │   Dashboard     │    │   Render       │
-│   Website       │    │   Application   │    │   Backend      │
+│   Marketing     │    │   Dashboard     │    │   Render        │
+│   Website       │    │   Application   │    │   Backend       │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
          │                       │                       │
          └───────────────────────┼───────────────────────┘
@@ -304,7 +304,7 @@ Puppies ──┐
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                      Git Workflow                              │
+│                      Git Workflow                               │
 └─────────────────────────────────────────────────────────────────┘
 
 Feature Branch ──► Development ──► Pull Request ──► Code Review
@@ -316,7 +316,7 @@ Feature Branch ──► Development ──► Pull Request ──► Code Revie
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                      Build Process                             │
+│                      Build Process                              │
 └─────────────────────────────────────────────────────────────────┘
 
 Source Code ──► TypeScript Compilation ──► Bundle ──► Production
@@ -328,6 +328,7 @@ Source Code ──► TypeScript Compilation ──► Bundle ──► Producti
 ## Technology Stack
 
 ### Backend Stack
+
 - **Framework**: NestJS with TypeScript
 - **Architecture**: Domain-Driven Design (DDD)
 - **Database**: Supabase (PostgreSQL)
@@ -335,6 +336,7 @@ Source Code ──► TypeScript Compilation ──► Bundle ──► Producti
 - **Dependency Injection**: Abstract Classes + Symbol Tokens
 
 ### Frontend Stack
+
 - **Marketing**: Next.js with SSR
 - **Dashboard**: React with Vite
 - **Styling**: Tailwind CSS
@@ -342,6 +344,7 @@ Source Code ──► TypeScript Compilation ──► Bundle ──► Producti
 - **State Management**: React Query
 
 ### Shared Packages
+
 - **Types**: TypeScript definitions
 - **Utilities**: Date/time, validation, formatting
 - **UI Components**: Reusable React components
@@ -353,7 +356,7 @@ Source Code ──► TypeScript Compilation ──► Bundle ──► Producti
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    Authentication Flow                         │
+│                    Authentication Flow                          │
 └─────────────────────────────────────────────────────────────────┘
 
 User ──► Login Form ──► Supabase Auth ──► JWT Token ──► Protected Routes
@@ -406,4 +409,4 @@ Admin Routes ──► System Administration
 
 ---
 
-*This architecture document is maintained alongside the project and should be updated as the system evolves.*
+_This architecture document is maintained alongside the project and should be updated as the system evolves._

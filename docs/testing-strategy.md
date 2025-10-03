@@ -16,6 +16,7 @@ This document outlines the comprehensive testing strategy for the Wag Wise Mento
 4. **Branch Protection**: `main` branch should be protected and require PR approval
 
 **Required Git Commands for Development**:
+
 ```bash
 # 1. Create and checkout feature branch
 git checkout -b feature/your-feature-name
@@ -33,6 +34,7 @@ git push origin feature/your-feature-name
 ```
 
 **Branch Naming Conventions**:
+
 - `feature/` - New features or major functionality
 - `fix/` - Bug fixes
 - `refactor/` - Code refactoring without changing functionality
@@ -41,6 +43,7 @@ git push origin feature/your-feature-name
 - `chore/` - Maintenance tasks, dependency updates
 
 **Commit Message Format**:
+
 - Use conventional commits: `type(scope): description`
 - Types: `feat`, `fix`, `refactor`, `docs`, `test`, `chore`
 - Examples:

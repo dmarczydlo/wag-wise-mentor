@@ -52,6 +52,7 @@ For detailed architecture information, including system design, component relati
 **📋 [Architecture Documentation](./architecture.md)**
 
 This document contains:
+
 - System architecture overview with ASCII diagrams
 - Monorepo structure and package dependencies
 - Backend DDD architecture patterns

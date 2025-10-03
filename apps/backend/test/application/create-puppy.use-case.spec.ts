@@ -4,6 +4,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 import {
   CreatePuppyUseCase,
   CreatePuppyCommand,
+  PUPPY_REPOSITORY,
 } from "../../src/application/puppy/puppy.use-cases";
 import { InMemoryPuppyRepository } from "../../src/infrastructure/puppy/in-memory-puppy.repository";
 import { PuppyRepository } from "../../src/domain/puppy/puppy.repository";
@@ -19,7 +20,7 @@ describe("CreatePuppyUseCase - AAA Pattern", () => {
       providers: [
         CreatePuppyUseCase,
         {
-          provide: "PuppyRepository",
+          provide: PUPPY_REPOSITORY,
           useClass: InMemoryPuppyRepository,
         },
       ],
@@ -27,7 +28,7 @@ describe("CreatePuppyUseCase - AAA Pattern", () => {
 
     useCase = module.get<CreatePuppyUseCase>(CreatePuppyUseCase);
     repository = module.get<PuppyRepository>(
-      "PuppyRepository"
+      PUPPY_REPOSITORY
     ) as InMemoryPuppyRepository;
 
     // Clear repository before each test
