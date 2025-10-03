@@ -38,7 +38,7 @@ bun run dev
 
 The application will be available at:
 
-- **Frontend**: http://localhost:8081
+- **Frontend**: http://localhost:5173
 - **Backend**: http://localhost:3001
 
 ## 🏗️ Project Structure
@@ -49,10 +49,10 @@ This is a **Bun monorepo** with the following structure:
 wag-wise-mentor/
 ├── apps/
 │   ├── frontend/          # React + Vite frontend
-│   └── backend/           # NestJS backend (coming soon)
+│   └── backend/           # NestJS backend with DDD architecture
 ├── packages/
 │   ├── shared/            # Shared types and utilities
-│   └── ui/                # Reusable UI components
+│   └── ui/                # Reusable UI components (shadcn/ui)
 ├── supabase/              # Database migrations and config
 ├── docs/                  # Documentation
 ├── scripts/               # Build and utility scripts
@@ -71,9 +71,10 @@ wag-wise-mentor/
 - **TanStack Query** for data fetching
 - **Supabase** for authentication and database
 
-**Backend** (Planned)
+**Backend**
 
-- **NestJS** with TypeScript
+- **NestJS** with TypeScript and DDD architecture
+- **Domain-Driven Design** with proper layer separation
 - **PostgreSQL** via Supabase
 - **JWT** authentication
 - **RESTful API** design
@@ -283,12 +284,16 @@ task-master add-task --prompt="Your task description"
 
 - ✅ **Monorepo Structure**: Bun workspaces with apps and packages
 - ✅ **Frontend**: React + Vite with Tailwind CSS and shadcn/ui
+- ✅ **Backend**: NestJS with DDD architecture and comprehensive testing
+- ✅ **Shared Packages**: Types, utilities, and UI components
 - ✅ **Authentication**: Supabase Auth integration
 - ✅ **Testing Infrastructure**: Vitest, Mocha, Playwright setup
 - ✅ **Type Safety**: Comprehensive TypeScript configuration
 
 ### Planned Features
 
+- 🔄 **Marketing Website**: Separate Next.js SSR site for SEO and marketing
+- 🔄 **Authenticated App**: React SPA for logged-in users
 - 🔄 **Backend API**: NestJS with comprehensive endpoints
 - 🔄 **Puppy Profiles**: Complete puppy management system
 - 🔄 **Feeding Schedules**: AI-powered feeding recommendations

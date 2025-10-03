@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { BaseEntity, PaginationParams, PaginatedResponse } from "./common.js";
 
-// API Request/Response DTOs
 export interface ApiResponse<T = any> {
   success: boolean;
   data?: T;
@@ -15,7 +14,6 @@ export interface ApiError {
   details?: Record<string, any>;
 }
 
-// User-related DTOs
 export interface UserDto extends BaseEntity {
   email: string;
   firstName: string;
@@ -48,7 +46,6 @@ export interface AuthResponse {
   refreshToken: string;
 }
 
-// Puppy-related DTOs
 export interface PuppyDto extends BaseEntity {
   name: string;
   breed: string;
@@ -92,7 +89,6 @@ export interface WeightRecordDto extends BaseEntity {
   notes?: string;
 }
 
-// Validation schemas for API DTOs
 export const CreateUserSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
@@ -127,7 +123,6 @@ export const UpdatePuppySchema = z.object({
   photos: z.array(z.string().url()).optional(),
 });
 
-// API response types
 export type UsersResponse = PaginatedResponse<UserDto>;
 export type PuppiesResponse = PaginatedResponse<PuppyDto>;
 export type MedicalRecordsResponse = PaginatedResponse<MedicalRecordDto>;

@@ -64,19 +64,19 @@ apps/backend/
     └── helpers/
 ```
 
-### Frontend Tests
+### Frontend Tests (Updated Structure)
 
 ```
-apps/frontend/
+apps/frontend/                    # Dashboard App (React SPA)
 ├── src/
 │   ├── components/
-│   │   ├── ui/
-│   │   │   ├── button.tsx
-│   │   │   └── button.test.tsx
+│   │   ├── dashboard/
+│   │   │   ├── Dashboard.tsx
+│   │   │   └── Dashboard.test.tsx
+│   │   ├── puppy-profile/
+│   │   │   ├── PuppyProfile.tsx
+│   │   │   └── PuppyProfile.test.tsx
 │   │   └── features/
-│   │       ├── puppy-profile/
-│   │       │   ├── PuppyProfile.tsx
-│   │       │   └── PuppyProfile.test.tsx
 │   ├── hooks/
 │   │   ├── use-puppy.ts
 │   │   └── use-puppy.test.ts
@@ -87,19 +87,44 @@ apps/frontend/
     ├── setup.ts
     ├── fixtures/
     └── helpers/
+
+apps/marketing/                   # Marketing Website (Next.js SSR)
+├── src/
+│   ├── app/
+│   │   ├── page.tsx
+│   │   └── page.test.tsx
+│   ├── components/
+│   │   ├── Hero.tsx
+│   │   └── Hero.test.tsx
+│   └── lib/
+└── test/
+    ├── setup.ts
+    ├── fixtures/
+    └── helpers/
 ```
 
-### E2E Tests
+### E2E Tests (Updated for Dual Apps)
 
 ```
 e2e/
 ├── tests/
-│   ├── auth.spec.ts
-│   ├── puppy-profile.spec.ts
-│   ├── feeding-schedule.spec.ts
-│   └── notifications.spec.ts
+│   ├── marketing/
+│   │   ├── landing-page.spec.ts
+│   │   ├── pricing.spec.ts
+│   │   └── seo.spec.ts
+│   ├── app/
+│   │   ├── auth.spec.ts
+│   │   ├── puppy-profile.spec.ts
+│   │   ├── feeding-schedule.spec.ts
+│   │   └── notifications.spec.ts
+│   └── integration/
+│       ├── marketing-to-app-flow.spec.ts
+│       └── cross-domain-auth.spec.ts
 ├── fixtures/
 ├── page-objects/
+│   ├── MarketingPage.ts
+│   ├── DashboardPage.ts
+│   └── BasePage.ts
 └── playwright.config.ts
 ```
 
@@ -108,14 +133,12 @@ e2e/
 ### Backend Testing
 
 1. **Unit Tests**
-
    - Test individual service methods
    - Test business logic and validation
    - Use real database with transactions
    - Test error handling and edge cases
 
 2. **Integration Tests**
-
    - Test API endpoints end-to-end
    - Test database operations
    - Test external service integrations
@@ -134,46 +157,77 @@ e2e/
    });
    ```
 
-### Frontend Testing
+### Frontend Testing (Dual App Structure)
+
+#### Dashboard App (React SPA)
 
 1. **Component Tests**
-
-   - Test component rendering
-   - Test user interactions
-   - Test props and state changes
-   - Test accessibility
+   - Test dashboard components rendering
+   - Test user interactions and state changes
+   - Test authentication-dependent components
+   - Test accessibility and responsive design
 
 2. **Hook Tests**
-
-   - Test custom hook behavior
-   - Test state management
-   - Test side effects
-   - Test error handling
+   - Test custom hooks for data fetching
+   - Test authentication hooks
+   - Test state management hooks
+   - Test error handling and loading states
 
 3. **Integration Tests**
-   - Test component interactions
-   - Test form submissions
-   - Test API integration
-   - Test routing
+   - Test component interactions within dashboard
+   - Test form submissions and API integration
+   - Test client-side routing
+   - Test real-time updates and notifications
 
-### E2E Testing
+#### Marketing Website (Next.js SSR)
 
-1. **Critical User Flows**
+1. **Component Tests**
+   - Test marketing page components
+   - Test static generation and SSR
+   - Test SEO metadata rendering
+   - Test responsive layouts
 
+2. **Page Tests**
+   - Test page-level components
+   - Test static generation
+   - Test dynamic routes
+   - Test API routes
+
+3. **SEO Tests**
+   - Test meta tags and structured data
+   - Test Open Graph tags
+   - Test sitemap generation
+   - Test performance metrics
+
+### E2E Testing (Dual App Structure)
+
+1. **Marketing Website Flows**
+   - Landing page load and navigation
+   - Pricing page interactions
+   - Contact form submissions
+   - SEO metadata validation
+   - Performance and accessibility
+
+2. **Dashboard App Flows**
    - User registration and authentication
    - Puppy profile creation and management
    - Feeding schedule setup and updates
    - Notification management
    - Dashboard interactions
 
-2. **Cross-browser Testing**
+3. **Cross-App Integration Flows**
+   - Marketing to app signup flow
+   - Cross-domain authentication
+   - Shared session management
+   - Domain redirects and routing
 
+4. **Cross-browser Testing**
    - Chrome (primary)
    - Firefox
    - Safari
-   - Mobile responsive
+   - Mobile responsive (both apps)
 
-3. **Browser MCP Integration**
+5. **Browser MCP Integration**
 
    ```typescript
    // Use browser MCP for advanced automation
@@ -244,23 +298,42 @@ e2e/
 
 ## Tools and Commands
 
-### Running Tests
+### Running Tests (Updated Commands)
 
 ```bash
+# All tests (from root)
+bun run test              # Run all tests across monorepo
+bun run test:coverage     # Generate coverage reports
+
 # Backend tests
 cd apps/backend
-npm run test              # Unit tests
-npm run test:integration  # Integration tests
-npm run test:coverage     # Coverage report
+bun run test              # Unit tests
+bun run test:integration  # Integration tests
+bun run test:coverage     # Coverage report
 
-# Frontend tests
+# Dashboard app tests
 cd apps/frontend
-npm run test              # Unit tests
-npm run test:coverage     # Coverage report
+bun run test              # Unit tests
+bun run test:coverage     # Coverage report
+
+# Marketing website tests (when implemented)
+cd apps/marketing
+bun run test              # Unit tests
+bun run test:coverage     # Coverage report
+
+# Shared package tests
+cd packages/shared
+bun run test:run          # Unit tests
+bun run test:coverage     # Coverage report
+
+cd packages/ui
+bun run test:run          # Unit tests
+bun run test:coverage     # Coverage report
 
 # E2E tests
-npm run test:e2e          # Playwright tests
-npm run test:e2e:ui       # Playwright UI mode
+bun run test:e2e          # Playwright tests
+bun run test:e2e:ui       # Playwright UI mode
+bun run test:e2e:headed   # Playwright headed mode
 ```
 
 ### Coverage Commands

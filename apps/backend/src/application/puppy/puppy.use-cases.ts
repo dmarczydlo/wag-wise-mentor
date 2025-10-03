@@ -10,7 +10,6 @@ import {
 } from "../../domain/puppy/puppy.entity";
 import { PuppyRepository } from "../../domain/puppy/puppy.repository";
 
-// Use Case - Create Puppy
 export interface CreatePuppyCommand {
   name: string;
   breed: string;
@@ -34,7 +33,6 @@ export class CreatePuppyUseCase {
 
   async execute(command: CreatePuppyCommand): Promise<CreatePuppyResult> {
     try {
-      // Validate business rules
       const puppyId = new PuppyId(this.generateId());
       const name = new PuppyName(command.name);
       const breed = new Breed(command.breed);
@@ -44,7 +42,6 @@ export class CreatePuppyUseCase {
         command.weightUnit
       );
 
-      // Create the puppy entity
       const puppy = Puppy.create(
         puppyId,
         name,
@@ -54,7 +51,6 @@ export class CreatePuppyUseCase {
         command.ownerId
       );
 
-      // Save to repository
       const savedPuppy = await this.puppyRepository.save(puppy);
 
       return {
@@ -75,7 +71,6 @@ export class CreatePuppyUseCase {
   }
 }
 
-// Use Case - Get Puppy by ID
 @Injectable()
 export class GetPuppyByIdUseCase {
   constructor(
@@ -88,7 +83,6 @@ export class GetPuppyByIdUseCase {
   }
 }
 
-// Use Case - Get Puppies by Owner
 @Injectable()
 export class GetPuppiesByOwnerUseCase {
   constructor(
@@ -100,7 +94,6 @@ export class GetPuppiesByOwnerUseCase {
   }
 }
 
-// Use Case - Update Puppy Weight
 export interface UpdatePuppyWeightCommand {
   puppyId: string;
   newWeight: number;

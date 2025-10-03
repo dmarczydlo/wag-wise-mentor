@@ -12,13 +12,11 @@ import { PuppyRepository } from "../../domain/puppy/puppy.repository";
 @Module({
   controllers: [PuppyController],
   providers: [
-    // Use Cases
     CreatePuppyUseCase,
     GetPuppyByIdUseCase,
     GetPuppiesByOwnerUseCase,
     UpdatePuppyWeightUseCase,
 
-    // Repository Implementation (In-Memory for testing)
     {
       provide: "PuppyRepository",
       useClass: InMemoryPuppyRepository,
