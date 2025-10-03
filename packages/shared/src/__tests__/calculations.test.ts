@@ -214,4 +214,5 @@ describe("Calculation Utilities", () => {
       expect(advanced.level).toBe("Advanced");
     });
   });
-});
+
+  });

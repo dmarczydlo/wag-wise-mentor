@@ -91,6 +91,23 @@ describe("Date Utilities", () => {
       const result = calculateAge(birthDate.toISOString());
       expect(result.years).toBe(2);
     });
+
+    it("should handle negative months adjustment", () => {
+      const birthDate = new Date();
+      birthDate.setFullYear(birthDate.getFullYear() - 1);
+      birthDate.setMonth(birthDate.getMonth() + 1);
+      
+      const result = calculateAge(birthDate);
+      expect(result.years).toBeGreaterThanOrEqual(0);
+      expect(result.months).toBeGreaterThanOrEqual(0);
+    });
+
+    it("should calculate total days correctly", () => {
+      const birthDate = new Date("2020-01-01");
+      const result = calculateAge(birthDate);
+      expect(result.totalDays).toBeGreaterThan(0);
+      expect(typeof result.totalDays).toBe("number");
+    });
   });
 
   describe("getRelativeTime", () => {
@@ -130,6 +147,39 @@ describe("Date Utilities", () => {
 
       const result = getRelativeTime(date.toISOString());
       expect(result).toBe("1 hour ago");
+    });
+
+    it("should return correct format for weeks", () => {
+      const date = new Date();
+      date.setDate(date.getDate() - 14);
+      const result = getRelativeTime(date);
+      expect(result).toMatch(/week/);
+    });
+
+    it("should return correct format for months", () => {
+      const date = new Date();
+      date.setMonth(date.getMonth() - 6);
+      const result = getRelativeTime(date);
+      expect(result).toMatch(/month/);
+    });
+
+    it("should return correct format for years", () => {
+      const date = new Date();
+      date.setFullYear(date.getFullYear() - 2);
+      const result = getRelativeTime(date);
+      expect(result).toMatch(/year/);
+    });
+
+    it("should handle singular vs plural correctly", () => {
+      const oneWeekAgo = new Date();
+      oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+      const oneWeekResult = getRelativeTime(oneWeekAgo);
+      expect(oneWeekResult).toBe("1 week ago");
+
+      const twoWeeksAgo = new Date();
+      twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
+      const twoWeeksResult = getRelativeTime(twoWeeksAgo);
+      expect(twoWeeksResult).toBe("2 weeks ago");
     });
   });
 
