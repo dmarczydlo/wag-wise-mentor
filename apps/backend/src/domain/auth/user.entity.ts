@@ -108,6 +108,9 @@ export class User extends Entity<UserId> {
   }
 
   public canManageFamily(): boolean {
-    return this.role.value === UserRoleType.ADMIN || this.role.value === UserRoleType.USER;
+    return (
+      this.role.value === UserRoleType.ADMIN ||
+      this.role.value === UserRoleType.USER
+    );
   }
 }

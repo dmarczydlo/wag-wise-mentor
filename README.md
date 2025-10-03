@@ -304,8 +304,10 @@ task-master add-task --prompt="Your task description"
 
 ## 📚 Documentation
 
+- [Architecture Documentation](docs/architecture.md) - System design and technical architecture
 - [Testing Strategy](docs/testing-strategy.md) - Comprehensive testing approach
 - [Environment Variables](docs/environment-variables.md) - Configuration guide
+- [Project Plan](docs/project-plan.md) - Complete project roadmap and task management
 - [API Documentation](docs/api.md) - Backend API reference (coming soon)
 - [Component Library](docs/components.md) - UI component documentation (coming soon)
 
