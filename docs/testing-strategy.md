@@ -103,7 +103,7 @@ apps/marketing/                   # Marketing Website (Next.js SSR)
     └── helpers/
 ```
 
-### E2E Tests (Updated for Dual Apps)
+### E2E Tests (Updated for Dual Apps with Page Object Models)
 
 ```
 e2e/
@@ -122,9 +122,34 @@ e2e/
 │       └── cross-domain-auth.spec.ts
 ├── fixtures/
 ├── page-objects/
-│   ├── MarketingPage.ts
-│   ├── DashboardPage.ts
-│   └── BasePage.ts
+│   ├── base/
+│   │   ├── BasePage.ts
+│   │   └── BaseComponent.ts
+│   ├── marketing/
+│   │   ├── LandingPage.ts
+│   │   ├── PricingPage.ts
+│   │   ├── ContactPage.ts
+│   │   └── components/
+│   │       ├── NavigationComponent.ts
+│   │       ├── HeroComponent.ts
+│   │       └── FooterComponent.ts
+│   ├── app/
+│   │   ├── LoginPage.ts
+│   │   ├── DashboardPage.ts
+│   │   ├── PuppyProfilePage.ts
+│   │   ├── FeedingSchedulePage.ts
+│   │   └── components/
+│   │       ├── PuppyCardComponent.ts
+│   │       ├── FeedingFormComponent.ts
+│   │       └── CalendarComponent.ts
+│   └── shared/
+│       ├── AuthComponent.ts
+│       ├── NotificationComponent.ts
+│       └── LoadingComponent.ts
+├── helpers/
+│   ├── TestUtils.ts
+│   ├── BrowserMCP.ts
+│   └── DataFactory.ts
 └── playwright.config.ts
 ```
 
@@ -199,46 +224,236 @@ e2e/
    - Test sitemap generation
    - Test performance metrics
 
-### E2E Testing (Dual App Structure)
+### E2E Testing (Dual App Structure with Page Object Models)
 
-1. **Marketing Website Flows**
-   - Landing page load and navigation
-   - Pricing page interactions
-   - Contact form submissions
-   - SEO metadata validation
-   - Performance and accessibility
+#### Page Object Model Implementation
 
-2. **Dashboard App Flows**
-   - User registration and authentication
-   - Puppy profile creation and management
-   - Feeding schedule setup and updates
-   - Notification management
-   - Dashboard interactions
+Following [Selenium Page Object Model best practices](https://www.selenium.dev/documentation/test_practices/encouraged/page_object_models/), we implement a comprehensive Page Object Model architecture:
 
-3. **Cross-App Integration Flows**
-   - Marketing to app signup flow
-   - Cross-domain authentication
-   - Shared session management
-   - Domain redirects and routing
+**Core Principles:**
+1. **Clean Separation**: Test code separated from page-specific code (locators, layout)
+2. **Single Repository**: All page services/operations centralized in one place
+3. **UI Change Resilience**: UI changes only require updates in Page Objects, not tests
+4. **Service-Oriented**: Page Objects represent services offered by pages, not implementation details
 
-4. **Cross-browser Testing**
-   - Chrome (primary)
-   - Firefox
-   - Safari
-   - Mobile responsive (both apps)
+**Architecture Structure:**
 
-5. **Browser MCP Integration**
+```typescript
+// Base Page Object - Common functionality
+export abstract class BasePage {
+  protected page: Page;
+  protected baseUrl: string;
 
-   ```typescript
-   // Use browser MCP for advanced automation
-   import { browserMCP } from "@playwright/browser-mcp";
+  constructor(page: Page, baseUrl: string) {
+    this.page = page;
+    this.baseUrl = baseUrl;
+  }
 
-   test("puppy profile creation", async ({ page }) => {
-     await browserMCP.navigate(page, "/dashboard");
-     await browserMCP.interact(page, "create-puppy-button");
-     // ... test implementation
-   });
-   ```
+  // Common navigation methods
+  async navigateTo(path: string): Promise<void> {
+    await this.page.goto(`${this.baseUrl}${path}`);
+  }
+
+  async waitForLoad(): Promise<void> {
+    await this.page.waitForLoadState('networkidle');
+  }
+
+  // Common assertion methods
+  async assertPageTitle(expectedTitle: string): Promise<void> {
+    await expect(this.page).toHaveTitle(expectedTitle);
+  }
+
+  async assertUrlContains(expectedPath: string): Promise<void> {
+    await expect(this.page).toHaveURL(new RegExp(expectedPath));
+  }
+}
+
+// Marketing Page Object Example
+export class LandingPage extends BasePage {
+  // Locators - only defined once
+  private readonly heroSection = this.page.locator('[data-testid="hero-section"]');
+  private readonly ctaButton = this.page.locator('[data-testid="cta-button"]');
+  private readonly pricingLink = this.page.locator('[data-testid="pricing-link"]');
+
+  constructor(page: Page) {
+    super(page, process.env.MARKETING_URL || 'http://localhost:3000');
+  }
+
+  // Services offered by the landing page
+  async navigateToLanding(): Promise<void> {
+    await this.navigateTo('/');
+    await this.waitForLoad();
+  }
+
+  async clickGetStarted(): Promise<PricingPage> {
+    await this.ctaButton.click();
+    return new PricingPage(this.page);
+  }
+
+  async navigateToPricing(): Promise<PricingPage> {
+    await this.pricingLink.click();
+    return new PricingPage(this.page);
+  }
+
+  async assertHeroVisible(): Promise<void> {
+    await expect(this.heroSection).toBeVisible();
+  }
+
+  async assertPageLoaded(): Promise<void> {
+    await this.assertPageTitle('Wag Wise Mentor - AI-Powered Puppy Care');
+    await this.assertHeroVisible();
+  }
+}
+
+// Dashboard Page Object Example
+export class DashboardPage extends BasePage {
+  // Locators
+  private readonly puppyCards = this.page.locator('[data-testid="puppy-card"]');
+  private readonly addPuppyButton = this.page.locator('[data-testid="add-puppy-button"]');
+  private readonly userMenu = this.page.locator('[data-testid="user-menu"]');
+
+  constructor(page: Page) {
+    super(page, process.env.APP_URL || 'http://localhost:5173');
+  }
+
+  // Services offered by the dashboard
+  async navigateToDashboard(): Promise<void> {
+    await this.navigateTo('/dashboard');
+    await this.waitForLoad();
+  }
+
+  async clickAddPuppy(): Promise<PuppyProfilePage> {
+    await this.addPuppyButton.click();
+    return new PuppyProfilePage(this.page);
+  }
+
+  async getPuppyCount(): Promise<number> {
+    return await this.puppyCards.count();
+  }
+
+  async assertDashboardLoaded(): Promise<void> {
+    await this.assertPageTitle('Dashboard - Wag Wise Mentor');
+    await expect(this.addPuppyButton).toBeVisible();
+  }
+}
+
+// Component Object Example
+export class PuppyCardComponent {
+  private readonly card: Locator;
+  private readonly name: Locator;
+  private readonly editButton: Locator;
+
+  constructor(page: Page, puppyId: string) {
+    this.card = page.locator(`[data-testid="puppy-card-${puppyId}"]`);
+    this.name = this.card.locator('[data-testid="puppy-name"]');
+    this.editButton = this.card.locator('[data-testid="edit-puppy-button"]');
+  }
+
+  async clickEdit(): Promise<PuppyProfilePage> {
+    await this.editButton.click();
+    return new PuppyProfilePage(this.card.page());
+  }
+
+  async getName(): Promise<string> {
+    return await this.name.textContent() || '';
+  }
+
+  async assertPuppyName(expectedName: string): Promise<void> {
+    await expect(this.name).toHaveText(expectedName);
+  }
+}
+```
+
+**Test Implementation with Page Objects:**
+
+```typescript
+// Test using Page Objects
+test.describe('Puppy Management Flow', () => {
+  test('should create and manage puppy profile', async ({ page }) => {
+    // Arrange
+    const loginPage = new LoginPage(page);
+    const dashboardPage = new DashboardPage(page);
+    const puppyProfilePage = new PuppyProfilePage(page);
+
+    // Act - Login
+    await loginPage.navigateToLogin();
+    await loginPage.loginAs('test@example.com', 'password123');
+    
+    // Act - Navigate to dashboard
+    await dashboardPage.navigateToDashboard();
+    await dashboardPage.assertDashboardLoaded();
+    
+    // Act - Add new puppy
+    await dashboardPage.clickAddPuppy();
+    await puppyProfilePage.fillPuppyDetails({
+      name: 'Buddy',
+      breed: 'Golden Retriever',
+      birthDate: '2024-01-01'
+    });
+    await puppyProfilePage.savePuppy();
+    
+    // Assert - Verify puppy appears on dashboard
+    await dashboardPage.navigateToDashboard();
+    const puppyCount = await dashboardPage.getPuppyCount();
+    expect(puppyCount).toBe(1);
+    
+    // Act - Edit puppy
+    const puppyCard = new PuppyCardComponent(page, 'buddy-123');
+    await puppyCard.clickEdit();
+    await puppyProfilePage.updatePuppyName('Buddy Jr.');
+    await puppyProfilePage.savePuppy();
+    
+    // Assert - Verify updated name
+    await dashboardPage.navigateToDashboard();
+    await puppyCard.assertPuppyName('Buddy Jr.');
+  });
+});
+```
+
+**Page Object Model Benefits:**
+
+1. **Maintainability**: UI changes only require Page Object updates
+2. **Reusability**: Page Objects can be reused across multiple tests
+3. **Readability**: Tests focus on user behavior, not implementation
+4. **Reliability**: Centralized locator management reduces flaky tests
+5. **Scalability**: Easy to add new pages and components
+
+**Implementation Guidelines:**
+
+1. **One Page Object per Page**: Each page/component has its own Page Object
+2. **Service Methods**: Methods represent services offered by the page
+3. **Return Other Page Objects**: Navigation methods return destination Page Objects
+4. **No Assertions in Page Objects**: Page Objects don't make assertions (except page validation)
+5. **Component Objects**: Reusable components get their own Page Objects
+6. **Fluent API**: Chain methods for better readability
+
+**Browser MCP Integration with Page Objects:**
+
+```typescript
+// Advanced Page Object with Browser MCP
+export class AdvancedDashboardPage extends BasePage {
+  constructor(page: Page) {
+    super(page, process.env.APP_URL || 'http://localhost:5173');
+  }
+
+  async setupAdvancedEnvironment(): Promise<void> {
+    await browserMCP.setup(this.page, {
+      viewport: { width: 1920, height: 1080 },
+      userAgent: 'custom-test-agent',
+    });
+  }
+
+  async performComplexInteraction(): Promise<void> {
+    await browserMCP.interact(this.page, '[data-testid="complex-widget"]');
+    await browserMCP.waitForElement(this.page, '[data-testid="result-panel"]');
+  }
+
+  async assertAdvancedState(): Promise<void> {
+    await browserMCP.assertElementVisible(this.page, '[data-testid="success-indicator"]');
+    await browserMCP.assertTextContent(this.page, 'h1', 'Operation Complete');
+  }
+}
+```
 
 ## Coverage Requirements
 
