@@ -5,9 +5,9 @@ import {
   GetPuppyByIdUseCase,
   GetPuppiesByOwnerUseCase,
   UpdatePuppyWeightUseCase,
+  PUPPY_REPOSITORY,
 } from "../../application/puppy/puppy.use-cases";
 import { InMemoryPuppyRepository } from "./in-memory-puppy.repository";
-import { PuppyRepository } from "../../domain/puppy/puppy.repository";
 
 @Module({
   controllers: [PuppyController],
@@ -16,12 +16,11 @@ import { PuppyRepository } from "../../domain/puppy/puppy.repository";
     GetPuppyByIdUseCase,
     GetPuppiesByOwnerUseCase,
     UpdatePuppyWeightUseCase,
-
     {
-      provide: "PuppyRepository",
+      provide: PUPPY_REPOSITORY,
       useClass: InMemoryPuppyRepository,
     },
   ],
-  exports: ["PuppyRepository"], // Export for other modules
+  exports: [PUPPY_REPOSITORY],
 })
 export class PuppyModule {}

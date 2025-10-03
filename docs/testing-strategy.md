@@ -199,11 +199,11 @@ e2e/
      async save(puppy: Puppy): Promise<Puppy> {
        // Implementation
      }
-     
+
      async findById(id: PuppyId): Promise<Puppy | null> {
        // Implementation
      }
-     
+
      async findByOwnerId(ownerId: string): Promise<Puppy[]> {
        // Implementation
      }

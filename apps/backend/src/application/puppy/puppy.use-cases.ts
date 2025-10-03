@@ -10,6 +10,8 @@ import {
 } from "../../domain/puppy/puppy.entity";
 import { PuppyRepository } from "../../domain/puppy/puppy.repository";
 
+export const PUPPY_REPOSITORY = Symbol("PuppyRepository");
+
 export interface CreatePuppyCommand {
   name: string;
   breed: string;
@@ -28,7 +30,7 @@ export interface CreatePuppyResult {
 @Injectable()
 export class CreatePuppyUseCase {
   constructor(
-    @Inject("PuppyRepository") private readonly puppyRepository: PuppyRepository
+    @Inject(PUPPY_REPOSITORY) private readonly puppyRepository: PuppyRepository
   ) {}
 
   async execute(command: CreatePuppyCommand): Promise<CreatePuppyResult> {
@@ -74,7 +76,7 @@ export class CreatePuppyUseCase {
 @Injectable()
 export class GetPuppyByIdUseCase {
   constructor(
-    @Inject("PuppyRepository") private readonly puppyRepository: PuppyRepository
+    @Inject(PUPPY_REPOSITORY) private readonly puppyRepository: PuppyRepository
   ) {}
 
   async execute(id: string): Promise<Puppy | null> {
@@ -86,7 +88,7 @@ export class GetPuppyByIdUseCase {
 @Injectable()
 export class GetPuppiesByOwnerUseCase {
   constructor(
-    @Inject("PuppyRepository") private readonly puppyRepository: PuppyRepository
+    @Inject(PUPPY_REPOSITORY) private readonly puppyRepository: PuppyRepository
   ) {}
 
   async execute(ownerId: string): Promise<Puppy[]> {
@@ -103,7 +105,7 @@ export interface UpdatePuppyWeightCommand {
 @Injectable()
 export class UpdatePuppyWeightUseCase {
   constructor(
-    @Inject("PuppyRepository") private readonly puppyRepository: PuppyRepository
+    @Inject(PUPPY_REPOSITORY) private readonly puppyRepository: PuppyRepository
   ) {}
 
   async execute(command: UpdatePuppyWeightCommand): Promise<CreatePuppyResult> {

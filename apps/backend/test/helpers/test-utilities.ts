@@ -1,4 +1,5 @@
-import { describe, it, expect, beforeEach, afterEach } from "mocha";
+import { describe, it, beforeEach, afterEach } from "mocha";
+import { expect } from "chai";
 import { InMemoryPuppyRepository } from "../../src/infrastructure/puppy/in-memory-puppy.repository";
 import {
   Puppy,
@@ -7,6 +8,7 @@ import {
   Breed,
   BirthDate,
   Weight,
+  WeightUnit,
 } from "../../src/domain/puppy/puppy.entity";
 
 /**
@@ -18,7 +20,7 @@ export class PuppyTestDataBuilder {
   private name: PuppyName = new PuppyName("Buddy");
   private breed: Breed = new Breed("Golden Retriever");
   private birthDate: BirthDate = new BirthDate(new Date("2023-01-01"));
-  private currentWeight: Weight = new Weight(10, "kg");
+  private currentWeight: Weight = new Weight(10, WeightUnit.KG);
   private ownerId: string = "owner-1";
 
   static create(): PuppyTestDataBuilder {
@@ -45,7 +47,7 @@ export class PuppyTestDataBuilder {
     return this;
   }
 
-  withWeight(value: number, unit: "kg" | "lbs" = "kg"): PuppyTestDataBuilder {
+  withWeight(value: number, unit: WeightUnit = WeightUnit.KG): PuppyTestDataBuilder {
     this.currentWeight = new Weight(value, unit);
     return this;
   }
@@ -84,11 +86,11 @@ export class PuppyTestDataBuilder {
   }
 
   static heavyPuppy(): PuppyTestDataBuilder {
-    return PuppyTestDataBuilder.create().withWeight(25, "kg");
+    return PuppyTestDataBuilder.create().withWeight(25, WeightUnit.KG);
   }
 
   static lightPuppy(): PuppyTestDataBuilder {
-    return PuppyTestDataBuilder.create().withWeight(2, "kg");
+    return PuppyTestDataBuilder.create().withWeight(2, WeightUnit.KG);
   }
 }
 
@@ -127,7 +129,7 @@ export class RepositoryTestHelper {
       breed: string;
       birthDate: Date;
       weight: number;
-      weightUnit: "kg" | "lbs";
+      weightUnit: WeightUnit;
       ownerId: string;
     }> = {}
   ): Promise<Puppy> {
@@ -138,7 +140,7 @@ export class RepositoryTestHelper {
     if (overrides.breed) builder.withBreed(overrides.breed);
     if (overrides.birthDate) builder.withBirthDate(overrides.birthDate);
     if (overrides.weight !== undefined) {
-      builder.withWeight(overrides.weight, overrides.weightUnit || "kg");
+      builder.withWeight(overrides.weight, overrides.weightUnit || WeightUnit.KG);
     }
     if (overrides.ownerId) builder.withOwnerId(overrides.ownerId);
 
@@ -376,7 +378,7 @@ export class TestDataFactory {
       breed: string;
       birthDate: Date;
       weight: number;
-      weightUnit: "kg" | "lbs";
+      weightUnit: WeightUnit;
       ownerId: string;
     }> = {}
   ): Puppy {
@@ -385,7 +387,7 @@ export class TestDataFactory {
       .withName(overrides.name || "Buddy")
       .withBreed(overrides.breed || "Golden Retriever")
       .withBirthDate(overrides.birthDate || new Date("2023-01-01"))
-      .withWeight(overrides.weight || 10, overrides.weightUnit || "kg")
+      .withWeight(overrides.weight || 10, overrides.weightUnit || WeightUnit.KG)
       .withOwnerId(overrides.ownerId || "owner-1")
       .build();
   }
@@ -518,7 +520,7 @@ describe("TestDataBuilder Example", () => {
     const puppy = PuppyTestDataBuilder.create()
       .withName("Max")
       .withBreed("Labrador")
-      .withWeight(15, "kg")
+      .withWeight(15, WeightUnit.KG)
       .build();
 
     // Act
