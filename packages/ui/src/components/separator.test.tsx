@@ -5,25 +5,25 @@ import { Separator } from "./separator";
 describe("Separator Component", () => {
   it("should render horizontal separator by default", () => {
     render(<Separator />);
-    const separator = screen.getByRole("separator");
+    const separator = screen.getByRole("none");
     expect(separator).toBeInTheDocument();
   });
 
   it("should render vertical separator", () => {
     render(<Separator orientation="vertical" />);
-    const separator = screen.getByRole("separator");
+    const separator = screen.getByRole("none");
     expect(separator).toBeInTheDocument();
   });
 
   it("should apply custom className", () => {
     render(<Separator className="custom-class" />);
-    const separator = screen.getByRole("separator");
+    const separator = screen.getByRole("none");
     expect(separator).toHaveClass("custom-class");
   });
 
   it("should render with decorative prop", () => {
     render(<Separator decorative />);
-    const separator = screen.getByRole("separator");
+    const separator = screen.getByRole("none");
     expect(separator).toBeInTheDocument();
   });
 });

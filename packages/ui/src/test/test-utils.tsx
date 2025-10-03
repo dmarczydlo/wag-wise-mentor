@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { render, act } from "@testing-library/react";
 import { ReactElement } from "react";
 
 export * from "@testing-library/react";

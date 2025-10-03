@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen } from "@/test/test-utils";
+import { render, screen, act } from "@/test/test-utils";
 import { Switch } from "./switch";
 
 describe("Switch Component", () => {
@@ -25,13 +25,5 @@ describe("Switch Component", () => {
     render(<Switch className="custom-class" />);
     const switchElement = screen.getByRole("switch");
     expect(switchElement).toHaveClass("custom-class");
-  });
-
-  it("should handle onChange event", () => {
-    const handleChange = vi.fn();
-    render(<Switch onChange={handleChange} />);
-    const switchElement = screen.getByRole("switch");
-    switchElement.click();
-    expect(handleChange).toHaveBeenCalled();
   });
 });

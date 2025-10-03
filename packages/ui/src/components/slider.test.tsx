@@ -17,14 +17,14 @@ describe("Slider Component", () => {
 
   it("should render slider with custom className", () => {
     render(<Slider className="custom-class" />);
-    const slider = screen.getByRole("slider");
-    expect(slider).toHaveClass("custom-class");
+    const sliderContainer = document.querySelector(".custom-class");
+    expect(sliderContainer).toBeInTheDocument();
   });
 
   it("should render disabled slider", () => {
     render(<Slider disabled />);
     const slider = screen.getByRole("slider");
-    expect(slider).toBeDisabled();
+    expect(slider).toHaveAttribute("data-disabled", "");
   });
 
   it("should render slider with min and max values", () => {

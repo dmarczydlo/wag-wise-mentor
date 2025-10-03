@@ -5,20 +5,20 @@ import { Skeleton } from "./skeleton";
 describe("Skeleton Component", () => {
   it("should render skeleton with default styling", () => {
     render(<Skeleton />);
-    const skeleton = screen.getByRole("status");
+    const skeleton = document.querySelector(".animate-pulse");
     expect(skeleton).toBeInTheDocument();
   });
 
   it("should render skeleton with custom className", () => {
     render(<Skeleton className="custom-class" />);
-    const skeleton = screen.getByRole("status");
-    expect(skeleton).toHaveClass("custom-class");
+    const skeleton = document.querySelector(".custom-class");
+    expect(skeleton).toBeInTheDocument();
   });
 
   it("should render skeleton with custom dimensions", () => {
     render(<Skeleton className="w-20 h-10" />);
-    const skeleton = screen.getByRole("status");
-    expect(skeleton).toHaveClass("w-20", "h-10");
+    const skeleton = document.querySelector(".w-20.h-10");
+    expect(skeleton).toBeInTheDocument();
   });
 
   it("should render skeleton with children", () => {
