@@ -231,6 +231,7 @@ e2e/
 Following [Selenium Page Object Model best practices](https://www.selenium.dev/documentation/test_practices/encouraged/page_object_models/), we implement a comprehensive Page Object Model architecture:
 
 **Core Principles:**
+
 1. **Clean Separation**: Test code separated from page-specific code (locators, layout)
 2. **Single Repository**: All page services/operations centralized in one place
 3. **UI Change Resilience**: UI changes only require updates in Page Objects, not tests
@@ -255,7 +256,7 @@ export abstract class BasePage {
   }
 
   async waitForLoad(): Promise<void> {
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState("networkidle");
   }
 
   // Common assertion methods
@@ -271,17 +272,21 @@ export abstract class BasePage {
 // Marketing Page Object Example
 export class LandingPage extends BasePage {
   // Locators - only defined once
-  private readonly heroSection = this.page.locator('[data-testid="hero-section"]');
+  private readonly heroSection = this.page.locator(
+    '[data-testid="hero-section"]'
+  );
   private readonly ctaButton = this.page.locator('[data-testid="cta-button"]');
-  private readonly pricingLink = this.page.locator('[data-testid="pricing-link"]');
+  private readonly pricingLink = this.page.locator(
+    '[data-testid="pricing-link"]'
+  );
 
   constructor(page: Page) {
-    super(page, process.env.MARKETING_URL || 'http://localhost:3000');
+    super(page, process.env.MARKETING_URL || "http://localhost:3000");
   }
 
   // Services offered by the landing page
   async navigateToLanding(): Promise<void> {
-    await this.navigateTo('/');
+    await this.navigateTo("/");
     await this.waitForLoad();
   }
 
@@ -300,7 +305,7 @@ export class LandingPage extends BasePage {
   }
 
   async assertPageLoaded(): Promise<void> {
-    await this.assertPageTitle('Wag Wise Mentor - AI-Powered Puppy Care');
+    await this.assertPageTitle("Wag Wise Mentor - AI-Powered Puppy Care");
     await this.assertHeroVisible();
   }
 }
@@ -309,16 +314,18 @@ export class LandingPage extends BasePage {
 export class DashboardPage extends BasePage {
   // Locators
   private readonly puppyCards = this.page.locator('[data-testid="puppy-card"]');
-  private readonly addPuppyButton = this.page.locator('[data-testid="add-puppy-button"]');
+  private readonly addPuppyButton = this.page.locator(
+    '[data-testid="add-puppy-button"]'
+  );
   private readonly userMenu = this.page.locator('[data-testid="user-menu"]');
 
   constructor(page: Page) {
-    super(page, process.env.APP_URL || 'http://localhost:5173');
+    super(page, process.env.APP_URL || "http://localhost:5173");
   }
 
   // Services offered by the dashboard
   async navigateToDashboard(): Promise<void> {
-    await this.navigateTo('/dashboard');
+    await this.navigateTo("/dashboard");
     await this.waitForLoad();
   }
 
@@ -332,7 +339,7 @@ export class DashboardPage extends BasePage {
   }
 
   async assertDashboardLoaded(): Promise<void> {
-    await this.assertPageTitle('Dashboard - Wag Wise Mentor');
+    await this.assertPageTitle("Dashboard - Wag Wise Mentor");
     await expect(this.addPuppyButton).toBeVisible();
   }
 }
@@ -355,7 +362,7 @@ export class PuppyCardComponent {
   }
 
   async getName(): Promise<string> {
-    return await this.name.textContent() || '';
+    return (await this.name.textContent()) || "";
   }
 
   async assertPuppyName(expectedName: string): Promise<void> {
@@ -368,8 +375,8 @@ export class PuppyCardComponent {
 
 ```typescript
 // Test using Page Objects
-test.describe('Puppy Management Flow', () => {
-  test('should create and manage puppy profile', async ({ page }) => {
+test.describe("Puppy Management Flow", () => {
+  test("should create and manage puppy profile", async ({ page }) => {
     // Arrange
     const loginPage = new LoginPage(page);
     const dashboardPage = new DashboardPage(page);
@@ -377,35 +384,35 @@ test.describe('Puppy Management Flow', () => {
 
     // Act - Login
     await loginPage.navigateToLogin();
-    await loginPage.loginAs('test@example.com', 'password123');
-    
+    await loginPage.loginAs("test@example.com", "password123");
+
     // Act - Navigate to dashboard
     await dashboardPage.navigateToDashboard();
     await dashboardPage.assertDashboardLoaded();
-    
+
     // Act - Add new puppy
     await dashboardPage.clickAddPuppy();
     await puppyProfilePage.fillPuppyDetails({
-      name: 'Buddy',
-      breed: 'Golden Retriever',
-      birthDate: '2024-01-01'
+      name: "Buddy",
+      breed: "Golden Retriever",
+      birthDate: "2024-01-01",
     });
     await puppyProfilePage.savePuppy();
-    
+
     // Assert - Verify puppy appears on dashboard
     await dashboardPage.navigateToDashboard();
     const puppyCount = await dashboardPage.getPuppyCount();
     expect(puppyCount).toBe(1);
-    
+
     // Act - Edit puppy
-    const puppyCard = new PuppyCardComponent(page, 'buddy-123');
+    const puppyCard = new PuppyCardComponent(page, "buddy-123");
     await puppyCard.clickEdit();
-    await puppyProfilePage.updatePuppyName('Buddy Jr.');
+    await puppyProfilePage.updatePuppyName("Buddy Jr.");
     await puppyProfilePage.savePuppy();
-    
+
     // Assert - Verify updated name
     await dashboardPage.navigateToDashboard();
-    await puppyCard.assertPuppyName('Buddy Jr.');
+    await puppyCard.assertPuppyName("Buddy Jr.");
   });
 });
 ```
@@ -433,13 +440,13 @@ test.describe('Puppy Management Flow', () => {
 // Advanced Page Object with Browser MCP
 export class AdvancedDashboardPage extends BasePage {
   constructor(page: Page) {
-    super(page, process.env.APP_URL || 'http://localhost:5173');
+    super(page, process.env.APP_URL || "http://localhost:5173");
   }
 
   async setupAdvancedEnvironment(): Promise<void> {
     await browserMCP.setup(this.page, {
       viewport: { width: 1920, height: 1080 },
-      userAgent: 'custom-test-agent',
+      userAgent: "custom-test-agent",
     });
   }
 
@@ -449,8 +456,11 @@ export class AdvancedDashboardPage extends BasePage {
   }
 
   async assertAdvancedState(): Promise<void> {
-    await browserMCP.assertElementVisible(this.page, '[data-testid="success-indicator"]');
-    await browserMCP.assertTextContent(this.page, 'h1', 'Operation Complete');
+    await browserMCP.assertElementVisible(
+      this.page,
+      '[data-testid="success-indicator"]'
+    );
+    await browserMCP.assertTextContent(this.page, "h1", "Operation Complete");
   }
 }
 ```

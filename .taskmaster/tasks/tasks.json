@@ -1489,6 +1489,20 @@
         ],
         "priority": "high",
         "subtasks": []
+      },
+      {
+        "id": 39,
+        "title": "Implement Page Object Models for E2E Tests",
+        "description": "Implement Page Object Models following Selenium best practices to create maintainable and reusable E2E test architecture. This should be completed before starting E2E tests implementation. Reference: https://www.selenium.dev/documentation/test_practices/encouraged/page_object_models/",
+        "details": "",
+        "testStrategy": "",
+        "status": "pending",
+        "dependencies": [
+          6,
+          7
+        ],
+        "priority": "high",
+        "subtasks": []
       }
     ],
     "metadata": {
@@ -1500,7 +1514,8 @@
         "master"
       ],
       "created": "2025-10-03T06:48:12.309Z",
-      "description": "Tasks for master context"
+      "description": "Tasks for master context",
+      "updated": "2025-10-03T07:45:14.785Z"
     }
   }
 }
