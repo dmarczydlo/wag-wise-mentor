@@ -38,6 +38,16 @@ jobs:
       - name: Install dependencies
         run: bun install
 
+      - name: Run shared package tests with coverage
+        run: |
+          cd packages/shared
+          bun run test:coverage
+
+      - name: Run UI package tests with coverage
+        run: |
+          cd packages/ui
+          bun run test:coverage
+
       - name: Run backend tests with coverage
         run: |
           cd apps/backend
@@ -52,10 +62,29 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            coverage/
+            packages/shared/coverage/
+            packages/ui/coverage/
+            apps/backend/coverage/
+            apps/frontend/coverage/
           key: ${{ runner.os }}-test-results-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-test-results-
+
+      - name: Upload shared package coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./packages/shared/coverage/lcov.info
+          flags: shared
+          name: shared-coverage
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Upload UI package coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./packages/ui/coverage/lcov.info
+          flags: ui
+          name: ui-coverage
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload backend coverage to Codecov
         uses: codecov/codecov-action@v3
@@ -78,6 +107,8 @@ jobs:
         with:
           name: coverage-reports
           path: |
+            packages/shared/coverage/
+            packages/ui/coverage/
             apps/backend/coverage/
             apps/frontend/coverage/
 
@@ -86,6 +117,8 @@ jobs:
         uses: romeovs/lcov-reporter-action@v0.3.1
         with:
           lcov-file: |
+            packages/shared/coverage/lcov.info
+            packages/ui/coverage/lcov.info
             apps/backend/coverage/lcov.info
             apps/frontend/coverage/lcov.info
           delete-old-comments: true

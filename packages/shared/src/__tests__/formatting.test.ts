@@ -218,6 +218,15 @@ describe("Formatting Utilities", () => {
       expect(formatPhoneNumber("123-456-7890")).toBe("(123) 456-7890");
       expect(formatPhoneNumber("123 456 7890")).toBe("(123) 456-7890");
     });
+
+    it("should handle 11-digit numbers starting with 1", () => {
+      expect(formatPhoneNumber("11234567890")).toBe("+1 (123) 456-7890");
+    });
+
+    it("should return original input for invalid formats", () => {
+      expect(formatPhoneNumber("invalid")).toBe("invalid");
+      expect(formatPhoneNumber("123")).toBe("123");
+    });
   });
 
   describe("maskSensitive", () => {
