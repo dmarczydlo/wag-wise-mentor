@@ -1,7 +1,6 @@
 import { Entity } from "../shared/base.entity";
 import { ValueObject } from "../shared/base.entity";
 
-// Value Objects
 export class PuppyId extends ValueObject {
   constructor(public readonly value: string) {
     super();
@@ -48,7 +47,6 @@ export class Weight extends ValueObject {
       return this;
     }
 
-    // Convert to kg first, then to target unit
     let kgValue: number;
     if (this.unit === WeightUnit.KG) {
       kgValue = this.value;
@@ -108,7 +106,6 @@ export class BirthDate extends ValueObject {
   }
 }
 
-// Main Entity
 export class Puppy extends Entity<PuppyId> {
   private constructor(
     id: PuppyId,

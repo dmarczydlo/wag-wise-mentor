@@ -1,6 +1,4 @@
 import { z } from "zod";
-
-// Common types used across the application
 export interface BaseEntity {
   id: string;
   createdAt: Date;
@@ -24,7 +22,6 @@ export interface PaginatedResponse<T> {
   };
 }
 
-// Common validation schemas
 export const PaginationSchema = z.object({
   page: z.number().int().min(1).optional().default(1),
   limit: z.number().int().min(1).max(100).optional().default(10),
@@ -34,7 +31,6 @@ export const PaginationSchema = z.object({
 
 export const IdSchema = z.string().uuid();
 
-// Common enums
 export enum UserRole {
   ADMIN = "admin",
   USER = "user",

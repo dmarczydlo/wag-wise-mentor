@@ -1,5 +1,3 @@
-// Database types - these will be generated from Supabase schema
-// For now, we'll define the basic structure
 
 export interface Database {
   public: {

@@ -2,7 +2,6 @@ import { Injectable } from "@nestjs/common";
 import { Puppy, PuppyId } from "../../domain/puppy/puppy.entity";
 import { PuppyRepository } from "../../domain/puppy/puppy.repository";
 
-// In-Memory Implementation (Adapter) - Perfect for testing
 @Injectable()
 export class InMemoryPuppyRepository implements PuppyRepository {
   private puppies: Map<string, Puppy> = new Map();
@@ -38,7 +37,6 @@ export class InMemoryPuppyRepository implements PuppyRepository {
     this.puppies.delete(id.value);
   }
 
-  // Test helper methods
   clear(): void {
     this.puppies.clear();
   }

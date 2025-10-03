@@ -9,7 +9,6 @@ export function calculateIdealWeightRange(
   breed: string,
   ageInWeeks: number
 ): { min: number; max: number; unit: "kg" | "lbs" } {
-  // This is a simplified calculation - in reality, you'd have breed-specific data
   const baseWeight = getBreedBaseWeight(breed);
   const growthFactor = getGrowthFactor(breed, ageInWeeks);
 
@@ -31,10 +30,8 @@ export function calculateFeedingPortion(
   ageInWeeks: number,
   activityLevel: "low" | "medium" | "high" = "medium"
 ): { amount: number; unit: "g" | "cups"; frequency: number } {
-  // Base calculation: 2-3% of body weight per day for puppies
   const basePercentage = ageInWeeks < 12 ? 0.03 : 0.025;
 
-  // Adjust for activity level
   const activityMultiplier = {
     low: 0.9,
     medium: 1.0,
@@ -44,10 +41,8 @@ export function calculateFeedingPortion(
   const dailyAmount =
     weight * basePercentage * activityMultiplier[activityLevel];
 
-  // Convert to grams (assuming 1 cup = 120g of dry food)
   const amountInGrams = dailyAmount * 1000;
 
-  // Determine frequency based on age
   const frequency = ageInWeeks < 12 ? 4 : ageInWeeks < 24 ? 3 : 2;
 
   return {
@@ -91,21 +86,17 @@ export function calculateBodyConditionScore(
 
   let score = 5; // Start with ideal score
 
-  // Adjust based on weight ratio
   if (weightRatio < 0.9) score -= 2;
   else if (weightRatio < 0.95) score -= 1;
   else if (weightRatio > 1.1) score += 1;
   else if (weightRatio > 1.2) score += 2;
 
-  // Adjust based on rib visibility
   if (ribVisibility === "visible") score -= 1;
   else if (ribVisibility === "not_visible") score += 1;
 
-  // Adjust based on waist definition
   if (waistDefinition === "pronounced") score -= 1;
   else if (waistDefinition === "not_visible") score += 1;
 
-  // Clamp score between 1 and 9
   score = Math.max(1, Math.min(9, score));
 
   const descriptions = {
@@ -174,7 +165,6 @@ export function calculateTrainingProgress(
 
   const basePercentage = (completedExercises / totalExercises) * 100;
 
-  // Adjust for mastery level
   const masteryMultiplier = {
     beginner: 1.0,
     intermediate: 0.8,
@@ -193,9 +183,7 @@ export function calculateTrainingProgress(
   };
 }
 
-// Helper functions
 function getBreedBaseWeight(breed: string): number {
-  // Simplified breed weight data (in kg)
   const breedWeights: Record<string, number> = {
     golden_retriever: 30,
     labrador: 30,
@@ -213,7 +201,6 @@ function getBreedBaseWeight(breed: string): number {
 }
 
 function getGrowthFactor(breed: string, ageInWeeks: number): number {
-  // Simplified growth factor calculation
   if (ageInWeeks < 8) return 0.1;
   if (ageInWeeks < 16) return 0.3;
   if (ageInWeeks < 24) return 0.6;

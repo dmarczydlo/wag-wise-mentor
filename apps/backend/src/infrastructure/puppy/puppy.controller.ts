@@ -19,7 +19,6 @@ import { GetPuppiesByOwnerUseCase } from "../../application/puppy/puppy.use-case
 import { UpdatePuppyWeightUseCase } from "../../application/puppy/puppy.use-cases";
 import { WeightUnit } from "../../domain/puppy/puppy.entity";
 
-// DTOs for API
 export class CreatePuppyDto {
   name: string;
   breed: string;

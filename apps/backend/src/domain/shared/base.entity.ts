@@ -1,7 +1,4 @@
-// Domain Layer - Core Business Logic
-// This layer contains entities, value objects, domain services, and business rules
 
-// Base Entity
 export abstract class Entity<T> {
   protected readonly _id: T;
   protected readonly _createdAt: Date;
@@ -38,7 +35,6 @@ export abstract class Entity<T> {
   }
 }
 
-// Base Value Object
 export abstract class ValueObject {
   public equals(vo?: ValueObject): boolean {
     if (vo === null || vo === undefined) {
@@ -51,7 +47,6 @@ export abstract class ValueObject {
   }
 }
 
-// Domain Events
 export abstract class DomainEvent {
   public readonly occurredOn: Date;
   public readonly eventId: string;
@@ -66,7 +61,6 @@ export abstract class DomainEvent {
   }
 }
 
-// Repository Interface (Port)
 export interface Repository<T, ID> {
   findById(id: ID): Promise<T | null>;
   findAll(): Promise<T[]>;
@@ -75,7 +69,5 @@ export interface Repository<T, ID> {
   delete(id: ID): Promise<void>;
 }
 
-// Domain Service Interface
 export interface DomainService {
-  // Domain services contain business logic that doesn't belong to a single entity
 }
