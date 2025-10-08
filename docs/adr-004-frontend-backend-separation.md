@@ -50,13 +50,13 @@ We will implement a **separated frontend and backend architecture** with clear b
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    Separated Architecture                        │
+│                    Separated Architecture                       │
 └─────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Frontend      │    │   Backend       │    │   Database       │
-│   Applications  │    │   Services      │    │   & External     │
-│                 │    │                 │    │   Services       │
+│   Frontend      │    │   Backend       │    │   Database      │
+│   Applications  │    │   Services      │    │   & External    │
+│                 │    │                 │    │   Services      │
 │ ┌─────────────┐ │    │ ┌─────────────┐ │    │ ┌─────────────┐ │
 │ │  Marketing  │ │    │ │   NestJS    │ │    │ │  Supabase   │ │
 │ │  Website    │ │    │ │   API       │ │    │ │  Database   │ │
@@ -65,7 +65,7 @@ We will implement a **separated frontend and backend architecture** with clear b
 │ ┌─────────────┐ │    │ ┌─────────────┐ │    │ ┌─────────────┐ │
 │ │  Dashboard  │ │    │ │   Domain    │ │    │ │  Auth       │ │
 │ │  App        │ │    │ │   Logic     │ │    │ │  Service    │ │
-│ │  (React)    │ │    │ │   (DDD)    │ │    │ │             │ │
+│ │  (React)    │ │    │ │   (DDD)     │ │    │ │             │ │
 │ └─────────────┘ │    │ └─────────────┘ │    │ └─────────────┘ │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
          │                       │                       │
@@ -73,9 +73,9 @@ We will implement a **separated frontend and backend architecture** with clear b
          └───────────────────────┼───────────────────────┘
                                  │
                     ┌─────────────────┐
-                    │   API Gateway    │
-                    │   & Load         │
-                    │   Balancer       │
+                    │   API Gateway   │
+                    │   & Load        │
+                    │   Balancer      │
                     └─────────────────┘
 ```
 
