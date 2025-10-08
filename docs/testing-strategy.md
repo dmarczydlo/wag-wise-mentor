@@ -4,6 +4,50 @@
 
 This document outlines the comprehensive testing strategy for the Wag Wise Mentor monorepo, emphasizing behavior testing over mocking and ensuring high-quality, maintainable code.
 
+## Development Workflow
+
+### Git Workflow Requirements
+
+**CRITICAL**: All development work must follow proper Git workflow:
+
+1. **Always Create Feature Branches**: Never commit directly to `main` branch
+2. **Branch Naming Convention**: Use descriptive branch names (e.g., `feature/auth-module`, `fix/dependency-injection`, `docs/update-testing-strategy`)
+3. **Pull Request Process**: All changes must go through Pull Request review
+4. **Branch Protection**: `main` branch should be protected and require PR approval
+
+**Required Git Commands for Development**:
+```bash
+# 1. Create and checkout feature branch
+git checkout -b feature/your-feature-name
+
+# 2. Make changes and commit
+git add .
+git commit -m "feat: descriptive commit message"
+
+# 3. Push branch to remote
+git push origin feature/your-feature-name
+
+# 4. Create Pull Request via GitHub UI or CLI
+# 5. After PR approval, merge to main
+# 6. Delete feature branch after merge
+```
+
+**Branch Naming Conventions**:
+- `feature/` - New features or major functionality
+- `fix/` - Bug fixes
+- `refactor/` - Code refactoring without changing functionality
+- `docs/` - Documentation updates
+- `test/` - Test-related changes
+- `chore/` - Maintenance tasks, dependency updates
+
+**Commit Message Format**:
+- Use conventional commits: `type(scope): description`
+- Types: `feat`, `fix`, `refactor`, `docs`, `test`, `chore`
+- Examples:
+  - `feat(auth): add user registration with email validation`
+  - `fix(di): resolve abstract class injection issues`
+  - `docs(testing): update Page Object Models documentation`
+
 ## Testing Philosophy
 
 ### Core Principles
