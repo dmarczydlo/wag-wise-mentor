@@ -1,5 +1,12 @@
 import { Injectable, Inject } from "@nestjs/common";
-import { User, UserId, Email, Password, UserRole, UserRoleType } from "../../domain/auth/user.entity";
+import {
+  User,
+  UserId,
+  Email,
+  Password,
+  UserRole,
+  UserRoleType,
+} from "../../domain/auth/user.entity";
 import { UserRepository } from "../../domain/auth/user.repository";
 import * as bcrypt from "bcrypt";
 
@@ -35,7 +42,7 @@ export interface PasswordResetCommand {
 
 export interface PasswordResetResult {
   success: boolean;
-  message: string;
+  message?: string;
   error?: string;
 }
 
@@ -61,7 +68,7 @@ export class RegisterUserUseCase {
 
       const hashedPassword = await bcrypt.hash(password.value, 10);
       const userId = new UserId(this.generateId());
-      
+
       const user = User.create(userId, email, role);
 
       const savedUser = await this.userRepository.save(user);
@@ -73,7 +80,8 @@ export class RegisterUserUseCase {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Unknown error occurred",
+        error:
+          error instanceof Error ? error.message : "Unknown error occurred",
       };
     }
   }
@@ -109,7 +117,10 @@ export class LoginUseCase {
         };
       }
 
-      const isValidPassword = await bcrypt.compare(password.value, command.password);
+      const isValidPassword = await bcrypt.compare(
+        password.value,
+        command.password
+      );
       if (!isValidPassword) {
         return {
           success: false,
@@ -127,7 +138,8 @@ export class LoginUseCase {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Unknown error occurred",
+        error:
+          error instanceof Error ? error.message : "Unknown error occurred",
       };
     }
   }
@@ -165,8 +177,8 @@ export class PasswordResetUseCase {
     } catch (error) {
       return {
         success: false,
-        message: "Failed to send password reset email",
-        error: error instanceof Error ? error.message : "Unknown error occurred",
+        error:
+          error instanceof Error ? error.message : "Unknown error occurred",
       };
     }
   }
@@ -175,7 +187,10 @@ export class PasswordResetUseCase {
     return `reset_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 
-  private async sendPasswordResetEmail(email: string, token: string): Promise<void> {
+  private async sendPasswordResetEmail(
+    email: string,
+    token: string
+  ): Promise<void> {
     console.log(`Password reset email sent to ${email} with token ${token}`);
   }
 }

@@ -48,20 +48,22 @@ This is a **Bun monorepo** with the following structure:
 ```
 wag-wise-mentor/
 ├── apps/
-│   ├── frontend/          # React + Vite frontend
+│   ├── frontend/          # React + Vite dashboard application
 │   └── backend/           # NestJS backend with DDD architecture
 ├── packages/
 │   ├── shared/            # Shared types and utilities
 │   └── ui/                # Reusable UI components (shadcn/ui)
 ├── supabase/              # Database migrations and config
-├── docs/                  # Documentation
-├── scripts/               # Build and utility scripts
-└── e2e/                   # End-to-end tests
+├── docs/                  # Documentation (Architecture, ADRs, Testing)
+├── e2e/                   # End-to-end tests with Playwright
+└── scripts/               # Build and utility scripts
 ```
+
+> **Note**: Marketing website (Next.js) will be added as `apps/marketing/` in future phases
 
 ### Technology Stack
 
-**Frontend**
+**Frontend (Dashboard App)**
 
 - **React 18** with TypeScript
 - **Vite** for fast development and building
@@ -71,22 +73,24 @@ wag-wise-mentor/
 - **TanStack Query** for data fetching
 - **Supabase** for authentication and database
 
-**Backend**
+**Backend (API Services)**
 
 - **NestJS** with TypeScript and DDD architecture
 - **Domain-Driven Design** with proper layer separation
+- **Abstract Classes** for dependency injection (no string tokens)
 - **PostgreSQL** via Supabase
 - **JWT** authentication
 - **RESTful API** design
 
-**Testing**
+**Testing Stack**
 
-- **Vitest** for frontend unit tests
-- **Mocha + Chai** for backend tests
-- **Playwright** for E2E testing
+- **Vitest** for frontend unit tests (performance over Jest)
+- **Mocha + Chai** for backend tests (performance over Jest)
+- **Playwright** for E2E testing with Page Object Models
 - **Browser MCP** integration
+- **AAA Pattern** (Arrange-Act-Assert) for all tests
 
-**Development**
+**Development Tools**
 
 - **Bun** for package management and running
 - **TypeScript** for type safety
@@ -113,19 +117,19 @@ We follow a **behavior-driven testing approach** with comprehensive coverage:
 ### Running Tests
 
 ```bash
-# Frontend tests
-cd apps/frontend
+# All tests
 bun run test
 
-# Backend tests (when implemented)
-cd apps/backend
-bun run test
-
-# E2E tests
-bun run test:e2e
+# Individual test suites
+bun run test:shared      # Shared package tests
+bun run test:ui          # UI package tests
+bun run test:frontend    # Frontend tests
+bun run test:backend     # Backend tests
+bun run test:e2e         # E2E tests
 
 # Coverage reports
-bun run coverage
+bun run test:coverage    # Generate coverage for all packages
+bun run coverage:report  # View coverage reports
 ```
 
 ## 🛠️ Development Commands
@@ -134,44 +138,66 @@ bun run coverage
 
 ```bash
 # Development
-bun run dev              # Start frontend dev server
+bun run dev              # Start both frontend and backend
 bun run dev:frontend     # Start frontend only
 bun run dev:backend      # Start backend only
 
 # Building
-bun run build            # Build frontend
-bun run build:frontend  # Build frontend only
-bun run build:backend   # Build backend only
+bun run build            # Build all packages and apps
+bun run build:shared     # Build shared package
+bun run build:ui         # Build UI package
+bun run build:frontend   # Build frontend only
+bun run build:backend    # Build backend only
 
 # Testing
 bun run test             # Run all tests
+bun run test:shared      # Run shared package tests
+bun run test:ui          # Run UI package tests
 bun run test:frontend    # Run frontend tests
 bun run test:backend     # Run backend tests
-bun run test:e2e        # Run E2E tests
+bun run test:e2e         # Run E2E tests
+
+# Coverage
+bun run test:coverage    # Generate coverage for all
+bun run coverage:report  # View coverage reports
+bun run coverage:check   # Check coverage thresholds
 
 # Code Quality
 bun run lint             # Lint all code
 bun run type-check       # TypeScript type checking
-bun run format           # Format code with Prettier
+bun run clean            # Clean all build artifacts
 ```
 
 ### Workspace Commands
 
 ```bash
-# Frontend
+# Frontend (Dashboard App)
 cd apps/frontend
 bun run dev              # Start Vite dev server
 bun run build            # Build for production
 bun run preview          # Preview production build
 bun run test             # Run Vitest tests
+bun run test:coverage    # Run tests with coverage
 bun run lint             # Run ESLint
 
-# Backend (when implemented)
+# Backend (API Services)
 cd apps/backend
 bun run start:dev        # Start NestJS in dev mode
 bun run build            # Build NestJS app
 bun run test             # Run Mocha tests
+bun run test:coverage    # Run tests with coverage
 bun run lint             # Run ESLint
+
+# Shared Packages
+cd packages/shared
+bun run build            # Build shared package
+bun run test:run         # Run Vitest tests
+bun run test:coverage    # Run tests with coverage
+
+cd packages/ui
+bun run build            # Build UI package
+bun run test:run         # Run Vitest tests
+bun run test:coverage    # Run tests with coverage
 ```
 
 ## 🔧 Environment Variables
@@ -247,11 +273,50 @@ bun run build
 
 ## 🤝 Contributing
 
-1. **Fork** the repository
-2. **Create** a feature branch: `git checkout -b feature/amazing-feature`
-3. **Commit** your changes: `git commit -m 'Add amazing feature'`
-4. **Push** to the branch: `git push origin feature/amazing-feature`
-5. **Open** a Pull Request
+### Git Workflow Requirements
+
+**CRITICAL**: All development work must follow proper Git workflow:
+
+1. **Always Create Feature Branches**: Never commit directly to `main` branch
+2. **Branch Naming Convention**: Use descriptive branch names (e.g., `feature/auth-module`, `fix/dependency-injection`, `docs/update-testing-strategy`)
+3. **Pull Request Process**: All changes must go through Pull Request review
+4. **Branch Protection**: `main` branch should be protected and require PR approval
+
+**Required Git Commands for Development**:
+
+```bash
+# 1. Create and checkout feature branch
+git checkout -b feature/your-feature-name
+
+# 2. Make changes and commit
+git add .
+git commit -m "feat: descriptive commit message"
+
+# 3. Push branch to remote
+git push origin feature/your-feature-name
+
+# 4. Create Pull Request via GitHub UI or CLI
+# 5. After PR approval, merge to main
+# 6. Delete feature branch after merge
+```
+
+**Branch Naming Conventions**:
+
+- `feature/` - New features or major functionality
+- `fix/` - Bug fixes
+- `refactor/` - Code refactoring without changing functionality
+- `docs/` - Documentation updates
+- `test/` - Test-related changes
+- `chore/` - Maintenance tasks, dependency updates
+
+**Commit Message Format**:
+
+- Use conventional commits: `type(scope): description`
+- Types: `feat`, `fix`, `refactor`, `docs`, `test`, `chore`
+- Examples:
+  - `feat(auth): add user registration with email validation`
+  - `fix(di): resolve abstract class injection issues`
+  - `docs(testing): update Page Object Models documentation`
 
 ### Development Workflow
 
@@ -283,29 +348,33 @@ task-master add-task --prompt="Your task description"
 ### Current Features
 
 - ✅ **Monorepo Structure**: Bun workspaces with apps and packages
-- ✅ **Frontend**: React + Vite with Tailwind CSS and shadcn/ui
-- ✅ **Backend**: NestJS with DDD architecture and comprehensive testing
-- ✅ **Shared Packages**: Types, utilities, and UI components
+- ✅ **Frontend Dashboard**: React + Vite with Tailwind CSS and shadcn/ui
+- ✅ **Backend API**: NestJS with DDD architecture and comprehensive testing
+- ✅ **Shared Packages**: Types, utilities, and UI components with full test coverage
 - ✅ **Authentication**: Supabase Auth integration
-- ✅ **Testing Infrastructure**: Vitest, Mocha, Playwright setup
+- ✅ **Testing Infrastructure**: Vitest, Mocha, Playwright with Page Object Models
 - ✅ **Type Safety**: Comprehensive TypeScript configuration
+- ✅ **Documentation**: Architecture docs, ADRs, and testing strategy
+- ✅ **Dependency Injection**: Abstract classes with Symbol tokens (no string tokens)
 
 ### Planned Features
 
 - 🔄 **Marketing Website**: Separate Next.js SSR site for SEO and marketing
-- 🔄 **Authenticated App**: React SPA for logged-in users
-- 🔄 **Backend API**: NestJS with comprehensive endpoints
 - 🔄 **Puppy Profiles**: Complete puppy management system
 - 🔄 **Feeding Schedules**: AI-powered feeding recommendations
 - 🔄 **Vet Appointments**: Calendar integration and reminders
 - 🔄 **Training Plans**: Breed-specific training modules
 - 🔄 **Analytics**: Growth tracking and health insights
 - 🔄 **Notifications**: Smart reminders and alerts
+- 🔄 **AI Integration**: TaskMaster for project management
 
 ## 📚 Documentation
 
+- [Architecture Documentation](docs/architecture.md) - System design and technical architecture
+- [Architecture Decision Records (ADRs)](docs/adr-index.md) - Documented architectural decisions and rationale
 - [Testing Strategy](docs/testing-strategy.md) - Comprehensive testing approach
 - [Environment Variables](docs/environment-variables.md) - Configuration guide
+- [Project Plan](docs/project-plan.md) - Complete project roadmap and task management
 - [API Documentation](docs/api.md) - Backend API reference (coming soon)
 - [Component Library](docs/components.md) - UI component documentation (coming soon)
 

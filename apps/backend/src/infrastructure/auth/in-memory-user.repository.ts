@@ -36,4 +36,17 @@ export class InMemoryUserRepository implements UserRepository {
   async findAll(): Promise<User[]> {
     return Array.from(this.users.values());
   }
+
+  // Test helper methods
+  clear(): void {
+    this.users.clear();
+  }
+
+  getCount(): number {
+    return this.users.size;
+  }
+
+  getAllUsers(): User[] {
+    return Array.from(this.users.values());
+  }
 }

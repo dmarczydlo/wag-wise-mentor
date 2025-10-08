@@ -6,6 +6,18 @@
 
 **Mission**: Never miss a puppy care milestone. Smart feeding schedules, vet appointments, training guides, and AI-powered care plans that grow with your puppy.
 
+## Task Processing Requirements
+
+**CRITICAL**: All task processing must reference and follow these mandatory documents:
+
+- **📋 [Architecture Documentation](./architecture.md)** - System design, component relationships, and technical decisions
+- **📋 [Architecture Decision Records (ADRs)](./adr-index.md)** - Documented architectural decisions and rationale
+- **🧪 [Testing Strategy](./testing-strategy.md)** - Comprehensive testing approach and patterns
+- **⚙️ [Environment Variables](./environment-variables.md)** - Configuration and environment setup
+- **📋 [Project Plan](./project-plan.md)** - This document - complete roadmap and task management
+
+These documents must be checked and referenced during all task processing to ensure consistency and adherence to project standards.
+
 ## Development Principles
 
 The following principles must be followed throughout the entire development process:
@@ -34,61 +46,20 @@ The following principles must be followed throughout the entire development proc
 - **Small Functions**: Keep functions small and focused on a single responsibility
 - **Clean Architecture**: Follow DDD principles with clear separation of concerns
 
-## Current Monorepo Architecture
+## Architecture Reference
 
-```
-wag-wise-mentor/
-├── apps/
-│   ├── frontend/                 # React SPA for authenticated users (dashboard)
-│   │   ├── src/
-│   │   ├── public/
-│   │   ├── package.json
-│   │   ├── vite.config.ts
-│   │   ├── tailwind.config.ts
-│   │   └── tsconfig.json
-│   ├── marketing/                # Next.js SSR marketing website (planned)
-│   │   ├── src/
-│   │   │   ├── app/
-│   │   │   ├── components/
-│   │   │   └── lib/
-│   │   ├── public/
-│   │   ├── package.json
-│   │   ├── next.config.js
-│   │   └── tailwind.config.ts
-│   └── backend/                  # NestJS backend with DDD architecture
-│       ├── src/
-│       │   ├── domain/           # Domain layer (entities, value objects)
-│       │   ├── application/       # Application layer (use cases)
-│       │   ├── infrastructure/    # Infrastructure layer (repositories, controllers)
-│       │   └── main.ts
-│       ├── test/                 # Comprehensive test suite
-│       ├── package.json
-│       └── tsconfig.json
-├── packages/
-│   ├── shared/                   # Shared types and utilities
-│   │   ├── src/
-│   │   │   ├── types/
-│   │   │   ├── utils/
-│   │   │   └── __tests__/
-│   │   ├── dist/
-│   │   ├── package.json
-│   │   └── tsconfig.json
-│   └── ui/                       # Shared UI components (shadcn/ui)
-│       ├── src/
-│       │   ├── components/
-│       │   ├── hooks/
-│       │   └── utils.ts
-│       ├── dist/
-│       ├── package.json
-│       └── tsconfig.json
-├── supabase/                     # Database migrations and config
-├── docs/                         # Documentation
-├── scripts/                      # Build and deployment scripts
-├── e2e/                          # End-to-end tests
-├── package.json                  # Root package.json with workspaces
-├── bun.lock                      # Bun lockfile
-└── README.md
-```
+For detailed architecture information, including system design, component relationships, and technical decisions, please refer to:
+
+**📋 [Architecture Documentation](./architecture.md)**
+
+This document contains:
+
+- System architecture overview with ASCII diagrams
+- Monorepo structure and package dependencies
+- Backend DDD architecture patterns
+- Frontend application structure
+- Database and deployment architecture
+- Development workflow and technology stack
 
 ## Implementation Phases
 
@@ -639,6 +610,7 @@ The project will implement a dual-application architecture to optimize for both 
 4. **Branch Protection**: `main` branch should be protected and require PR approval
 
 **Required Git Commands for Development**:
+
 ```bash
 # 1. Create and checkout feature branch
 git checkout -b feature/your-feature-name
@@ -656,6 +628,7 @@ git push origin feature/your-feature-name
 ```
 
 **Branch Naming Conventions**:
+
 - `feature/` - New features or major functionality
 - `fix/` - Bug fixes
 - `refactor/` - Code refactoring without changing functionality
@@ -664,6 +637,7 @@ git push origin feature/your-feature-name
 - `chore/` - Maintenance tasks, dependency updates
 
 **Commit Message Format**:
+
 - Use conventional commits: `type(scope): description`
 - Types: `feat`, `fix`, `refactor`, `docs`, `test`, `chore`
 - Examples:

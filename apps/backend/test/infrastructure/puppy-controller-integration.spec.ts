@@ -4,6 +4,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { PuppyController } from "../../src/infrastructure/puppy/puppy.controller";
 import { PuppyModule } from "../../src/infrastructure/puppy/puppy.module";
 import { InMemoryPuppyRepository } from "../../src/infrastructure/puppy/in-memory-puppy.repository";
+import { PUPPY_REPOSITORY } from "../../src/application/puppy/puppy.use-cases";
 import {
   Puppy,
   PuppyId,
@@ -26,7 +27,7 @@ describe("PuppyController Integration Tests - AAA Pattern", () => {
     }).compile();
 
     controller = app.get<PuppyController>(PuppyController);
-    repository = app.get<InMemoryPuppyRepository>("PuppyRepository");
+    repository = app.get<InMemoryPuppyRepository>(PUPPY_REPOSITORY);
     repository.clear(); // Clean state for each test
   });
 
