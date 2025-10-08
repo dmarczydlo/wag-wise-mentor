@@ -100,7 +100,8 @@ export class CreateEventUseCase {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Unknown error occurred",
+        error:
+          error instanceof Error ? error.message : "Unknown error occurred",
       };
     }
   }
@@ -130,12 +131,12 @@ export class UpdateEventUseCase {
 
       let updatedEvent = event;
 
-      if (command.title) {
+      if (command.title !== undefined) {
         const newTitle = new EventTitle(command.title);
         updatedEvent = updatedEvent.updateTitle(newTitle);
       }
 
-      if (command.description) {
+      if (command.description !== undefined) {
         const newDescription = new EventDescription(command.description);
         updatedEvent = updatedEvent.updateDescription(newDescription);
       }
@@ -154,7 +155,8 @@ export class UpdateEventUseCase {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Unknown error occurred",
+        error:
+          error instanceof Error ? error.message : "Unknown error occurred",
       };
     }
   }
@@ -166,35 +168,46 @@ export class GenerateHealthTimelineUseCase {
     @Inject(EVENT_REPOSITORY) private readonly eventRepository: EventRepository
   ) {}
 
-  async execute(command: GenerateHealthTimelineCommand): Promise<GenerateHealthTimelineResult> {
+  async execute(
+    command: GenerateHealthTimelineCommand
+  ): Promise<GenerateHealthTimelineResult> {
     try {
+      if (!command.puppyId || command.puppyId.trim().length === 0) {
+        return {
+          success: false,
+          error: "PuppyId cannot be empty",
+        };
+      }
+
       const events: Event[] = [];
       const birthDate = new Date(command.birthDate);
       const currentDate = new Date();
 
-      const vaccinationSchedule = this.getVaccinationSchedule(command.breed, birthDate);
-      
+      const vaccinationSchedule = this.getVaccinationSchedule(
+        command.breed,
+        birthDate
+      );
+
       for (const vaccine of vaccinationSchedule) {
-        if (vaccine.date <= currentDate) {
-          continue;
+        // Only include future vaccination events
+        if (vaccine.date > currentDate) {
+          const eventId = new EventId(this.generateId());
+          const title = new EventTitle(vaccine.name);
+          const description = new EventDescription(vaccine.description);
+          const eventDateTime = new EventDateTime(vaccine.date);
+          const eventType = new EventType(EventTypeEnum.VACCINATION);
+
+          const event = Event.create(
+            eventId,
+            title,
+            description,
+            eventDateTime,
+            eventType,
+            command.puppyId
+          );
+
+          events.push(event);
         }
-
-        const eventId = new EventId(this.generateId());
-        const title = new EventTitle(vaccine.name);
-        const description = new EventDescription(vaccine.description);
-        const eventDateTime = new EventDateTime(vaccine.date);
-        const eventType = new EventType(EventTypeEnum.VACCINATION);
-
-        const event = Event.create(
-          eventId,
-          title,
-          description,
-          eventDateTime,
-          eventType,
-          command.puppyId
-        );
-
-        events.push(event);
       }
 
       for (const event of events) {
@@ -208,12 +221,16 @@ export class GenerateHealthTimelineUseCase {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Unknown error occurred",
+        error:
+          error instanceof Error ? error.message : "Unknown error occurred",
       };
     }
   }
 
-  private getVaccinationSchedule(breed: string, birthDate: Date): Array<{
+  private getVaccinationSchedule(
+    breed: string,
+    birthDate: Date
+  ): Array<{
     name: string;
     description: string;
     date: Date;
@@ -221,7 +238,8 @@ export class GenerateHealthTimelineUseCase {
     const schedule = [
       {
         name: "First DHPP Vaccination",
-        description: "First dose of DHPP (Distemper, Hepatitis, Parvovirus, Parainfluenza)",
+        description:
+          "First dose of DHPP (Distemper, Hepatitis, Parvovirus, Parainfluenza)",
         date: new Date(birthDate.getTime() + 6 * 7 * 24 * 60 * 60 * 1000), // 6 weeks
       },
       {

@@ -17,19 +17,21 @@ export class InMemoryEventRepository implements EventRepository {
 
   async findByPuppyId(puppyId: string): Promise<Event[]> {
     return Array.from(this.events.values()).filter(
-      event => event.puppyId === puppyId
+      (event) => event.puppyId === puppyId
     );
   }
 
   async findByDateRange(startDate: Date, endDate: Date): Promise<Event[]> {
     return Array.from(this.events.values()).filter(
-      event => event.eventDateTime.value >= startDate && event.eventDateTime.value <= endDate
+      (event) =>
+        event.eventDateTime.value >= startDate &&
+        event.eventDateTime.value <= endDate
     );
   }
 
   async findByType(eventType: string): Promise<Event[]> {
     return Array.from(this.events.values()).filter(
-      event => event.eventType.value === eventType
+      (event) => event.eventType.value === eventType
     );
   }
 
@@ -42,13 +44,32 @@ export class InMemoryEventRepository implements EventRepository {
     this.events.delete(id.value);
   }
 
-  async findUpcomingEvents(puppyId: string, limit: number = 10): Promise<Event[]> {
+  async findUpcomingEvents(
+    puppyId: string,
+    limit: number = 10
+  ): Promise<Event[]> {
     const puppyEvents = await this.findByPuppyId(puppyId);
     const upcomingEvents = puppyEvents
-      .filter(event => event.isUpcoming())
-      .sort((a, b) => a.eventDateTime.value.getTime() - b.eventDateTime.value.getTime())
+      .filter((event) => event.isUpcoming())
+      .sort(
+        (a, b) =>
+          a.eventDateTime.value.getTime() - b.eventDateTime.value.getTime()
+      )
       .slice(0, limit);
-    
+
     return upcomingEvents;
+  }
+
+  // Test helper methods
+  clear(): void {
+    this.events.clear();
+  }
+
+  getCount(): number {
+    return this.events.size;
+  }
+
+  getAllEvents(): Event[] {
+    return Array.from(this.events.values());
   }
 }

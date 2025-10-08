@@ -42,10 +42,30 @@ export class CalendarController {
 
   @Post("health-timeline")
   @ApiOperation({ summary: "Generate health timeline for a puppy" })
-  @ApiResponse({ status: 201, description: "Health timeline generated successfully" })
+  @ApiResponse({
+    status: 201,
+    description: "Health timeline generated successfully",
+  })
   @ApiResponse({ status: 400, description: "Invalid input" })
   async generateHealthTimeline(@Body() command: GenerateHealthTimelineCommand) {
     return await this.generateHealthTimelineUseCase.execute(command);
+  }
+
+  @Get("health-timeline/:puppyId")
+  @ApiOperation({ summary: "Generate health timeline for a puppy via GET" })
+  @ApiResponse({
+    status: 200,
+    description: "Health timeline generated successfully",
+  })
+  @ApiResponse({ status: 400, description: "Invalid input" })
+  async generateHealthTimelineGet(
+    @Param("puppyId") puppyId: string,
+    @Body() command: Omit<GenerateHealthTimelineCommand, "puppyId">
+  ) {
+    return await this.generateHealthTimelineUseCase.execute({
+      ...command,
+      puppyId,
+    });
   }
 
   @Get("puppy/:puppyId/events")
@@ -57,7 +77,10 @@ export class CalendarController {
 
   @Get("puppy/:puppyId/upcoming")
   @ApiOperation({ summary: "Get upcoming events for a puppy" })
-  @ApiResponse({ status: 200, description: "Upcoming events retrieved successfully" })
+  @ApiResponse({
+    status: 200,
+    description: "Upcoming events retrieved successfully",
+  })
   async getUpcomingEvents(@Param("puppyId") puppyId: string) {
     return { puppyId, upcomingEvents: [] };
   }
