@@ -1,9 +1,11 @@
 # ADR-004: Frontend and Backend Separation Architecture
 
 ## Status
+
 Accepted
 
 ## Context
+
 We need to decide on the overall architecture for the Wag Wise Mentor application. The primary considerations are:
 
 - Separation of concerns between frontend and backend
@@ -13,6 +15,7 @@ We need to decide on the overall architecture for the Wag Wise Mentor applicatio
 - Technology stack optimization for each layer
 
 ## Decision
+
 We will implement a **separated frontend and backend architecture** with clear boundaries and independent deployment.
 
 ## Rationale
@@ -79,6 +82,7 @@ We will implement a **separated frontend and backend architecture** with clear b
 ### Frontend Architecture
 
 #### Marketing Website (Next.js)
+
 - **Purpose**: SEO-optimized marketing and landing pages
 - **Technology**: Next.js 14 with App Router
 - **Features**: SSR, SSG, SEO optimization
@@ -86,6 +90,7 @@ We will implement a **separated frontend and backend architecture** with clear b
 - **Domain**: `wagwisementor.com`
 
 #### Dashboard Application (React)
+
 - **Purpose**: Authenticated user dashboard and management
 - **Technology**: React 18 with Vite
 - **Features**: SPA, real-time updates, offline support
@@ -95,6 +100,7 @@ We will implement a **separated frontend and backend architecture** with clear b
 ### Backend Architecture
 
 #### API Services (NestJS)
+
 - **Purpose**: Business logic and data management
 - **Technology**: NestJS with TypeScript
 - **Architecture**: Domain-Driven Design (DDD)
@@ -103,6 +109,7 @@ We will implement a **separated frontend and backend architecture** with clear b
 - **Domain**: `api.wagwisementor.com`
 
 #### Database (Supabase)
+
 - **Purpose**: Data persistence and authentication
 - **Technology**: PostgreSQL with Supabase
 - **Features**: Real-time subscriptions, Row Level Security, Auth
@@ -111,140 +118,12 @@ We will implement a **separated frontend and backend architecture** with clear b
 
 ## Implementation
 
-### Frontend Implementation
-
-#### Marketing Website Structure
-```
-apps/marketing/
-├── src/
-│   ├── app/                 # Next.js App Router
-│   │   ├── page.tsx         # Home page
-│   │   ├── pricing/
-│   │   ├── about/
-│   │   └── contact/
-│   ├── components/          # Reusable components
-│   │   ├── ui/              # shadcn/ui components
-│   │   ├── marketing/       # Marketing-specific components
-│   │   └── layout/          # Layout components
-│   ├── lib/                 # Utilities and configurations
-│   └── styles/              # Global styles
-├── public/                  # Static assets
-├── next.config.js           # Next.js configuration
-└── package.json
-```
-
-#### Dashboard Application Structure
-```
-apps/frontend/
-├── src/
-│   ├── components/          # React components
-│   │   ├── ui/              # shadcn/ui components
-│   │   ├── features/        # Feature-specific components
-│   │   └── layout/          # Layout components
-│   ├── pages/               # Route components
-│   │   ├── dashboard/
-│   │   ├── puppies/
-│   │   └── settings/
-│   ├── hooks/               # Custom React hooks
-│   ├── lib/                 # Utilities and configurations
-│   └── integrations/        # External service integrations
-├── public/                  # Static assets
-├── vite.config.ts           # Vite configuration
-└── package.json
-```
-
-### Backend Implementation
-
-#### API Services Structure
-```
-apps/backend/
-├── src/
-│   ├── domain/              # Domain Layer (DDD)
-│   │   ├── puppy/
-│   │   ├── auth/
-│   │   ├── calendar/
-│   │   └── shared/
-│   ├── application/         # Application Layer (DDD)
-│   │   ├── puppy/
-│   │   ├── auth/
-│   │   ├── calendar/
-│   │   └── shared/
-│   ├── infrastructure/      # Infrastructure Layer (DDD)
-│   │   ├── puppy/
-│   │   ├── auth/
-│   │   ├── calendar/
-│   │   └── shared/
-│   └── main.ts              # Application entry point
-├── test/                    # Test files
-├── package.json
-└── tsconfig.json
-```
-
-### Communication Patterns
-
-#### API Communication
-```typescript
-// Frontend API Client
-class ApiClient {
-  private baseURL = 'https://api.wagwisementor.com'
-  
-  async getPuppies(): Promise<Puppy[]> {
-    const response = await fetch(`${this.baseURL}/puppies`, {
-      headers: {
-        'Authorization': `Bearer ${this.getToken()}`,
-        'Content-Type': 'application/json'
-      }
-    })
-    return response.json()
-  }
-}
-
-// Backend API Controller
-@Controller('puppies')
-export class PuppyController {
-  constructor(
-    @Inject(PUPPY_REPOSITORY) private readonly puppyRepository: PuppyRepository
-  ) {}
-
-  @Get()
-  async getPuppies(@Req() req: Request): Promise<Puppy[]> {
-    const userId = req.user.id
-    return this.puppyRepository.findByOwnerId(userId)
-  }
-}
-```
-
-#### Real-time Communication
-```typescript
-// Frontend WebSocket Client
-class WebSocketClient {
-  private ws: WebSocket
-  
-  connect() {
-    this.ws = new WebSocket('wss://api.wagwisementor.com/ws')
-    this.ws.onmessage = (event) => {
-      const data = JSON.parse(event.data)
-      this.handleMessage(data)
-    }
-  }
-}
-
-// Backend WebSocket Gateway
-@WebSocketGateway()
-export class NotificationGateway {
-  @WebSocketServer()
-  server: Server
-
-  @SubscribeMessage('subscribe')
-  handleSubscribe(client: Socket, payload: { userId: string }) {
-    client.join(`user:${payload.userId}`)
-  }
-}
-```
+The implementation will follow the separated architecture with clear boundaries between frontend and backend components. Specific implementation details will be determined during development based on requirements and best practices.
 
 ## Consequences
 
 ### Positive
+
 - **Clear separation of concerns** and responsibilities
 - **Independent scaling** and optimization
 - **Technology flexibility** for each layer
@@ -253,6 +132,7 @@ export class NotificationGateway {
 - **Deployment flexibility** and hosting options
 
 ### Negative
+
 - **Increased complexity** in communication
 - **More deployment pipelines** to manage
 - **Cross-origin issues** and CORS configuration
@@ -260,6 +140,7 @@ export class NotificationGateway {
 - **More infrastructure** to maintain
 
 ### Mitigation
+
 - **API Gateway** for centralized communication
 - **CDN and caching** to reduce latency
 - **Proper CORS configuration** and security
@@ -274,6 +155,7 @@ export class NotificationGateway {
 4. **JAMstack**: Considered but limited for real-time features
 
 ## References
+
 - [Domain-Driven Design](https://martinfowler.com/bliki/DomainDrivenDesign.html)
 - [NestJS Documentation](https://docs.nestjs.com/)
 - [Next.js Documentation](https://nextjs.org/docs)
@@ -282,4 +164,4 @@ export class NotificationGateway {
 
 ---
 
-*This ADR was created on 2024-01-02 and documents the decision to implement separated frontend and backend architecture.*
+_This ADR was created on 2024-01-02 and documents the decision to implement separated frontend and backend architecture._
