@@ -11,6 +11,7 @@
 **CRITICAL**: All task processing must reference and follow these mandatory documents:
 
 - **📋 [Architecture Documentation](./architecture.md)** - System design, component relationships, and technical decisions
+- **📋 [Architecture Decision Records (ADRs)](./adr-index.md)** - Documented architectural decisions and rationale
 - **🧪 [Testing Strategy](./testing-strategy.md)** - Comprehensive testing approach and patterns
 - **⚙️ [Environment Variables](./environment-variables.md)** - Configuration and environment setup
 - **📋 [Project Plan](./project-plan.md)** - This document - complete roadmap and task management

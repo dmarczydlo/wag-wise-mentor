@@ -305,6 +305,7 @@ task-master add-task --prompt="Your task description"
 ## 📚 Documentation
 
 - [Architecture Documentation](docs/architecture.md) - System design and technical architecture
+- [Architecture Decision Records (ADRs)](docs/adr-index.md) - Documented architectural decisions and rationale
 - [Testing Strategy](docs/testing-strategy.md) - Comprehensive testing approach
 - [Environment Variables](docs/environment-variables.md) - Configuration guide
 - [Project Plan](docs/project-plan.md) - Complete project roadmap and task management
