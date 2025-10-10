@@ -2,12 +2,14 @@ import { describe, it, beforeEach } from "mocha";
 import { expect } from "chai";
 import { Test, TestingModule } from "@nestjs/testing";
 import {
-  RegisterUserUseCase,
-  LoginUseCase,
-  PasswordResetUseCase,
-  RegisterUserCommand,
-  LoginCommand,
-  PasswordResetCommand,
+  GetUserUseCase,
+  CreateUserProfileUseCase,
+  UpdateUserProfileUseCase,
+  DeleteUserProfileUseCase,
+  GetUserCommand,
+  CreateUserProfileCommand,
+  UpdateUserProfileCommand,
+  DeleteUserProfileCommand,
   USER_REPOSITORY,
 } from "../../src/application/auth/auth.use-cases";
 import { InMemoryUserRepository } from "../../src/infrastructure/auth/in-memory-user.repository";
@@ -16,22 +18,25 @@ import {
   User,
   UserId,
   Email,
-  Password,
+  UserRole,
+  UserRoleType,
 } from "../../src/domain/auth/user.entity";
 
 describe("Auth Use Cases - AAA Pattern", () => {
-  let registerUseCase: RegisterUserUseCase;
-  let loginUseCase: LoginUseCase;
-  let passwordResetUseCase: PasswordResetUseCase;
+  let getUserUseCase: GetUserUseCase;
+  let createUserProfileUseCase: CreateUserProfileUseCase;
+  let updateUserProfileUseCase: UpdateUserProfileUseCase;
+  let deleteUserProfileUseCase: DeleteUserProfileUseCase;
   let repository: InMemoryUserRepository;
 
   beforeEach(async () => {
-    // Arrange - Setup test dependencies
+    // Arrange
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        RegisterUserUseCase,
-        LoginUseCase,
-        PasswordResetUseCase,
+        GetUserUseCase,
+        CreateUserProfileUseCase,
+        UpdateUserProfileUseCase,
+        DeleteUserProfileUseCase,
         {
           provide: USER_REPOSITORY,
           useClass: InMemoryUserRepository,
@@ -39,243 +44,230 @@ describe("Auth Use Cases - AAA Pattern", () => {
       ],
     }).compile();
 
-    registerUseCase = module.get<RegisterUserUseCase>(RegisterUserUseCase);
-    loginUseCase = module.get<LoginUseCase>(LoginUseCase);
-    passwordResetUseCase =
-      module.get<PasswordResetUseCase>(PasswordResetUseCase);
+    getUserUseCase = module.get<GetUserUseCase>(GetUserUseCase);
+    createUserProfileUseCase = module.get<CreateUserProfileUseCase>(
+      CreateUserProfileUseCase
+    );
+    updateUserProfileUseCase = module.get<UpdateUserProfileUseCase>(
+      UpdateUserProfileUseCase
+    );
+    deleteUserProfileUseCase = module.get<DeleteUserProfileUseCase>(
+      DeleteUserProfileUseCase
+    );
     repository = module.get<UserRepository>(
       USER_REPOSITORY
     ) as InMemoryUserRepository;
 
-    // Clear repository before each test
     repository.clear();
   });
 
-  describe("RegisterUserUseCase", () => {
-    it("should register a new user successfully", async () => {
+  describe("GetUserUseCase", () => {
+    it("should get user by ID successfully", async () => {
       // Arrange
-      const command: RegisterUserCommand = {
-        email: "test@example.com",
-        password: "password123",
+      const userId = new UserId("test-user-id");
+      const email = new Email("test@example.com");
+      const role = new UserRole(UserRoleType.USER);
+      const user = User.create(userId, email, role);
+      await repository.save(user);
+
+      const command: GetUserCommand = {
+        userId: "test-user-id",
       };
 
       // Act
-      const result = await registerUseCase.execute(command);
+      const result = await getUserUseCase.execute(command);
 
       // Assert
       expect(result.success).to.be.true;
       expect(result.user).to.not.be.undefined;
+      expect(result.user?.id.value).to.equal("test-user-id");
       expect(result.user?.email.value).to.equal("test@example.com");
-      expect(result.error).to.be.undefined;
-    });
-
-    it("should return error when email is invalid", async () => {
-      // Arrange
-      const command: RegisterUserCommand = {
-        email: "invalid-email",
-        password: "password123",
-      };
-
-      // Act
-      const result = await registerUseCase.execute(command);
-
-      // Assert
-      expect(result.success).to.be.false;
-      expect(result.error).to.equal("Email format is invalid");
-      expect(result.user).to.be.undefined;
-    });
-
-    it("should return error when password is too short", async () => {
-      // Arrange
-      const command: RegisterUserCommand = {
-        email: "test@example.com",
-        password: "123",
-      };
-
-      // Act
-      const result = await registerUseCase.execute(command);
-
-      // Assert
-      expect(result.success).to.be.false;
-      expect(result.error).to.equal(
-        "Password must be at least 8 characters long"
-      );
-      expect(result.user).to.be.undefined;
-    });
-
-    it("should return error when email already exists", async () => {
-      // Arrange
-      const command: RegisterUserCommand = {
-        email: "test@example.com",
-        password: "password123",
-      };
-
-      // Act
-      await registerUseCase.execute(command);
-      const result = await registerUseCase.execute(command);
-
-      // Assert
-      expect(result.success).to.be.false;
-      expect(result.error).to.equal("User with this email already exists");
-      expect(result.user).to.be.undefined;
-    });
-
-    it("should save user to repository", async () => {
-      // Arrange
-      const command: RegisterUserCommand = {
-        email: "test@example.com",
-        password: "password123",
-      };
-
-      // Act
-      const result = await registerUseCase.execute(command);
-
-      // Assert
-      expect(result.success).to.be.true;
-      expect(repository.getCount()).to.equal(1);
-
-      const savedUsers = repository.getAllUsers();
-      expect(savedUsers).to.have.length(1);
-      expect(savedUsers[0].email.value).to.equal("test@example.com");
-    });
-  });
-
-  describe("LoginUseCase", () => {
-    beforeEach(async () => {
-      // Arrange - Create a test user
-      const registerCommand: RegisterUserCommand = {
-        email: "test@example.com",
-        password: "password123",
-      };
-      await registerUseCase.execute(registerCommand);
-    });
-
-    it("should return error when password is incorrect (current implementation)", async () => {
-      // Arrange
-      const command: LoginCommand = {
-        email: "test@example.com",
-        password: "password123",
-      };
-
-      // Act
-      const result = await loginUseCase.execute(command);
-
-      // Assert
-      expect(result.success).to.be.false;
-      expect(result.error).to.equal("Invalid email or password");
-      expect(result.user).to.be.undefined;
-      expect(result.token).to.be.undefined;
-    });
-
-    it("should return error when email is invalid", async () => {
-      // Arrange
-      const command: LoginCommand = {
-        email: "invalid-email",
-        password: "password123",
-      };
-
-      // Act
-      const result = await loginUseCase.execute(command);
-
-      // Assert
-      expect(result.success).to.be.false;
-      expect(result.error).to.equal("Email format is invalid");
-      expect(result.user).to.be.undefined;
-      expect(result.token).to.be.undefined;
     });
 
     it("should return error when user not found", async () => {
       // Arrange
-      const command: LoginCommand = {
-        email: "nonexistent@example.com",
-        password: "password123",
+      const command: GetUserCommand = {
+        userId: "non-existent-user",
       };
 
       // Act
-      const result = await loginUseCase.execute(command);
+      const result = await getUserUseCase.execute(command);
 
       // Assert
       expect(result.success).to.be.false;
-      expect(result.error).to.equal("Invalid email or password");
-      expect(result.user).to.be.undefined;
-      expect(result.token).to.be.undefined;
-    });
-
-    it("should return error when password is incorrect", async () => {
-      // Arrange
-      const command: LoginCommand = {
-        email: "test@example.com",
-        password: "wrongpassword",
-      };
-
-      // Act
-      const result = await loginUseCase.execute(command);
-
-      // Assert
-      expect(result.success).to.be.false;
-      expect(result.error).to.equal("Invalid email or password");
-      expect(result.user).to.be.undefined;
-      expect(result.token).to.be.undefined;
+      expect(result.error).to.equal("User not found");
     });
   });
 
-  describe("PasswordResetUseCase", () => {
-    beforeEach(async () => {
-      // Arrange - Create a test user
-      const registerCommand: RegisterUserCommand = {
-        email: "test@example.com",
-        password: "password123",
-      };
-      await registerUseCase.execute(registerCommand);
-    });
-
-    it("should initiate password reset successfully", async () => {
+  describe("CreateUserProfileUseCase", () => {
+    it("should create user profile successfully", async () => {
       // Arrange
-      const command: PasswordResetCommand = {
-        email: "test@example.com",
+      const command: CreateUserProfileCommand = {
+        userId: "supabase-user-id",
+        email: "newuser@example.com",
+        role: UserRoleType.USER,
       };
 
       // Act
-      const result = await passwordResetUseCase.execute(command);
+      const result = await createUserProfileUseCase.execute(command);
 
       // Assert
       expect(result.success).to.be.true;
-      expect(result.message).to.equal(
-        "Password reset link has been sent to your email"
-      );
-      expect(result.error).to.be.undefined;
+      expect(result.user).to.not.be.undefined;
+      expect(result.user?.id.value).to.equal("supabase-user-id");
+      expect(result.user?.email.value).to.equal("newuser@example.com");
+      expect(result.user?.role.value).to.equal(UserRoleType.USER);
+    });
+
+    it("should return error when profile already exists", async () => {
+      // Arrange
+      const userId = new UserId("existing-user");
+      const email = new Email("existing@example.com");
+      const role = new UserRole(UserRoleType.USER);
+      const existingUser = User.create(userId, email, role);
+      await repository.save(existingUser);
+
+      const command: CreateUserProfileCommand = {
+        userId: "existing-user",
+        email: "existing@example.com",
+      };
+
+      // Act
+      const result = await createUserProfileUseCase.execute(command);
+
+      // Assert
+      expect(result.success).to.be.false;
+      expect(result.error).to.equal("User profile already exists");
+    });
+
+    it("should create profile with default USER role when not specified", async () => {
+      // Arrange
+      const command: CreateUserProfileCommand = {
+        userId: "new-user",
+        email: "user@example.com",
+      };
+
+      // Act
+      const result = await createUserProfileUseCase.execute(command);
+
+      // Assert
+      expect(result.success).to.be.true;
+      expect(result.user?.role.value).to.equal(UserRoleType.USER);
     });
 
     it("should return error when email is invalid", async () => {
       // Arrange
-      const command: PasswordResetCommand = {
+      const command: CreateUserProfileCommand = {
+        userId: "user-id",
         email: "invalid-email",
       };
 
       // Act
-      const result = await passwordResetUseCase.execute(command);
+      const result = await createUserProfileUseCase.execute(command);
 
       // Assert
       expect(result.success).to.be.false;
-      expect(result.error).to.equal("Email format is invalid");
-      expect(result.message).to.be.undefined;
+      expect(result.error).to.include("Email");
     });
+  });
 
-    it("should return success even when user not found (security)", async () => {
+  describe("UpdateUserProfileUseCase", () => {
+    it("should update user role successfully", async () => {
       // Arrange
-      const command: PasswordResetCommand = {
-        email: "nonexistent@example.com",
+      const userId = new UserId("user-to-update");
+      const email = new Email("user@example.com");
+      const role = new UserRole(UserRoleType.USER);
+      const user = User.create(userId, email, role);
+      await repository.save(user);
+
+      const command: UpdateUserProfileCommand = {
+        userId: "user-to-update",
+        role: UserRoleType.ADMIN,
       };
 
       // Act
-      const result = await passwordResetUseCase.execute(command);
+      const result = await updateUserProfileUseCase.execute(command);
 
       // Assert
       expect(result.success).to.be.true;
-      expect(result.message).to.equal(
-        "If the email exists, a password reset link has been sent"
+      expect(result.user?.role.value).to.equal(UserRoleType.ADMIN);
+    });
+
+    it("should update user active status successfully", async () => {
+      // Arrange
+      const userId = new UserId("user-to-deactivate");
+      const email = new Email("user@example.com");
+      const role = new UserRole(UserRoleType.USER);
+      const user = User.create(userId, email, role);
+      await repository.save(user);
+
+      const command: UpdateUserProfileCommand = {
+        userId: "user-to-deactivate",
+        isActive: false,
+      };
+
+      // Act
+      const result = await updateUserProfileUseCase.execute(command);
+
+      // Assert
+      expect(result.success).to.be.true;
+      expect(result.user?.isActive).to.be.false;
+    });
+
+    it("should return error when user not found", async () => {
+      // Arrange
+      const command: UpdateUserProfileCommand = {
+        userId: "non-existent-user",
+        role: UserRoleType.ADMIN,
+      };
+
+      // Act
+      const result = await updateUserProfileUseCase.execute(command);
+
+      // Assert
+      expect(result.success).to.be.false;
+      expect(result.error).to.equal("User not found");
+    });
+  });
+
+  describe("DeleteUserProfileUseCase", () => {
+    it("should delete user profile successfully", async () => {
+      // Arrange
+      const userId = new UserId("user-to-delete");
+      const email = new Email("delete@example.com");
+      const role = new UserRole(UserRoleType.USER);
+      const user = User.create(userId, email, role);
+      await repository.save(user);
+
+      const command: DeleteUserProfileCommand = {
+        userId: "user-to-delete",
+      };
+
+      // Act
+      const result = await deleteUserProfileUseCase.execute(command);
+
+      // Assert
+      expect(result.success).to.be.true;
+      expect(result.message).to.equal("User profile deleted successfully");
+
+      const deletedUser = await repository.findById(
+        new UserId("user-to-delete")
       );
-      expect(result.error).to.be.undefined;
+      expect(deletedUser).to.be.null;
+    });
+
+    it("should return error when user not found", async () => {
+      // Arrange
+      const command: DeleteUserProfileCommand = {
+        userId: "non-existent-user",
+      };
+
+      // Act
+      const result = await deleteUserProfileUseCase.execute(command);
+
+      // Assert
+      expect(result.success).to.be.false;
+      expect(result.error).to.equal("User not found");
     });
   });
 });
