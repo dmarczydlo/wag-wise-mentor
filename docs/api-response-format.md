@@ -23,6 +23,7 @@ All successful API responses follow this structure:
 #### Examples
 
 **GET /users/me** (200 OK):
+
 ```json
 {
   "success": true,
@@ -48,6 +49,7 @@ All successful API responses follow this structure:
 ```
 
 **POST /puppies** (201 Created):
+
 ```json
 {
   "success": true,
@@ -72,6 +74,7 @@ All successful API responses follow this structure:
 ```
 
 **GET /puppies/owner/user-123** (200 OK - List):
+
 ```json
 {
   "success": true,
@@ -119,6 +122,7 @@ Validation errors occur when request data doesn't match the expected schema (Zod
 **Error Code**: `VALIDATION_ERROR`
 
 **Example**:
+
 ```json
 {
   "success": false,
@@ -150,6 +154,7 @@ Validation errors occur when request data doesn't match the expected schema (Zod
 ```
 
 **Details Array Structure**:
+
 - `code`: Zod error code (e.g., `too_small`, `invalid_type`, `invalid_enum_value`)
 - `message`: Human-readable error message
 - `path`: Array showing which field failed validation
@@ -162,6 +167,7 @@ Domain errors occur when business logic validation fails (e.g., puppy not found,
 **Error Code**: `DOMAIN_ERROR`
 
 **Example - Puppy Not Found**:
+
 ```json
 {
   "success": false,
@@ -176,6 +182,7 @@ Domain errors occur when business logic validation fails (e.g., puppy not found,
 ```
 
 **Example - User Already Exists**:
+
 ```json
 {
   "success": false,
@@ -194,6 +201,7 @@ Domain errors occur when business logic validation fails (e.g., puppy not found,
 **Error Code**: `NOT_FOUND`
 
 **Example**:
+
 ```json
 {
   "success": false,
@@ -212,6 +220,7 @@ Domain errors occur when business logic validation fails (e.g., puppy not found,
 **Error Code**: `UNAUTHORIZED`
 
 **Example - Missing Token**:
+
 ```json
 {
   "success": false,
@@ -226,6 +235,7 @@ Domain errors occur when business logic validation fails (e.g., puppy not found,
 ```
 
 **Example - Invalid Token**:
+
 ```json
 {
   "success": false,
@@ -244,6 +254,7 @@ Domain errors occur when business logic validation fails (e.g., puppy not found,
 **Error Code**: `FORBIDDEN`
 
 **Example**:
+
 ```json
 {
   "success": false,
@@ -262,6 +273,7 @@ Domain errors occur when business logic validation fails (e.g., puppy not found,
 **Error Code**: `INTERNAL_SERVER_ERROR`
 
 **Production Example**:
+
 ```json
 {
   "success": false,
@@ -276,6 +288,7 @@ Domain errors occur when business logic validation fails (e.g., puppy not found,
 ```
 
 **Development Example** (includes stack trace):
+
 ```json
 {
   "success": false,
@@ -323,31 +336,31 @@ type ApiResponse<T> = ApiSuccessResponse<T> | ApiErrorResponse;
 ### Axios Example
 
 ```typescript
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError } from "axios";
 
 async function fetchUser(id: string) {
   try {
     const response = await axios.get<ApiSuccessResponse<User>>(`/users/${id}`);
-    
+
     if (response.data.success) {
       return response.data.data;
     }
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const apiError = error.response?.data as ApiErrorResponse;
-      
+
       switch (apiError.error.code) {
-        case 'VALIDATION_ERROR':
-          console.error('Validation failed:', apiError.error.details);
+        case "VALIDATION_ERROR":
+          console.error("Validation failed:", apiError.error.details);
           break;
-        case 'NOT_FOUND':
-          console.error('User not found');
+        case "NOT_FOUND":
+          console.error("User not found");
           break;
-        case 'UNAUTHORIZED':
+        case "UNAUTHORIZED":
           // Redirect to login
           break;
         default:
-          console.error('Error:', apiError.error.message);
+          console.error("Error:", apiError.error.message);
       }
     }
   }
@@ -357,19 +370,19 @@ async function fetchUser(id: string) {
 ### React Query Example
 
 ```typescript
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
 
 function useUser(id: string) {
   return useQuery({
-    queryKey: ['user', id],
+    queryKey: ["user", id],
     queryFn: async () => {
       const response = await fetch(`/api/users/${id}`);
       const data: ApiResponse<User> = await response.json();
-      
+
       if (!data.success) {
         throw new Error(data.error.message);
       }
-      
+
       return data.data;
     },
   });
@@ -381,7 +394,7 @@ function useUser(id: string) {
 ### 1. Always Check `success` Field
 
 ```typescript
-const response = await api.get('/users/me');
+const response = await api.get("/users/me");
 
 if (response.data.success) {
   // Handle success
@@ -397,15 +410,15 @@ if (response.data.success) {
 ```typescript
 if (!response.data.success) {
   switch (response.data.error.code) {
-    case 'VALIDATION_ERROR':
+    case "VALIDATION_ERROR":
       // Show field-specific errors
       showValidationErrors(response.data.error.details);
       break;
-    case 'UNAUTHORIZED':
+    case "UNAUTHORIZED":
       // Redirect to login
       redirectToLogin();
       break;
-    case 'NOT_FOUND':
+    case "NOT_FOUND":
       // Show 404 page
       show404();
       break;
@@ -421,19 +434,19 @@ if (!response.data.success) {
 ```typescript
 function extractValidationErrors(details: any[]) {
   const errors: Record<string, string> = {};
-  
-  details.forEach(detail => {
-    const field = detail.path.join('.');
+
+  details.forEach((detail) => {
+    const field = detail.path.join(".");
     errors[field] = detail.message;
   });
-  
+
   return errors;
 }
 
 // Usage
-if (response.data.error.code === 'VALIDATION_ERROR') {
+if (response.data.error.code === "VALIDATION_ERROR") {
   const fieldErrors = extractValidationErrors(response.data.error.details);
-  
+
   // Display errors next to form fields
   Object.entries(fieldErrors).forEach(([field, message]) => {
     showFieldError(field, message);
@@ -450,16 +463,16 @@ axios.interceptors.response.use(
   (error: AxiosError<ApiErrorResponse>) => {
     if (error.response?.data) {
       const apiError = error.response.data;
-      
+
       // Log to monitoring service
       logError(apiError);
-      
+
       // Handle specific errors globally
-      if (apiError.error.code === 'UNAUTHORIZED') {
+      if (apiError.error.code === "UNAUTHORIZED") {
         redirectToLogin();
       }
     }
-    
+
     return Promise.reject(error);
   }
 );
@@ -467,16 +480,16 @@ axios.interceptors.response.use(
 
 ## HTTP Status Codes
 
-| Status Code | Error Type | Description |
-|-------------|------------|-------------|
-| 200 | Success | Request succeeded |
-| 201 | Created | Resource created successfully |
-| 400 | VALIDATION_ERROR | Request validation failed (Zod) |
-| 400 | DOMAIN_ERROR | Business logic error |
-| 401 | UNAUTHORIZED | Missing or invalid authentication |
-| 403 | FORBIDDEN | Insufficient permissions |
-| 404 | NOT_FOUND | Resource not found |
-| 500 | INTERNAL_SERVER_ERROR | Unexpected server error |
+| Status Code | Error Type            | Description                       |
+| ----------- | --------------------- | --------------------------------- |
+| 200         | Success               | Request succeeded                 |
+| 201         | Created               | Resource created successfully     |
+| 400         | VALIDATION_ERROR      | Request validation failed (Zod)   |
+| 400         | DOMAIN_ERROR          | Business logic error              |
+| 401         | UNAUTHORIZED          | Missing or invalid authentication |
+| 403         | FORBIDDEN             | Insufficient permissions          |
+| 404         | NOT_FOUND             | Resource not found                |
+| 500         | INTERNAL_SERVER_ERROR | Unexpected server error           |
 
 ## Implementation Details
 
@@ -485,6 +498,7 @@ axios.interceptors.response.use(
 Location: `src/common/filters/http-exception.filter.ts`
 
 The filter catches all exceptions and transforms them into the standard format:
+
 - Zod validation errors → `VALIDATION_ERROR`
 - Domain errors → `DOMAIN_ERROR`
 - Not found → `NOT_FOUND`
@@ -496,6 +510,7 @@ The filter catches all exceptions and transforms them into the standard format:
 Location: `src/common/interceptors/transform-response.interceptor.ts`
 
 The interceptor wraps all successful responses in the standard format with:
+
 - `success: true`
 - `data`: The response payload
 - `timestamp`: Current timestamp
@@ -515,30 +530,30 @@ app.useGlobalInterceptors(new TransformResponseInterceptor());
 ### Success Response Test
 
 ```typescript
-it('should return standardized success response', async () => {
+it("should return standardized success response", async () => {
   const response = await request(app.getHttpServer())
-    .get('/users/me')
+    .get("/users/me")
     .expect(200);
 
-  expect(response.body).toHaveProperty('success', true);
-  expect(response.body).toHaveProperty('data');
-  expect(response.body).toHaveProperty('timestamp');
-  expect(response.body).toHaveProperty('path', '/users/me');
+  expect(response.body).toHaveProperty("success", true);
+  expect(response.body).toHaveProperty("data");
+  expect(response.body).toHaveProperty("timestamp");
+  expect(response.body).toHaveProperty("path", "/users/me");
 });
 ```
 
 ### Validation Error Test
 
 ```typescript
-it('should return standardized validation error', async () => {
+it("should return standardized validation error", async () => {
   const response = await request(app.getHttpServer())
-    .post('/puppies')
-    .send({ name: '' }) // Invalid data
+    .post("/puppies")
+    .send({ name: "" }) // Invalid data
     .expect(400);
 
   expect(response.body.success).toBe(false);
-  expect(response.body.error.code).toBe('VALIDATION_ERROR');
-  expect(response.body.error.message).toBe('Request validation failed');
+  expect(response.body.error.code).toBe("VALIDATION_ERROR");
+  expect(response.body.error.message).toBe("Request validation failed");
   expect(response.body.error.details).toBeInstanceOf(Array);
   expect(response.body.statusCode).toBe(400);
 });
@@ -547,14 +562,14 @@ it('should return standardized validation error', async () => {
 ### Domain Error Test
 
 ```typescript
-it('should return standardized domain error', async () => {
+it("should return standardized domain error", async () => {
   const response = await request(app.getHttpServer())
-    .get('/puppies/non-existent-id')
+    .get("/puppies/non-existent-id")
     .expect(400);
 
   expect(response.body.success).toBe(false);
-  expect(response.body.error.code).toBe('DOMAIN_ERROR');
-  expect(response.body.error.message).toContain('not found');
+  expect(response.body.error.code).toBe("DOMAIN_ERROR");
+  expect(response.body.error.message).toContain("not found");
   expect(response.body.statusCode).toBe(400);
 });
 ```
@@ -567,11 +582,11 @@ it('should return standardized domain error', async () => {
 // Old success response
 return {
   success: true,
-  user: userData
+  user: userData,
 };
 
 // Old error response
-throw new HttpException('User not found', 404);
+throw new HttpException("User not found", 404);
 ```
 
 ### After (Standardized):
@@ -581,7 +596,7 @@ throw new HttpException('User not found', 404);
 return userData;
 
 // Error response (handled by filter)
-throw new NotFoundException('User');
+throw new NotFoundException("User");
 ```
 
 The interceptor and filter automatically wrap these in the standard format.
@@ -597,4 +612,3 @@ The interceptor and filter automatically wrap these in the standard format.
 - **Global handlers** ensure consistency without manual formatting
 
 This standardization makes the API predictable, type-safe, and easy to consume from any frontend application.
-

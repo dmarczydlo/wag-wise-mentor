@@ -40,7 +40,10 @@ export class PuppyController {
   @ApiOperation({ summary: "Create a new puppy" })
   @ApiResponse({ status: 201, description: "Puppy created successfully" })
   @ApiResponse({ status: 400, description: "Invalid input data" })
-  async createPuppy(@Body(new ZodValidationPipe(CreatePuppyDtoSchema)) createPuppyDto: CreatePuppyDto) {
+  async createPuppy(
+    @Body(new ZodValidationPipe(CreatePuppyDtoSchema))
+    createPuppyDto: CreatePuppyDto
+  ) {
     const command: CreatePuppyCommand = {
       name: createPuppyDto.name,
       breed: createPuppyDto.breed,
@@ -100,7 +103,8 @@ export class PuppyController {
   @ApiResponse({ status: 404, description: "Puppy not found" })
   async updatePuppyWeight(
     @Param("id") id: string,
-    @Body(new ZodValidationPipe(UpdatePuppyWeightDtoSchema)) updateWeightDto: UpdatePuppyWeightDto
+    @Body(new ZodValidationPipe(UpdatePuppyWeightDtoSchema))
+    updateWeightDto: UpdatePuppyWeightDto
   ) {
     const command: UpdatePuppyWeightCommand = {
       puppyId: id,
