@@ -17,4 +17,3 @@ export const UpdatePuppyWeightDtoSchema = z.object({
 
 export type CreatePuppyDto = z.infer<typeof CreatePuppyDtoSchema>;
 export type UpdatePuppyWeightDto = z.infer<typeof UpdatePuppyWeightDtoSchema>;
-

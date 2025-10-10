@@ -5,7 +5,7 @@ export const CreateEventDtoSchema = z.object({
   eventType: z.string().min(1, "Event type is required"),
   title: z.string().min(1, "Title is required").max(200, "Title is too long"),
   description: z.string().optional(),
-  scheduledDate: z.coerce.date(),
+  eventDateTime: z.coerce.date(),
 });
 
 export const UpdateEventDtoSchema = z.object({
