@@ -25,9 +25,7 @@
             "id": 2,
             "title": "Configure Bun workspace in package.json",
             "description": "Update root package.json to define workspace structure",
-            "dependencies": [
-              "1.1"
-            ],
+            "dependencies": ["1.1"],
             "details": "Add workspaces configuration to root package.json that includes 'apps/*' and 'packages/*' to enable Bun workspace functionality.",
             "status": "done",
             "testStrategy": "Bun workspace commands recognize all workspace packages",
@@ -37,9 +35,7 @@
             "id": 3,
             "title": "Move existing frontend code to apps/frontend",
             "description": "Relocate current React application to new monorepo structure",
-            "dependencies": [
-              "1.2"
-            ],
+            "dependencies": ["1.2"],
             "details": "Move src/, public/, index.html, and other frontend files to apps/frontend/. Update any relative paths that may have broken.",
             "status": "done",
             "testStrategy": "Frontend application runs successfully from new location",
@@ -49,9 +45,7 @@
             "id": 4,
             "title": "Update package.json scripts for monorepo",
             "description": "Modify scripts to work with new monorepo structure",
-            "dependencies": [
-              "1.3"
-            ],
+            "dependencies": ["1.3"],
             "details": "Update npm/bun scripts in root package.json to handle workspace operations. Add scripts for building, testing, and running different parts of the monorepo.",
             "status": "done",
             "testStrategy": "All scripts run correctly and target appropriate workspace packages",
@@ -67,9 +61,7 @@
         "details": "Configure testing frameworks for all layers: Backend unit/integration tests with Mocha+Chai, Frontend component tests with Vitest, E2E tests with Playwright. Focus on behavior testing over mocking. Set up test coverage reporting and CI/CD integration.",
         "testStrategy": "All test suites run successfully, coverage reports generated, E2E tests pass in CI/CD",
         "priority": "high",
-        "dependencies": [
-          "1"
-        ],
+        "dependencies": ["1"],
         "status": "done",
         "subtasks": [
           {
@@ -109,10 +101,7 @@
             "id": 4,
             "title": "Implement test coverage reporting",
             "description": "Set up comprehensive test coverage reporting for all test types",
-            "dependencies": [
-              "2.1",
-              "2.2"
-            ],
+            "dependencies": ["2.1", "2.2"],
             "details": "Configure coverage tools: nyc for Mocha, @vitest/coverage for Vitest. Set up coverage thresholds and reporting. Integrate with CI/CD for coverage tracking.",
             "status": "done",
             "testStrategy": "Coverage reports generated, thresholds met, CI/CD integration works",
@@ -129,9 +118,7 @@
         "details": "Move src/, public/, index.html, vite.config.ts to apps/frontend/. Update all import paths to use absolute imports. Update package.json scripts for frontend-specific commands. Configure TypeScript paths for workspace packages.",
         "testStrategy": "Frontend builds and runs successfully from new location",
         "priority": "high",
-        "dependencies": [
-          "1"
-        ],
+        "dependencies": ["1"],
         "status": "done",
         "subtasks": [
           {
@@ -149,9 +136,7 @@
             "id": 2,
             "title": "Update import paths and TypeScript configuration",
             "description": "Convert relative imports to absolute imports and configure TypeScript paths for workspace packages",
-            "dependencies": [
-              "3.1"
-            ],
+            "dependencies": ["3.1"],
             "details": "Update all import statements in src/ to use absolute paths. Configure tsconfig.json with baseUrl and paths mapping for workspace packages. Update vite.config.ts to handle new import structure. Ensure TypeScript can resolve imports from packages/shared and other workspace packages.",
             "status": "done",
             "testStrategy": "",
@@ -162,9 +147,7 @@
             "id": 3,
             "title": "Update build scripts and validate frontend functionality",
             "description": "Configure package.json scripts for frontend-specific commands and verify everything works",
-            "dependencies": [
-              "3.2"
-            ],
+            "dependencies": ["3.2"],
             "details": "Update package.json scripts to work from apps/frontend/ location. Configure build, dev, and test scripts. Update any CI/CD references to new frontend path. Test that frontend builds successfully, dev server starts, and all imports resolve correctly from new location.",
             "status": "done",
             "testStrategy": "",
@@ -181,9 +164,7 @@
         "details": "Create packages/shared/ with TypeScript configuration. Set up build scripts using Bun. Create basic package.json with proper exports. Configure tsconfig.json for shared package compilation.",
         "testStrategy": "Shared package builds successfully and can be imported by other workspace packages",
         "priority": "high",
-        "dependencies": [
-          "1"
-        ],
+        "dependencies": ["1"],
         "status": "done",
         "subtasks": [
           {
@@ -201,9 +182,7 @@
             "id": 2,
             "title": "Configure TypeScript compilation for shared package",
             "description": "Set up TypeScript configuration and build system for the shared package",
-            "dependencies": [
-              "3.1"
-            ],
+            "dependencies": ["3.1"],
             "details": "Create tsconfig.json with appropriate compiler options for a shared library. Configure build scripts using Bun for TypeScript compilation. Set up proper output directories and declaration file generation.",
             "status": "done",
             "testStrategy": "",
@@ -214,9 +193,7 @@
             "id": 3,
             "title": "Create initial shared types and utilities structure",
             "description": "Implement basic shared types and utility functions for the monorepo",
-            "dependencies": [
-              "3.2"
-            ],
+            "dependencies": ["3.2"],
             "details": "Create src/types/ directory with common TypeScript interfaces and types. Create src/utils/ directory with shared utility functions. Set up index.ts files for proper exports. Ensure all exports are properly configured in package.json.",
             "status": "done",
             "testStrategy": "",
@@ -233,9 +210,7 @@
         "details": "Create packages/ui/ for reusable React components. Move current components/ui/ to packages/ui/. Configure build process for UI package. Set up proper exports in package.json for component importing.",
         "testStrategy": "UI package builds and components can be imported from other packages",
         "priority": "high",
-        "dependencies": [
-          "1"
-        ],
+        "dependencies": ["1"],
         "status": "done",
         "subtasks": [
           {
@@ -253,9 +228,7 @@
             "id": 2,
             "title": "Move existing components from components/ui to packages/ui",
             "description": "Migrate current UI components to the new packages/ui location while preserving functionality",
-            "dependencies": [
-              "4.1"
-            ],
+            "dependencies": ["4.1"],
             "details": "Move all files from components/ui/ to packages/ui/src/. Update import paths throughout the codebase to use the new package location. Ensure all existing UI components remain functional after the move.",
             "status": "done",
             "testStrategy": "",
@@ -266,9 +239,7 @@
             "id": 3,
             "title": "Configure build process and exports for UI package",
             "description": "Set up build tooling and proper package exports for the UI components package",
-            "dependencies": [
-              "4.2"
-            ],
+            "dependencies": ["4.2"],
             "details": "Configure Bun build scripts for the UI package. Set up proper module exports in package.json to allow importing components from other packages. Configure TypeScript declaration file generation. Test that components can be imported from other workspace packages.",
             "status": "done",
             "testStrategy": "",
@@ -285,9 +256,7 @@
         "details": "Use NestJS CLI to generate apps/backend/. Implement DDD architecture with Domain Layer (entities, value objects, domain services), Application Layer (use cases, application services), Infrastructure Layer (repositories, controllers, adapters). Configure dependency injection with proper abstraction layers. Set up Supabase client integration. Configure environment variables and CORS for frontend communication. All code must be self-documenting through clear naming and structure - no comments allowed except AAA comments in tests.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Follow environment setup guidelines in docs/environment-variables.md for .env configuration, symlinks, and security considerations\n- Implement all testing using AAA pattern as specified in docs/testing-strategy.md with Mocha + Chai and in-memory providers\n- Adhere to DDD architecture principles and monorepo structure outlined in docs/project-plan.md Phase 1 requirements",
         "testStrategy": "Backend starts successfully, DDD architecture is properly implemented, dependency injection works, comprehensive tests pass with AAA pattern using in-memory providers as per docs/testing-strategy.md, and all production code is comment-free",
         "priority": "high",
-        "dependencies": [
-          "1"
-        ],
+        "dependencies": ["1"],
         "status": "in-progress",
         "subtasks": [
           {
@@ -304,9 +273,7 @@
             "id": 2,
             "title": "Create core module structure",
             "description": "Generate and configure the main application modules for auth, puppies, calendar, training, ai, and analytics",
-            "dependencies": [
-              "6.1"
-            ],
+            "dependencies": ["6.1"],
             "details": "Use NestJS CLI to generate modules: nest g module auth, nest g module puppies, nest g module calendar, nest g module training, nest g module ai, nest g module analytics. Create basic service and controller files for each module. Configure module imports in app.module.ts. Follow DDD module organization patterns from docs/project-plan.md and implement proper testing setup per docs/testing-strategy.md. All production code must be self-documenting without comments.",
             "status": "pending",
             "testStrategy": "All modules generate correctly, follow AAA testing pattern from docs/testing-strategy.md, and contain no comments in production code",
@@ -316,13 +283,13 @@
             "id": 3,
             "title": "Configure environment and external integrations",
             "description": "Set up environment variables, Supabase client integration, and CORS configuration",
-            "dependencies": [
-              "6.2"
-            ],
+            "dependencies": ["6.2"],
             "details": "Create .env configuration files for development and production following docs/environment-variables.md guidelines. Install and configure @supabase/supabase-js client. Set up ConfigModule for environment variable management. Configure CORS settings in main.ts for frontend communication. Create Supabase service provider for database operations. Ensure all configuration follows security considerations from docs/environment-variables.md. Use descriptive variable and method names instead of comments.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Environment configuration works correctly, follows security guidelines from docs/environment-variables.md with proper testing per docs/testing-strategy.md, and contains no comments",
-            "parentId": "undefined"
+            "testsAdded": "7 comprehensive tests for Supabase configuration and service. Tests cover: valid configuration, missing configuration, fallback mechanisms, query/command execution, and error handling. All tests follow AAA pattern. Security best practices documented in apps/backend/SECURITY.md. Total tests: 169 passing.",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-10T00:00:00.000Z"
           }
         ],
         "updatedAt": "2025-10-03T08:23:48.363Z"
@@ -334,9 +301,7 @@
         "details": "Extract database types from existing types.ts into packages/shared/. Create API DTOs for request/response interfaces. Build Zod validation schemas for all data models. Define enums and constants. Export all types properly. All TypeScript interfaces and types must be self-explanatory through naming - no comments allowed.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Follow package structure and TypeScript configuration guidelines from docs/project-plan.md shared packages section\n- Implement validation using patterns from docs/testing-strategy.md with comprehensive testing coverage\n- Use environment-agnostic type definitions that work with configuration from docs/environment-variables.md",
         "testStrategy": "Types compile without errors, can be imported in frontend and backend, validation tests follow AAA pattern from docs/testing-strategy.md, and all type definitions are comment-free",
         "priority": "high",
-        "dependencies": [
-          "4"
-        ],
+        "dependencies": ["4"],
         "status": "pending",
         "subtasks": [
           {
@@ -353,9 +318,7 @@
             "id": 2,
             "title": "Create API DTO interfaces",
             "description": "Define request and response interfaces for all API endpoints",
-            "dependencies": [
-              "7.1"
-            ],
+            "dependencies": ["7.1"],
             "details": "Create comprehensive DTO (Data Transfer Object) interfaces for all API request and response payloads. Include user authentication, dog profiles, care plans, notifications, and other domain-specific DTOs. Follow DDD principles from docs/project-plan.md and ensure DTOs align with backend architecture. Use clear interface names that describe their purpose without requiring comments.",
             "status": "pending",
             "testStrategy": "DTOs provide type safety and validation as per docs/testing-strategy.md AAA pattern, and are self-explanatory without comments",
@@ -365,10 +328,7 @@
             "id": 3,
             "title": "Build Zod validation schemas",
             "description": "Create Zod schemas for runtime validation of all data models",
-            "dependencies": [
-              "7.1",
-              "7.2"
-            ],
+            "dependencies": ["7.1", "7.2"],
             "details": "Implement Zod validation schemas that correspond to the database types and API DTOs. Include proper validation rules for all fields, including optional fields, enums, and complex nested objects. Follow validation patterns from docs/testing-strategy.md and ensure schemas work with environment configuration from docs/environment-variables.md. Schema names and structure should be self-explanatory.",
             "status": "pending",
             "testStrategy": "Validation schemas work correctly with comprehensive test coverage using AAA pattern from docs/testing-strategy.md, and schema definitions contain no comments",
@@ -378,9 +338,7 @@
             "id": 4,
             "title": "Define application enums and constants",
             "description": "Create shared enums and constants used across the application",
-            "dependencies": [
-              "7.1"
-            ],
+            "dependencies": ["7.1"],
             "details": "Define all application-wide enums (user roles, notification types, care plan statuses, etc.) and constants (validation limits, default values, configuration options) in a centralized location. Follow domain language principles from docs/project-plan.md DDD architecture. Use descriptive enum and constant names that convey meaning without comments.",
             "status": "pending",
             "testStrategy": "Enums and constants are properly typed, tested following docs/testing-strategy.md guidelines, and self-documenting without comments",
@@ -390,12 +348,7 @@
             "id": 5,
             "title": "Configure package exports and TypeScript compilation",
             "description": "Set up proper package.json exports and TypeScript configuration for the shared types package",
-            "dependencies": [
-              "7.1",
-              "7.2",
-              "7.3",
-              "7.4"
-            ],
+            "dependencies": ["7.1", "7.2", "7.3", "7.4"],
             "details": "Configure package.json with proper exports mapping, set up TypeScript compilation with appropriate tsconfig.json, ensure all types are properly exported and can be imported by both frontend and backend packages. Follow monorepo configuration guidelines from docs/project-plan.md. Configuration files should be self-explanatory through clear structure.",
             "status": "pending",
             "testStrategy": "Package builds correctly, types import properly across monorepo, build validation follows docs/testing-strategy.md, and configuration is comment-free",
@@ -410,9 +363,7 @@
         "details": "Extract database types from existing types.ts into packages/shared/. Create API DTOs for request/response interfaces. Build Zod validation schemas for all data models. Define enums and constants. Export all types properly. All TypeScript interfaces and types must be self-explanatory through naming - no comments allowed.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Follow package structure and TypeScript configuration guidelines from docs/project-plan.md shared packages section\n- Implement validation using patterns from docs/testing-strategy.md with comprehensive testing coverage\n- Use environment-agnostic type definitions that work with configuration from docs/environment-variables.md",
         "testStrategy": "Types compile without errors, can be imported in frontend and backend, validation tests follow AAA pattern from docs/testing-strategy.md, and all type definitions are comment-free",
         "priority": "high",
-        "dependencies": [
-          "4"
-        ],
+        "dependencies": ["4"],
         "status": "pending",
         "subtasks": [
           {
@@ -429,9 +380,7 @@
             "id": 2,
             "title": "Create API DTO interfaces",
             "description": "Define request and response interfaces for all API endpoints",
-            "dependencies": [
-              "7.1"
-            ],
+            "dependencies": ["7.1"],
             "details": "Create comprehensive DTO (Data Transfer Object) interfaces for all API request and response payloads. Include user authentication, dog profiles, care plans, notifications, and other domain-specific DTOs. Follow DDD principles from docs/project-plan.md and ensure DTOs align with backend architecture. Use clear interface names that describe their purpose without requiring comments.",
             "status": "pending",
             "testStrategy": "DTOs provide type safety and validation as per docs/testing-strategy.md AAA pattern, and are self-explanatory without comments",
@@ -441,10 +390,7 @@
             "id": 3,
             "title": "Build Zod validation schemas",
             "description": "Create Zod schemas for runtime validation of all data models",
-            "dependencies": [
-              "7.1",
-              "7.2"
-            ],
+            "dependencies": ["7.1", "7.2"],
             "details": "Implement Zod validation schemas that correspond to the database types and API DTOs. Include proper validation rules for all fields, including optional fields, enums, and complex nested objects. Follow validation patterns from docs/testing-strategy.md and ensure schemas work with environment configuration from docs/environment-variables.md. Schema names and structure should be self-explanatory.",
             "status": "pending",
             "testStrategy": "Validation schemas work correctly with comprehensive test coverage using AAA pattern from docs/testing-strategy.md, and schema definitions contain no comments",
@@ -454,9 +400,7 @@
             "id": 4,
             "title": "Define application enums and constants",
             "description": "Create shared enums and constants used across the application",
-            "dependencies": [
-              "7.1"
-            ],
+            "dependencies": ["7.1"],
             "details": "Define all application-wide enums (user roles, notification types, care plan statuses, etc.) and constants (validation limits, default values, configuration options) in a centralized location. Follow domain language principles from docs/project-plan.md DDD architecture. Use descriptive enum and constant names that convey meaning without comments.",
             "status": "pending",
             "testStrategy": "Enums and constants are properly typed, tested following docs/testing-strategy.md guidelines, and self-documenting without comments",
@@ -466,12 +410,7 @@
             "id": 5,
             "title": "Configure package exports and TypeScript compilation",
             "description": "Set up proper package.json exports and TypeScript configuration for the shared types package",
-            "dependencies": [
-              "7.1",
-              "7.2",
-              "7.3",
-              "7.4"
-            ],
+            "dependencies": ["7.1", "7.2", "7.3", "7.4"],
             "details": "Configure package.json with proper exports mapping, set up TypeScript compilation with appropriate tsconfig.json, ensure all types are properly exported and can be imported by both frontend and backend packages. Follow monorepo configuration guidelines from docs/project-plan.md. Configuration files should be self-explanatory through clear structure.",
             "status": "pending",
             "testStrategy": "Package builds correctly, types import properly across monorepo, build validation follows docs/testing-strategy.md, and configuration is comment-free",
@@ -486,10 +425,7 @@
         "details": "Create auth module with JWT guards. Implement Supabase Auth integration. Build role-based access control guards. Create user registration/login endpoints. Implement password reset functionality. Add email verification endpoints. All authentication logic must be self-documenting through clear method names and structure - no comments in production code.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Follow environment configuration for Supabase Auth keys from docs/environment-variables.md\n- Implement DDD architecture patterns from docs/project-plan.md Phase 1 backend requirements\n- Use AAA testing pattern with in-memory providers as specified in docs/testing-strategy.md",
         "testStrategy": "Authentication endpoints work correctly, JWT tokens validate properly, comprehensive testing follows AAA pattern from docs/testing-strategy.md, and all production code is comment-free",
         "priority": "high",
-        "dependencies": [
-          "6",
-          "7"
-        ],
+        "dependencies": ["6", "7"],
         "status": "pending",
         "subtasks": [
           {
@@ -506,9 +442,7 @@
             "id": 2,
             "title": "Implement user authentication endpoints and guards",
             "description": "Build registration, login, password reset, and email verification endpoints with JWT guards",
-            "dependencies": [
-              "8.1"
-            ],
+            "dependencies": ["8.1"],
             "details": "Create user registration endpoint with Supabase Auth signup. Implement login endpoint with JWT token generation. Build password reset functionality using Supabase Auth. Create email verification endpoints. Implement JWT guards for protected routes. Add input validation and error handling following DDD patterns from docs/project-plan.md. Method names should clearly indicate their purpose.",
             "status": "pending",
             "testStrategy": "Authentication endpoints work correctly with proper error handling, tested using AAA pattern from docs/testing-strategy.md, and production code contains no comments",
@@ -518,9 +452,7 @@
             "id": 3,
             "title": "Build role-based access control system",
             "description": "Implement RBAC guards and decorators for fine-grained authorization",
-            "dependencies": [
-              "8.2"
-            ],
+            "dependencies": ["8.2"],
             "details": "Create role-based guard using JWT payload. Implement role decorator for controller methods. Build permission checking service. Create admin, user, and moderator role definitions. Add role assignment functionality. Implement route-level authorization controls following DDD domain services patterns from docs/project-plan.md. Use clear naming conventions for roles and permissions.",
             "status": "pending",
             "testStrategy": "RBAC system enforces permissions correctly with comprehensive test coverage using AAA pattern from docs/testing-strategy.md, and guard logic is self-documenting",
@@ -536,9 +468,7 @@
         "details": "Create events controller with CRUD operations. Implement recurring event logic. Build breed-specific health timeline generator. Create vaccination scheduling service. Implement Google Calendar integration service. All business logic must be expressed through clear method and class names without requiring explanatory comments.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Follow DDD architecture with Domain, Application, and Infrastructure layers as outlined in docs/project-plan.md Phase 1\n- Configure external API keys and integrations following docs/environment-variables.md security guidelines\n- Implement comprehensive testing using AAA pattern with in-memory providers per docs/testing-strategy.md",
         "testStrategy": "Events can be created, recurring events generate properly, calendar sync works, testing follows AAA pattern from docs/testing-strategy.md, and all code is self-documenting without comments",
         "priority": "medium",
-        "dependencies": [
-          "8"
-        ],
+        "dependencies": ["8"],
         "status": "pending",
         "subtasks": [
           {
@@ -555,9 +485,7 @@
             "id": 2,
             "title": "Implement recurring event logic and scheduling service",
             "description": "Build service to handle recurring events and vaccination scheduling with breed-specific timelines",
-            "dependencies": [
-              "9.1"
-            ],
+            "dependencies": ["9.1"],
             "details": "Create RecurringEventsService to generate event instances from recurring patterns (daily, weekly, monthly, yearly). Build VaccinationScheduleService with breed-specific health timeline templates. Implement logic to auto-generate vaccination events based on puppy breed and birthdate. Handle timezone considerations and daylight saving time. Follow DDD Domain Services patterns from docs/project-plan.md. Service names should clearly indicate their responsibility.",
             "status": "pending",
             "testStrategy": "Recurring events generate correctly, vaccination schedules follow breed requirements, tested with AAA pattern from docs/testing-strategy.md, and service logic is self-explanatory",
@@ -567,9 +495,7 @@
             "id": 3,
             "title": "Build Google Calendar integration service",
             "description": "Implement two-way sync with Google Calendar API for event management",
-            "dependencies": [
-              "9.2"
-            ],
+            "dependencies": ["9.2"],
             "details": "Create GoogleCalendarService with OAuth2 authentication. Implement sync methods to push events to Google Calendar and pull external events. Build webhook handlers for real-time calendar updates. Add conflict resolution for overlapping events. Include proper error handling for API rate limits and network failures. Configure API keys following docs/environment-variables.md security guidelines. Method names should describe integration actions clearly.",
             "status": "pending",
             "testStrategy": "Google Calendar integration syncs correctly with proper error handling, tested using AAA pattern from docs/testing-strategy.md, and integration code is comment-free",
@@ -584,9 +510,7 @@
         "details": "Build feeding schedules controller. Create feeding logs tracking service. Implement weight-based portion calculation algorithms. Build food types and assignments management. Create feeding history aggregation endpoints. All calculation logic must be expressed through clear algorithm names and structure.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Implement DDD architecture with proper Domain Layer business logic as specified in docs/project-plan.md Phase 1\n- Follow environment configuration guidelines from docs/environment-variables.md for any external service integrations\n- Use AAA testing pattern with in-memory providers for business logic testing per docs/testing-strategy.md",
         "testStrategy": "Feeding schedules create correctly, portion calculations are accurate, comprehensive testing follows AAA pattern from docs/testing-strategy.md, and business logic is self-documenting",
         "priority": "medium",
-        "dependencies": [
-          "8"
-        ],
+        "dependencies": ["8"],
         "status": "pending",
         "subtasks": [
           {
@@ -603,9 +527,7 @@
             "id": 2,
             "title": "Implement feeding logs tracking service and portion calculations",
             "description": "Create feeding logs tracking system with weight-based portion calculation algorithms",
-            "dependencies": [
-              "10.1"
-            ],
+            "dependencies": ["10.1"],
             "details": "Build feeding logs tracking service to record actual feeding events. Implement weight-based portion calculation algorithms that adjust serving sizes based on pet weight, age, and activity level. Create validation for feeding log entries and automatic portion recommendations. Include business logic for calculating optimal feeding amounts. Follow DDD Domain Services patterns from docs/project-plan.md. Algorithm method names should clearly describe calculation purpose.",
             "status": "pending",
             "testStrategy": "Portion calculations are accurate, feeding logs track correctly, tested with AAA pattern from docs/testing-strategy.md, and calculation logic is self-explanatory",
@@ -615,9 +537,7 @@
             "id": 3,
             "title": "Create feeding history aggregation endpoints",
             "description": "Build API endpoints for feeding history reports and analytics",
-            "dependencies": [
-              "10.2"
-            ],
+            "dependencies": ["10.2"],
             "details": "Implement feeding history aggregation endpoints that provide comprehensive feeding analytics. Create endpoints for daily, weekly, and monthly feeding summaries. Build feeding pattern analysis and trend reporting. Include feeding compliance tracking and missed feeding alerts. Provide data export capabilities for feeding history. Follow DDD Application Layer patterns from docs/project-plan.md. Endpoint names should clearly indicate the type of aggregation provided.",
             "status": "pending",
             "testStrategy": "Feeding history aggregation provides accurate analytics, tested using AAA pattern from docs/testing-strategy.md, and aggregation logic is comment-free",
@@ -632,9 +552,7 @@
         "details": "Create training exercises database service. Implement training progress tracking. Build training session management endpoints. Create behavioral milestones tracking. Implement training recommendation algorithms. All training logic must be self-documenting through clear naming conventions.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Follow DDD architecture patterns with proper domain modeling as outlined in docs/project-plan.md Phase 1\n- Configure any external service integrations following docs/environment-variables.md security guidelines\n- Implement comprehensive testing using AAA pattern with in-memory providers per docs/testing-strategy.md",
         "testStrategy": "Training sessions track correctly, recommendations generate appropriately, testing follows AAA pattern from docs/testing-strategy.md, and all training logic is comment-free",
         "priority": "medium",
-        "dependencies": [
-          "8"
-        ],
+        "dependencies": ["8"],
         "status": "pending",
         "subtasks": [
           {
@@ -651,9 +569,7 @@
             "id": 2,
             "title": "Implement training progress tracking system",
             "description": "Build progress tracking service and behavioral milestones management",
-            "dependencies": [
-              "11.1"
-            ],
+            "dependencies": ["11.1"],
             "details": "Create training session entity to track completed exercises. Implement progress calculation algorithms based on completion rates and improvement metrics. Build behavioral milestones tracking with configurable goals. Create progress aggregation endpoints for analytics. Follow DDD Domain Services patterns from docs/project-plan.md. Progress calculation methods should have descriptive names indicating metric types.",
             "status": "pending",
             "testStrategy": "Progress tracking calculates correctly, milestones update properly, tested with AAA pattern from docs/testing-strategy.md, and tracking logic is self-documenting",
@@ -663,10 +579,7 @@
             "id": 3,
             "title": "Build training session management and recommendation endpoints",
             "description": "Create API endpoints for session management and implement training recommendation algorithms",
-            "dependencies": [
-              "11.1",
-              "11.2"
-            ],
+            "dependencies": ["11.1", "11.2"],
             "details": "Build REST endpoints for creating, updating, and managing training sessions. Implement recommendation algorithms based on puppy age, breed, and progress history. Create session scheduling and reminder system. Build endpoints for retrieving personalized training plans. Follow DDD Application Layer patterns from docs/project-plan.md. Recommendation algorithm names should clearly describe their recommendation criteria.",
             "status": "pending",
             "testStrategy": "Training recommendations are relevant, session management works correctly, tested using AAA pattern from docs/testing-strategy.md, and algorithm logic contains no comments",
@@ -681,11 +594,7 @@
         "details": "Create Supabase Edge Functions for notifications. Build notification scheduling service. Implement web push notification handlers. Create email notification service integration. Build notification preferences management. All notification logic must be self-explanatory through clear service and method names.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Configure Supabase Edge Functions and service keys following docs/environment-variables.md security guidelines\n- Implement DDD architecture with proper domain events as outlined in docs/project-plan.md Phase 1\n- Use AAA testing pattern with proper mocking for external services per docs/testing-strategy.md",
         "testStrategy": "Notifications send correctly via all channels, preferences are respected, comprehensive testing follows AAA pattern from docs/testing-strategy.md, and notification logic is comment-free",
         "priority": "medium",
-        "dependencies": [
-          "8",
-          "9",
-          "10"
-        ],
+        "dependencies": ["8", "9", "10"],
         "status": "pending",
         "subtasks": [
           {
@@ -702,9 +611,7 @@
             "id": 2,
             "title": "Implement notification scheduling service",
             "description": "Build service to schedule and queue notifications for delivery",
-            "dependencies": [
-              "12.1"
-            ],
+            "dependencies": ["12.1"],
             "details": "Create scheduling logic for delayed notifications, recurring reminders, and batch processing. Implement queue management and priority handling. Follow DDD Domain Services patterns from docs/project-plan.md for business logic. Scheduling method names should clearly describe timing and priority logic.",
             "status": "pending",
             "testStrategy": "Notification scheduling works correctly with proper queue management, tested with AAA pattern from docs/testing-strategy.md, and scheduling logic is self-documenting",
@@ -714,9 +621,7 @@
             "id": 3,
             "title": "Set up web push notification handlers",
             "description": "Implement web push notification infrastructure and handlers",
-            "dependencies": [
-              "12.1"
-            ],
+            "dependencies": ["12.1"],
             "details": "Configure VAPID keys, implement push notification subscription management, and create handlers for different notification types. Configure keys following docs/environment-variables.md security guidelines. Handler method names should indicate the type of push notification being processed.",
             "status": "pending",
             "testStrategy": "Web push notifications deliver correctly with proper subscription management, tested using AAA pattern from docs/testing-strategy.md, and handler logic contains no comments",
@@ -726,9 +631,7 @@
             "id": 4,
             "title": "Integrate email notification service",
             "description": "Set up email delivery service and templates",
-            "dependencies": [
-              "12.1"
-            ],
+            "dependencies": ["12.1"],
             "details": "Integrate with email service provider, create email templates for different notification types, and implement delivery tracking. Configure API keys following docs/environment-variables.md security guidelines. Template and delivery method names should clearly indicate email purpose and delivery mechanism.",
             "status": "pending",
             "testStrategy": "Email notifications send correctly with proper template rendering, tested with AAA pattern from docs/testing-strategy.md, and email service code is comment-free",
@@ -738,10 +641,7 @@
             "id": 5,
             "title": "Build notification preferences management",
             "description": "Create system for managing user notification preferences",
-            "dependencies": [
-              "12.3",
-              "12.4"
-            ],
+            "dependencies": ["12.3", "12.4"],
             "details": "Implement preference storage, user interface integration, and respect for opt-out settings across all notification channels. Follow DDD Domain modeling patterns from docs/project-plan.md. Preference management methods should clearly indicate the type of preference being handled.",
             "status": "pending",
             "testStrategy": "Notification preferences are respected across all channels, tested using AAA pattern from docs/testing-strategy.md, and preference logic is self-explanatory",
@@ -751,11 +651,7 @@
             "id": 6,
             "title": "Create notification delivery tracking and retry logic",
             "description": "Implement tracking and retry mechanisms for failed notifications",
-            "dependencies": [
-              "12.2",
-              "12.3",
-              "12.4"
-            ],
+            "dependencies": ["12.2", "12.3", "12.4"],
             "details": "Build delivery status tracking, implement exponential backoff retry logic, and create monitoring for notification success rates. Follow DDD Domain Services patterns from docs/project-plan.md. Retry and tracking method names should clearly describe their monitoring and retry strategies.",
             "status": "pending",
             "testStrategy": "Delivery tracking and retry logic work correctly with proper monitoring, tested with AAA pattern from docs/testing-strategy.md, and tracking logic contains no comments",
@@ -770,9 +666,7 @@
         "details": "Create family groups management service. Implement invitation system with email tokens. Build RBAC for family member permissions. Implement real-time updates with Supabase subscriptions. Create activity logging and audit trail. All family sharing logic must be expressed through descriptive service and method names.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Follow DDD architecture patterns with proper domain modeling as outlined in docs/project-plan.md Phase 1\n- Configure email service integrations following docs/environment-variables.md security guidelines\n- Implement comprehensive testing using AAA pattern with in-memory providers per docs/testing-strategy.md",
         "testStrategy": "Family invitations work, permissions enforce correctly, real-time updates function, testing follows AAA pattern from docs/testing-strategy.md, and sharing logic is comment-free",
         "priority": "medium",
-        "dependencies": [
-          "8"
-        ],
+        "dependencies": ["8"],
         "status": "pending",
         "subtasks": [
           {
@@ -789,9 +683,7 @@
             "id": 2,
             "title": "Build invitation system with email tokens",
             "description": "Implement secure invitation flow with email verification and token management",
-            "dependencies": [
-              "13.1"
-            ],
+            "dependencies": ["13.1"],
             "details": "Create invitation tokens table with expiration dates and security tokens. Implement email service integration for sending family invitations. Build invitation acceptance endpoint with token validation. Add invitation status tracking (pending, accepted, expired, revoked). Create rate limiting for invitation sending. Follow email configuration from docs/environment-variables.md. Token and validation method names should clearly describe security operations.",
             "status": "pending",
             "testStrategy": "Invitation system works securely with proper token validation, tested with AAA pattern from docs/testing-strategy.md, and invitation logic is self-documenting",
@@ -801,9 +693,7 @@
             "id": 3,
             "title": "Implement RBAC and real-time features",
             "description": "Build role-based access control system and real-time updates with activity logging",
-            "dependencies": [
-              "13.2"
-            ],
+            "dependencies": ["13.2"],
             "details": "Create family member roles system (admin, member, viewer) with permission matrices. Implement middleware for role-based endpoint protection. Set up Supabase real-time subscriptions for family data changes. Create activity logging service for audit trail of family actions. Build notification system for family updates. Follow DDD Domain Services patterns from docs/project-plan.md. Role and permission method names should clearly indicate access control operations.",
             "status": "pending",
             "testStrategy": "RBAC enforces permissions correctly, real-time updates work properly, tested using AAA pattern from docs/testing-strategy.md, and access control logic contains no comments",
@@ -818,12 +708,7 @@
         "details": "Create AI service abstraction layer. Implement OpenAI and Anthropic provider integrations. Build care plan generation service. Create feeding plan optimization algorithms. Implement training progression suggestion engine. All AI integration logic must be self-documenting through clear service abstractions and method names.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Configure AI provider API keys following docs/environment-variables.md security guidelines\n- Implement DDD architecture with proper domain services as outlined in docs/project-plan.md Phase 1\n- Use AAA testing pattern with proper mocking for external AI services per docs/testing-strategy.md",
         "testStrategy": "AI services generate meaningful recommendations and care plans, comprehensive testing follows AAA pattern from docs/testing-strategy.md, and AI integration code is comment-free",
         "priority": "low",
-        "dependencies": [
-          "8",
-          "9",
-          "10",
-          "11"
-        ],
+        "dependencies": ["8", "9", "10", "11"],
         "status": "pending",
         "subtasks": [
           {
@@ -840,9 +725,7 @@
             "id": 2,
             "title": "Implement OpenAI provider integration",
             "description": "Build OpenAI-specific implementation of AI service interfaces",
-            "dependencies": [
-              "14.1"
-            ],
+            "dependencies": ["14.1"],
             "details": "Implement OpenAI SDK integration. Build chat completion service with GPT models. Create structured output handlers using function calling. Implement error handling and rate limiting. Add configuration for API keys and model selection following docs/environment-variables.md security guidelines. Provider method names should clearly indicate OpenAI-specific operations.",
             "status": "pending",
             "testStrategy": "OpenAI integration works correctly with proper error handling, tested with AAA pattern from docs/testing-strategy.md, and integration code is self-documenting",
@@ -852,9 +735,7 @@
             "id": 3,
             "title": "Implement Anthropic provider integration",
             "description": "Build Anthropic Claude-specific implementation of AI service interfaces",
-            "dependencies": [
-              "14.1"
-            ],
+            "dependencies": ["14.1"],
             "details": "Implement Anthropic SDK integration. Build Claude chat completion service. Create structured output handlers using tool use. Implement error handling and rate limiting. Add configuration for API keys and model selection following docs/environment-variables.md security guidelines. Provider method names should clearly indicate Anthropic-specific operations.",
             "status": "pending",
             "testStrategy": "Anthropic integration works correctly with proper error handling, tested using AAA pattern from docs/testing-strategy.md, and integration logic contains no comments",
@@ -864,10 +745,7 @@
             "id": 4,
             "title": "Build care plan generation algorithms",
             "description": "Create AI-powered pet care plan generation service",
-            "dependencies": [
-              "14.2",
-              "14.3"
-            ],
+            "dependencies": ["14.2", "14.3"],
             "details": "Design prompt templates for care plan generation based on pet profiles. Implement context processing to include pet health, age, breed, and medical history. Build structured output parsing for care recommendations. Create validation logic for generated plans. Follow DDD Domain Services patterns from docs/project-plan.md. Care plan method names should clearly indicate the type of care planning being performed.",
             "status": "pending",
             "testStrategy": "Care plan generation produces relevant recommendations, tested with AAA pattern from docs/testing-strategy.md, and generation logic is comment-free",
@@ -877,10 +755,7 @@
             "id": 5,
             "title": "Create feeding and training recommendation engines",
             "description": "Implement AI services for feeding schedules and training progression",
-            "dependencies": [
-              "14.2",
-              "14.3"
-            ],
+            "dependencies": ["14.2", "14.3"],
             "details": "Build feeding plan optimization using pet nutritional needs and activity levels. Create training progression algorithms based on pet behavior and learning patterns. Implement context-aware recommendations using historical data. Build feedback loops for recommendation improvement. Follow DDD Domain Services patterns from docs/project-plan.md. Recommendation method names should clearly describe the optimization criteria and target domain.",
             "status": "pending",
             "testStrategy": "Feeding and training recommendations are accurate and contextual, tested using AAA pattern from docs/testing-strategy.md, and recommendation logic is self-explanatory",
@@ -895,10 +770,7 @@
         "details": "Create weight tracking analytics service. Implement growth prediction algorithms. Build breed comparison service. Create trend analysis and alerting system. Implement data aggregation for dashboards. All analytics algorithms must be self-documenting through clear naming and structure.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Implement DDD architecture with proper domain analytics services as outlined in docs/project-plan.md Phase 1\n- Follow environment configuration for any external analytics services from docs/environment-variables.md\n- Use AAA testing pattern with in-memory data providers per docs/testing-strategy.md",
         "testStrategy": "Analytics generate accurate insights and predictions, comprehensive testing follows AAA pattern from docs/testing-strategy.md, and analytics logic is comment-free",
         "priority": "medium",
-        "dependencies": [
-          "8",
-          "10"
-        ],
+        "dependencies": ["8", "10"],
         "status": "pending",
         "subtasks": [
           {
@@ -915,9 +787,7 @@
             "id": 2,
             "title": "Implement growth prediction algorithms",
             "description": "Develop algorithms to predict puppy growth patterns and adult size estimation",
-            "dependencies": [
-              "15.1"
-            ],
+            "dependencies": ["15.1"],
             "details": "Create GrowthPredictionService with machine learning or statistical models for predicting adult weight based on current growth patterns. Implement breed-specific growth curves and prediction accuracy metrics. Include confidence intervals and prediction validation against historical data. Follow DDD Domain Services patterns from docs/project-plan.md. Prediction method names should clearly describe the growth modeling approach and target metrics.",
             "status": "pending",
             "testStrategy": "Growth predictions are accurate within acceptable confidence intervals, tested with AAA pattern from docs/testing-strategy.md, and prediction algorithms are self-documenting",
@@ -927,10 +797,7 @@
             "id": 3,
             "title": "Build analytics aggregation and reporting endpoints",
             "description": "Create API endpoints for analytics data aggregation and dashboard reporting",
-            "dependencies": [
-              "15.1",
-              "15.2"
-            ],
+            "dependencies": ["15.1", "15.2"],
             "details": "Implement AnalyticsController with endpoints for breed comparison data, trend analysis results, and dashboard metrics. Create data aggregation services for generating summary statistics, alerts for unusual patterns, and export functionality for reports. Include caching for performance optimization. Follow DDD Application Layer patterns from docs/project-plan.md. Endpoint and aggregation method names should clearly indicate the type of analytics data being provided.",
             "status": "pending",
             "testStrategy": "Analytics endpoints provide accurate aggregated data with proper performance, tested using AAA pattern from docs/testing-strategy.md, and aggregation logic contains no comments",
@@ -945,9 +812,7 @@
         "details": "Create date/time utilities. Build formatting helpers. Implement validation utilities. Create calculation helpers for weight, portions, etc. Build error handling utilities. Add logging utilities. All utility functions must be self-explanatory through descriptive names and clear parameter definitions.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Follow shared package structure and configuration guidelines from docs/project-plan.md Phase 2\n- Ensure utilities work with environment configuration from docs/environment-variables.md\n- Implement comprehensive testing using AAA pattern per docs/testing-strategy.md",
         "testStrategy": "All utilities work correctly and are properly exported, comprehensive testing follows AAA pattern from docs/testing-strategy.md, and utility functions are comment-free",
         "priority": "medium",
-        "dependencies": [
-          "7"
-        ],
+        "dependencies": ["7"],
         "status": "pending",
         "subtasks": [
           {
@@ -964,9 +829,7 @@
             "id": 2,
             "title": "Build validation and calculation utilities",
             "description": "Create validation functions and pet-specific calculation helpers",
-            "dependencies": [
-              "16.1"
-            ],
+            "dependencies": ["16.1"],
             "details": "Implement validation utilities (email, phone, required fields, etc.). Create weight conversion functions (pounds to kg, etc.). Build portion calculation helpers for pet feeding. Add age calculation utilities for pets. Create breed-specific validation functions. Follow DRY principles from docs/project-plan.md. Validation and calculation function names should clearly indicate their validation criteria or calculation purpose.",
             "status": "pending",
             "testStrategy": "Validation and calculation utilities handle edge cases correctly, tested with AAA pattern from docs/testing-strategy.md, and utility logic is self-documenting",
@@ -976,10 +839,7 @@
             "id": 3,
             "title": "Implement error handling and logging utilities",
             "description": "Create centralized error handling and logging infrastructure",
-            "dependencies": [
-              "16.1",
-              "16.2"
-            ],
+            "dependencies": ["16.1", "16.2"],
             "details": "Build custom error classes for different error types. Create error formatting and reporting utilities. Implement structured logging functions with different log levels. Add error boundary helpers for React components. Create API error response formatters. Follow error handling patterns from docs/project-plan.md. Error and logging function names should clearly indicate their error handling scope and logging level.",
             "status": "pending",
             "testStrategy": "Error handling and logging utilities provide consistent behavior, tested using AAA pattern from docs/testing-strategy.md, and error handling code contains no comments",
@@ -994,10 +854,7 @@
         "details": "Configure React Router for navigation. Set up React Query for API integration with proper error handling. Configure react-hook-form with Zod validation. Implement authentication context and hooks. Set up error boundary and global error handling. All frontend architecture must be self-documenting through clear component and hook names.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Follow frontend architecture patterns from docs/project-plan.md Phase 4 requirements\n- Configure environment variables for frontend following docs/environment-variables.md VITE_ prefix guidelines\n- Implement comprehensive testing using AAA pattern per docs/testing-strategy.md",
         "testStrategy": "Routing works, API calls succeed, forms validate correctly, testing follows AAA pattern from docs/testing-strategy.md, and frontend code is comment-free",
         "priority": "high",
-        "dependencies": [
-          "2",
-          "4"
-        ],
+        "dependencies": ["2", "4"],
         "status": "pending",
         "subtasks": [
           {
@@ -1014,9 +871,7 @@
             "id": 2,
             "title": "Set up React Query for API state management",
             "description": "Configure React Query with proper error handling and caching",
-            "dependencies": [
-              "17.1"
-            ],
+            "dependencies": ["17.1"],
             "details": "Install and configure React Query client. Set up query client with default options for caching and retries. Implement global error handling for API calls. Create custom hooks for common API patterns. Configure dev tools for debugging. Use API base URL from docs/environment-variables.md VITE_ configuration. Hook and query key names should clearly describe their API operations.",
             "status": "pending",
             "testStrategy": "React Query handles API state correctly with proper error handling, tested with AAA pattern from docs/testing-strategy.md, and query logic is self-documenting",
@@ -1026,9 +881,7 @@
             "id": 3,
             "title": "Implement form handling and authentication context",
             "description": "Set up react-hook-form with Zod validation and authentication system",
-            "dependencies": [
-              "17.2"
-            ],
+            "dependencies": ["17.2"],
             "details": "Configure react-hook-form with Zod schema validation from packages/shared. Create reusable form components and validation patterns. Implement authentication context with login/logout functionality. Create protected route wrapper components. Set up error boundaries for global error handling. Follow authentication patterns from docs/project-plan.md. Form and authentication component names should clearly indicate their purpose and scope.",
             "status": "pending",
             "testStrategy": "Form validation and authentication work correctly with proper error handling, tested using AAA pattern from docs/testing-strategy.md, and form handling code contains no comments",
@@ -1043,9 +896,7 @@
         "details": "Build Button, Input, Select components with variants. Create Card, Modal, Toast components. Implement Form components with validation display. Build responsive layout components. Create data display components like Tables and Charts. All UI components must be self-documenting through clear prop names and component structure.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Follow UI package structure and build configuration from docs/project-plan.md shared packages section\n- Ensure components work with environment configuration for any external dependencies from docs/environment-variables.md\n- Implement comprehensive component testing using AAA pattern per docs/testing-strategy.md",
         "testStrategy": "All components render correctly and are responsive, comprehensive testing follows AAA pattern from docs/testing-strategy.md, and component code is comment-free",
         "priority": "high",
-        "dependencies": [
-          "4"
-        ],
+        "dependencies": ["4"],
         "status": "pending",
         "subtasks": [
           {
@@ -1062,9 +913,7 @@
             "id": 2,
             "title": "Configure UI package build process and exports",
             "description": "Set up build configuration and package exports for the UI components package",
-            "dependencies": [
-              "18.1"
-            ],
+            "dependencies": ["18.1"],
             "details": "Create package.json for packages/ui with proper exports configuration following docs/project-plan.md package configuration guidelines. Set up TypeScript build configuration (tsconfig.json). Configure build scripts using Bun. Create index.ts files to export all components. Set up proper module resolution and build output structure. Configuration should be self-explanatory through clear structure and naming.",
             "status": "pending",
             "testStrategy": "UI package builds correctly and exports work properly, tested with AAA pattern from docs/testing-strategy.md, and build configuration contains no comments",
@@ -1074,9 +923,7 @@
             "id": 3,
             "title": "Update import paths across application to use UI package",
             "description": "Refactor all component imports throughout the application to use the new package structure",
-            "dependencies": [
-              "18.2"
-            ],
+            "dependencies": ["18.2"],
             "details": "Search and replace all import statements that reference the old shadcn/ui component paths. Update imports to use the new packages/ui package structure (e.g., import { Button } from '@wag-wise-mentor/ui'). Verify all components still work correctly after the import path updates. Test that the application builds and runs successfully. Import statements should clearly indicate component source packages.",
             "status": "pending",
             "testStrategy": "All import paths update correctly and application builds successfully, tested using AAA pattern from docs/testing-strategy.md, and refactored imports contain no comments",
@@ -1091,10 +938,7 @@
         "details": "Create puppy registration wizard with step-by-step flow. Build breed selection with autocomplete. Implement photo upload component with crop/resize. Create puppy profile view/edit forms. Build weight tracking charts. Implement medical history forms. All UI components must be self-documenting through clear component and prop names.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Follow frontend component patterns from docs/project-plan.md Phase 4 frontend implementation guidelines\n- Use environment configuration for file uploads and API endpoints from docs/environment-variables.md\n- Implement comprehensive component testing using AAA pattern per docs/testing-strategy.md",
         "testStrategy": "Puppy registration completes successfully, profiles display correctly, testing follows AAA pattern from docs/testing-strategy.md, and component code is comment-free",
         "priority": "medium",
-        "dependencies": [
-          "17",
-          "18"
-        ],
+        "dependencies": ["17", "18"],
         "status": "pending",
         "subtasks": [
           {
@@ -1131,11 +975,7 @@
             "id": 4,
             "title": "Create puppy profile view and edit forms",
             "description": "Build comprehensive profile display and editing interface",
-            "dependencies": [
-              "19.1",
-              "19.2",
-              "19.3"
-            ],
+            "dependencies": ["19.1", "19.2", "19.3"],
             "details": "Create profile view component showing all puppy information. Build edit forms for updating puppy details. Implement form validation and error handling. Add save/cancel functionality with optimistic updates. Avoid nested conditionals following docs/project-plan.md principles. Form component names should clearly indicate their profile management purpose.",
             "status": "pending",
             "testStrategy": "Profile forms handle data correctly with proper validation and error states, tested with AAA pattern from docs/testing-strategy.md, and form logic is comment-free",
@@ -1170,10 +1010,7 @@
         "details": "Create calendar component using react-day-picker. Build event creation/editing modal forms. Implement recurring event UI with options. Create vaccination schedule interface. Build appointment management with reminders. All calendar components must be self-documenting through clear naming and structure.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Follow frontend architecture patterns from docs/project-plan.md Phase 4 requirements\n- Configure calendar integrations using environment variables from docs/environment-variables.md\n- Implement comprehensive testing using AAA pattern per docs/testing-strategy.md",
         "testStrategy": "Calendar displays events correctly, event creation works, recurring events show properly, testing follows AAA pattern from docs/testing-strategy.md, and calendar code is comment-free",
         "priority": "medium",
-        "dependencies": [
-          "17",
-          "18"
-        ],
+        "dependencies": ["17", "18"],
         "status": "pending",
         "subtasks": []
       },
@@ -1184,10 +1021,7 @@
         "details": "Create feeding schedule creation forms with time pickers. Build meal logging interface with quick actions. Implement portion tracking charts using recharts. Create feeding history visualization. Build feeding reminders UI. All feeding components must be self-explanatory through descriptive names and clear structure.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Follow frontend component patterns from docs/project-plan.md Phase 4 implementation guidelines\n- Use API endpoints configured in docs/environment-variables.md for feeding data\n- Implement comprehensive component testing using AAA pattern per docs/testing-strategy.md",
         "testStrategy": "Feeding schedules create correctly, logging works, charts display data, testing follows AAA pattern from docs/testing-strategy.md, and feeding code contains no comments",
         "priority": "medium",
-        "dependencies": [
-          "17",
-          "18"
-        ],
+        "dependencies": ["17", "18"],
         "status": "pending",
         "subtasks": []
       },
@@ -1198,10 +1032,7 @@
         "details": "Create training exercise library with search/filter. Build progress tracking interface with charts. Create training session scheduler. Implement milestone tracking UI. Build exercise video player components. All training components must be self-documenting through clear naming conventions.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Follow frontend architecture patterns from docs/project-plan.md Phase 4 requirements\n- Configure media handling using environment variables from docs/environment-variables.md\n- Implement comprehensive testing using AAA pattern per docs/testing-strategy.md",
         "testStrategy": "Training library loads, progress tracks correctly, videos play, testing follows AAA pattern from docs/testing-strategy.md, and training code is comment-free",
         "priority": "medium",
-        "dependencies": [
-          "17",
-          "18"
-        ],
+        "dependencies": ["17", "18"],
         "status": "pending",
         "subtasks": []
       },
@@ -1212,12 +1043,7 @@
         "details": "Build main dashboard layout with responsive design. Create daily agenda view with timeline. Implement routine management UI. Build quick action cards for common tasks. Create progress widgets and summary stats. All dashboard components must be self-documenting through clear component names and structure.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Follow dashboard architecture patterns from docs/project-plan.md Phase 4 implementation guidelines\n- Use API configuration from docs/environment-variables.md for data fetching\n- Implement comprehensive testing using AAA pattern per docs/testing-strategy.md with focus on user interactions",
         "testStrategy": "Dashboard loads quickly, agenda displays correctly, routines function, testing follows AAA pattern from docs/testing-strategy.md, and dashboard code contains no comments",
         "priority": "high",
-        "dependencies": [
-          "19",
-          "20",
-          "21",
-          "22"
-        ],
+        "dependencies": ["19", "20", "21", "22"],
         "status": "pending",
         "subtasks": []
       },
@@ -1228,10 +1054,7 @@
         "details": "Implement notification permission request UI. Create notification preferences interface. Build in-app notification center. Implement notification toasts with actions. Create notification history view. All notification components must be self-explanatory through descriptive names.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Follow frontend notification patterns from docs/project-plan.md Phase 4 requirements\n- Configure push notification settings using docs/environment-variables.md guidelines\n- Implement comprehensive testing using AAA pattern per docs/testing-strategy.md",
         "testStrategy": "Notifications display correctly, preferences save, permission requests work, testing follows AAA pattern from docs/testing-strategy.md, and notification code is comment-free",
         "priority": "medium",
-        "dependencies": [
-          "17",
-          "18"
-        ],
+        "dependencies": ["17", "18"],
         "status": "pending",
         "subtasks": []
       },
@@ -1242,10 +1065,7 @@
         "details": "Build family invitation UI with email forms. Create family member management interface. Implement role-based UI controls and permissions. Build activity feed component. Create family communication interface. All family sharing components must be self-documenting through clear naming.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Follow frontend architecture patterns from docs/project-plan.md Phase 4 requirements\n- Use authentication and API configuration from docs/environment-variables.md\n- Implement comprehensive testing using AAA pattern per docs/testing-strategy.md",
         "testStrategy": "Family invitations send, member management works, activity feed updates, testing follows AAA pattern from docs/testing-strategy.md, and family sharing code contains no comments",
         "priority": "medium",
-        "dependencies": [
-          "17",
-          "18"
-        ],
+        "dependencies": ["17", "18"],
         "status": "pending",
         "subtasks": []
       },
@@ -1256,10 +1076,7 @@
         "details": "Create care plan display components with sections. Implement AI recommendation UI with accept/reject. Build care plan customization interface. Create feedback collection forms for AI improvements. All AI interface components must be self-explanatory through clear naming.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Follow frontend architecture patterns from docs/project-plan.md Phase 4 requirements\n- Configure AI service endpoints using docs/environment-variables.md for API access\n- Implement comprehensive testing using AAA pattern per docs/testing-strategy.md",
         "testStrategy": "Care plans display correctly, recommendations can be accepted, feedback submits, testing follows AAA pattern from docs/testing-strategy.md, and AI interface code is comment-free",
         "priority": "low",
-        "dependencies": [
-          "17",
-          "18"
-        ],
+        "dependencies": ["17", "18"],
         "status": "pending",
         "subtasks": []
       },
@@ -1270,10 +1087,7 @@
         "details": "Build weight tracking charts with recharts. Create growth comparison visualizations. Implement trend analysis displays with filters. Build export functionality for reports. Create sharing features for reports. All analytics components must be self-documenting through descriptive names.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Follow frontend data visualization patterns from docs/project-plan.md Phase 4 requirements\n- Use analytics API endpoints configured in docs/environment-variables.md\n- Implement comprehensive testing using AAA pattern per docs/testing-strategy.md",
         "testStrategy": "Charts render correctly, exports work, sharing functions properly, testing follows AAA pattern from docs/testing-strategy.md, and analytics code contains no comments",
         "priority": "medium",
-        "dependencies": [
-          "17",
-          "18"
-        ],
+        "dependencies": ["17", "18"],
         "status": "pending",
         "subtasks": []
       },
@@ -1284,9 +1098,7 @@
         "details": "Configure Vite PWA plugin with proper manifest. Set up service worker for offline caching. Create app manifest with icons and metadata. Implement offline data synchronization. Build app install prompts and badges. All PWA configuration must be self-explanatory through clear structure and naming.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Follow PWA implementation patterns from docs/project-plan.md Phase 5 mobile optimization requirements\n- Configure service worker caching for API endpoints from docs/environment-variables.md\n- Implement comprehensive PWA testing using AAA pattern per docs/testing-strategy.md",
         "testStrategy": "App installs as PWA, works offline, sync resumes when online, testing follows AAA pattern from docs/testing-strategy.md, and PWA configuration is comment-free",
         "priority": "medium",
-        "dependencies": [
-          "23"
-        ],
+        "dependencies": ["23"],
         "status": "pending",
         "subtasks": []
       },
@@ -1297,9 +1109,7 @@
         "details": "Create mobile navigation components with drawer. Implement touch gestures for interactions. Build mobile-optimized forms with better UX. Create responsive layouts for all features. Implement mobile-specific UI patterns. All mobile components must be self-documenting through clear naming and structure.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Follow mobile-first design patterns from docs/project-plan.md Phase 5 mobile optimization requirements\n- Ensure responsive design works with environment configuration from docs/environment-variables.md\n- Implement comprehensive mobile testing using AAA pattern per docs/testing-strategy.md",
         "testStrategy": "All interfaces work properly on mobile devices and tablets, testing follows AAA pattern from docs/testing-strategy.md, and mobile code contains no comments",
         "priority": "high",
-        "dependencies": [
-          "23"
-        ],
+        "dependencies": ["23"],
         "status": "pending",
         "subtasks": []
       },
@@ -1310,13 +1120,7 @@
         "details": "Connect all frontend components to backend APIs. Implement error handling and retry logic. Build loading states and skeleton screens. Create integration tests for API endpoints. Implement E2E testing with Playwright. All integration code must be self-documenting through clear service and hook names.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Follow integration testing patterns from docs/project-plan.md Phase 6 system integration requirements\n- Use API configuration and error handling guidelines from docs/environment-variables.md\n- Implement comprehensive E2E testing using Playwright and AAA pattern per docs/testing-strategy.md",
         "testStrategy": "All API calls work correctly, error handling functions, tests pass, comprehensive testing follows AAA pattern from docs/testing-strategy.md, and integration code is comment-free",
         "priority": "high",
-        "dependencies": [
-          "8",
-          "9",
-          "10",
-          "11",
-          "23"
-        ],
+        "dependencies": ["8", "9", "10", "11", "23"],
         "status": "pending",
         "subtasks": []
       },
@@ -1327,9 +1131,7 @@
         "details": "Implement code splitting and lazy loading. Optimize bundle sizes with analysis. Set up image optimization. Implement caching strategies. Configure CI/CD pipeline. Set up frontend deployment (Vercel) and backend deployment (Railway/Render). All optimization and deployment configuration must be self-explanatory.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Follow deployment strategies from docs/project-plan.md Phase 6 deployment requirements\n- Configure production environment variables following docs/environment-variables.md production guidelines\n- Implement performance testing using patterns from docs/testing-strategy.md",
         "testStrategy": "Performance metrics meet targets, deployments succeed, monitoring active, testing follows AAA pattern from docs/testing-strategy.md, and deployment configuration contains no comments",
         "priority": "high",
-        "dependencies": [
-          "30"
-        ],
+        "dependencies": ["30"],
         "status": "pending",
         "subtasks": []
       },
@@ -1380,10 +1182,7 @@
             "id": 4,
             "title": "Implement test coverage reporting",
             "description": "Set up comprehensive test coverage reporting for all test types",
-            "dependencies": [
-              "32.1",
-              "32.2"
-            ],
+            "dependencies": ["32.1", "32.2"],
             "details": "Configure coverage tools: nyc for Mocha, @vitest/coverage for Vitest. Set up coverage thresholds and reporting. Integrate with CI/CD for coverage tracking.",
             "status": "done",
             "testStrategy": "Coverage reports generated, thresholds met, CI/CD integration works",
@@ -1394,11 +1193,7 @@
             "id": 5,
             "title": "Create comprehensive test suites",
             "description": "Write extensive test suites for all business logic and critical paths",
-            "dependencies": [
-              "32.1",
-              "32.2",
-              "32.3"
-            ],
+            "dependencies": ["32.1", "32.2", "32.3"],
             "details": "Write unit tests for all services, utilities, and business logic. Create integration tests for API endpoints. Write component tests for React components. Create E2E tests for critical user flows.",
             "status": "done",
             "testStrategy": "All business logic covered by tests, critical user flows tested end-to-end",
@@ -1415,9 +1210,7 @@
         "details": "Create unit tests for all services (puppies, feeding, notifications, analytics). Write integration tests for API endpoints. Test database operations and external service integrations. Focus on behavior testing over mocking. All test code must use only AAA comments for structure - no other comments allowed.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Follow backend testing strategy with Mocha + Chai from docs/testing-strategy.md\n- Use AAA pattern and in-memory providers as specified in docs/testing-strategy.md backend testing guidelines\n- Test environment configuration following docs/environment-variables.md test setup procedures",
         "testStrategy": "All backend services have >90% test coverage, integration tests pass, following AAA pattern and behavior testing approach from docs/testing-strategy.md, and test code contains only AAA comments",
         "priority": "high",
-        "dependencies": [
-          "32.1"
-        ],
+        "dependencies": ["32.1"],
         "status": "pending",
         "subtasks": []
       },
@@ -1428,9 +1221,7 @@
         "details": "Create component tests for all UI components. Test custom hooks and utility functions. Write integration tests for complex user interactions. Test form validation and state management. All test code must use only AAA comments for structure - no explanatory comments in test logic.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Follow frontend testing strategy with Vitest from docs/testing-strategy.md\n- Use AAA pattern and behavior testing focus as specified in docs/testing-strategy.md frontend testing guidelines\n- Test components in isolation with proper environment setup from docs/environment-variables.md",
         "testStrategy": "All React components have tests, utility functions covered, user interactions tested, following AAA pattern and behavior testing from docs/testing-strategy.md, and test code contains only AAA comments",
         "priority": "high",
-        "dependencies": [
-          "32.2"
-        ],
+        "dependencies": ["32.2"],
         "status": "pending",
         "subtasks": []
       },
@@ -1441,9 +1232,7 @@
         "details": "Write E2E tests for user registration, puppy profile creation, feeding schedule setup, notification management, and dashboard interactions. Test cross-browser compatibility and responsive design. All test code must use only AAA comments for structure.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Follow E2E testing strategy with Playwright from docs/testing-strategy.md\n- Use browser MCP integration and cross-browser testing as specified in docs/testing-strategy.md E2E guidelines\n- Configure test environment following docs/environment-variables.md test setup procedures",
         "testStrategy": "All critical user flows tested end-to-end, cross-browser compatibility verified, following comprehensive E2E strategy from docs/testing-strategy.md, and test code contains only AAA comments",
         "priority": "high",
-        "dependencies": [
-          "32.3"
-        ],
+        "dependencies": ["32.3"],
         "status": "pending",
         "subtasks": []
       },
@@ -1454,12 +1243,7 @@
         "details": "Implement comprehensive E2E testing strategy building on existing Playwright infrastructure:\n\n**1. Test Environment Setup**\n- Configure dedicated test environment with isolated frontend (localhost:5174) and backend (localhost:3002) instances\n- Set up test-specific environment variables in `.env.test` with proper database isolation\n- Create Docker Compose configuration for consistent test environment across local and CI\n- Implement test environment health checks and startup/teardown scripts\n\n**2. Database Setup and Seeding**\n- Create separate test database instance with automated migration and seeding\n- Implement database cleanup and reset between test suites using transactions or database recreation\n- Build test data factories for consistent, realistic test data (users, puppies, feeding schedules)\n- Set up database connection pooling and isolation for parallel test execution\n\n**3. Authentication Flow Testing**\n- Test complete user registration, login, logout flows\n- Validate JWT token handling, refresh token mechanisms\n- Test password reset and email verification flows\n- Verify session persistence and security boundaries\n\n**4. Critical User Journey Testing**\n- **Puppy Management**: Registration → Profile creation → Medical history → Weight tracking\n- **Feeding Schedules**: Creation → Modification → Notifications → Completion tracking\n- **Dashboard Interactions**: Navigation → Data visualization → Quick actions\n- **Notifications**: Creation → Delivery → User preferences → Read/unread states\n\n**5. API Integration Testing**\n- Test all CRUD operations for puppies, feeding, notifications, analytics modules\n- Validate request/response formats, error handling, and status codes\n- Test file upload functionality (puppy photos, medical documents)\n- Verify real-time features using WebSocket/SSE connections\n\n**6. Cross-Browser Testing Setup**\n- Configure Playwright for Chrome, Firefox, Safari, and mobile viewports\n- Implement responsive design testing across device types\n- Set up browser-specific configuration and capability testing\n- Create visual regression testing for UI consistency\n\n**7. CI/CD Integration**\n- Extend existing GitHub Actions workflow with E2E test stage\n- Configure test parallelization and retry mechanisms\n- Implement test result reporting with screenshots/videos on failure\n- Set up test environment provisioning and cleanup in CI\n- Add E2E test coverage reporting and integration with existing coverage system\n\n**Test Structure:**\n```\ne2e/\n├── fixtures/           # Test data and mock files\n├── page-objects/       # Page object models\n├── tests/\n│   ├── auth/          # Authentication flows\n│   ├── puppies/       # Puppy management\n│   ├── feeding/       # Feeding schedules\n│   ├── notifications/ # Notification system\n│   └── integration/   # Full user journeys\n├── utils/             # Test utilities and helpers\n├── global-setup.ts    # Environment setup\n└── global-teardown.ts # Cleanup\n```\n\nAll test implementation must be self-documenting through clear test names and page object methods. Only AAA comments allowed for test structure.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Follow E2E testing framework from docs/testing-strategy.md with Playwright and browser MCP integration\n- Configure test environment variables following docs/environment-variables.md test setup guidelines\n- Implement testing strategy aligned with docs/project-plan.md Phase 6 integration requirements",
         "testStrategy": "1. Verify test environment spins up both FE and BE correctly with isolated test database, 2. Validate all authentication flows work end-to-end with real JWT tokens, 3. Test complete user journeys from registration to advanced features, 4. Verify API integration with real HTTP calls and database operations, 5. Ensure cross-browser compatibility across Chrome, Firefox, Safari, and mobile, 6. Confirm CI/CD pipeline runs E2E tests successfully with proper reporting, 7. Validate test data seeding and cleanup works consistently, 8. Test error scenarios and edge cases in real environment conditions, following comprehensive E2E strategy from docs/testing-strategy.md, with only AAA comments in test code",
         "status": "pending",
-        "dependencies": [
-          "2",
-          "32",
-          "33",
-          "34"
-        ],
+        "dependencies": ["2", "32", "33", "34"],
         "priority": "medium",
         "subtasks": []
       },
@@ -1470,10 +1254,7 @@
         "details": "Frontend: Install react-i18next, i18next, and i18next-browser-languagedetector. Configure i18next with namespace support for different app sections (common, dashboard, auth, feeding, training). Create translation files in public/locales/{en,pl}/ directories. Implement useTranslation hooks throughout React components. Add language switcher component in main navigation. Configure date-fns locale support for Polish date formatting. Setup number and currency formatting for locale-specific display. Backend: Install i18next, i18next-fs-backend, and i18next-http-middleware for NestJS. Create backend translation files for API responses, validation messages, and email templates. Implement i18n decorator for controller methods. Configure locale detection from Accept-Language headers. Setup email template localization for notifications. Shared: Create TypeScript interfaces for translation keys to ensure type safety. Implement locale persistence in localStorage and user preferences. Setup proper RTL/LTR CSS support with Tailwind directives. Configure build pipeline to validate translation completeness across locales. All i18n implementation must be self-documenting through clear naming and structure.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Follow frontend and backend architecture patterns from docs/project-plan.md for i18n integration\n- Configure locale environment variables following docs/environment-variables.md guidelines\n- Implement comprehensive i18n testing using AAA pattern per docs/testing-strategy.md",
         "testStrategy": "Verify language switching updates all UI text immediately. Test translation key validation prevents missing translations. Confirm date/number formatting respects selected locale. Validate API responses return localized error messages. Test email templates render correctly in both languages. Ensure localStorage persists language preference across sessions, following AAA testing pattern from docs/testing-strategy.md, with all i18n code being comment-free",
         "status": "pending",
-        "dependencies": [
-          "17",
-          "6"
-        ],
+        "dependencies": ["17", "6"],
         "priority": "high",
         "subtasks": []
       },
@@ -1484,10 +1265,7 @@
         "details": "1. **Evaluate NX vs Current Bun Workspaces**: Analyze current Bun workspace setup in package.json (workspaces: apps/*, packages/*) and assess migration path to NX monorepo management. Consider benefits of NX build system, dependency graph, and caching vs current setup.\n\n2. **Create Marketing Website (apps/marketing)**:\n   - Initialize Next.js app with App Router for SSR/SEO optimization\n   - Move Index.tsx marketing content to Next.js pages/components\n   - Implement static generation for landing pages, features, pricing\n   - Configure SEO metadata, Open Graph tags, structured data\n   - Set up Tailwind CSS with existing design system from @wag-wise-mentor/ui\n   - Create responsive marketing layouts optimized for conversion\n   - Import shared types from @wag-wise-mentor/shared for API integration\n\n3. **Refactor Dashboard App (apps/dashboard)**:\n   - Extract authenticated routes from current apps/frontend/\n   - Keep React SPA architecture with Vite for optimal user experience\n   - Move Dashboard.tsx and all authenticated pages to new structure\n   - Configure React Router for client-side navigation within dashboard\n   - Maintain existing Supabase auth integration and user session handling\n   - Import UI components from @wag-wise-mentor/ui package\n   - Use shared types from @wag-wise-mentor/shared for consistency\n\n4. **Configure Shared Package Usage**:\n   - Ensure both apps import from @wag-wise-mentor/shared for types, utilities\n   - Update @wag-wise-mentor/ui to support both Next.js SSR and React SPA contexts\n   - Configure proper build dependencies and watch modes for development\n   - Update root package.json scripts for new app structure\n\n5. **Setup Vercel Deployment Strategy**:\n   - Configure vercel.json for monorepo with multiple apps\n   - Set up separate Vercel projects: marketing.wagwisementor.com, app.wagwisementor.com\n   - Configure build commands and environment variables per app\n   - Set up domain routing and redirects between marketing and app\n   - Configure preview deployments for both applications\n\n6. **Maintain Development Workflow**:\n   - Update development scripts to run both apps concurrently\n   - Configure hot reloading for shared package changes\n   - Ensure TypeScript path mappings work across all applications\n   - Update testing configuration for new app structure\n\nAll application separation must be implemented with self-documenting code structure and clear naming conventions.\n\n**MANDATORY DOCUMENTATION REFERENCES:**\n- Follow dual-application architecture strategy from docs/project-plan.md Phase 3 marketing website separation\n- Configure environment variables for both apps following docs/environment-variables.md multi-app guidelines\n- Implement comprehensive testing for both applications using AAA pattern per docs/testing-strategy.md",
         "testStrategy": "Verify both marketing and dashboard apps build successfully and can import shared packages. Test SSR functionality on marketing site with proper SEO metadata rendering. Confirm dashboard app maintains authentication flow and all existing functionality. Validate development workflow with concurrent app serving and shared package hot reloading. Test Vercel deployment configuration with proper domain routing between marketing and authenticated app, following AAA testing pattern from docs/testing-strategy.md, with all application code being comment-free",
         "status": "pending",
-        "dependencies": [
-          "4",
-          "5"
-        ],
+        "dependencies": ["4", "5"],
         "priority": "high",
         "subtasks": []
       },
@@ -1498,10 +1276,7 @@
         "details": "",
         "testStrategy": "",
         "status": "pending",
-        "dependencies": [
-          "6",
-          "7"
-        ],
+        "dependencies": ["6", "7"],
         "priority": "high",
         "subtasks": []
       },
@@ -1512,9 +1287,7 @@
         "details": "",
         "testStrategy": "",
         "status": "pending",
-        "dependencies": [
-          1
-        ],
+        "dependencies": [1],
         "priority": "high",
         "subtasks": []
       }
@@ -1524,9 +1297,7 @@
       "lastModified": "2025-10-03T08:23:48.364Z",
       "taskCount": 40,
       "completedCount": 6,
-      "tags": [
-        "master"
-      ],
+      "tags": ["master"],
       "created": "2025-10-03T08:33:49.278Z",
       "description": "Tasks for master context",
       "updated": "2025-10-03T08:33:49.282Z"
