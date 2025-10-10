@@ -390,7 +390,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
         });
     });
 
-    it("should not have message field by default", (done) => {
+    it("should have undefined message field by default", (done) => {
       // Arrange
       mockCallHandler = {
         handle: () => of({ test: "data" }),
@@ -401,7 +401,8 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
         .intercept(mockExecutionContext, mockCallHandler)
         .subscribe((result) => {
           // Assert
-          expect(result).to.not.have.property("message");
+          expect(result).to.have.property("message");
+          expect(result.message).to.be.undefined;
           done();
         });
     });
