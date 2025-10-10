@@ -308,6 +308,17 @@
             "testsAdded": "7 comprehensive tests for Supabase configuration and service. Tests cover: valid configuration, missing configuration, fallback mechanisms, query/command execution, and error handling. All tests follow AAA pattern. Security best practices documented in apps/backend/SECURITY.md. Total tests: 169 passing.",
             "parentId": "undefined",
             "updatedAt": "2025-10-10T00:00:00.000Z"
+          },
+          {
+            "id": 4,
+            "title": "Implement Supabase repository implementations for production",
+            "description": "Create production-ready Supabase repository implementations for all modules (Auth, Puppy, Calendar, Training, AI, Analytics)",
+            "dependencies": ["6.3"],
+            "details": "Currently all modules use in-memory repositories which are only suitable for testing. Implement concrete Supabase repository classes that extend the abstract repository classes from the domain layer. Each repository must use the SupabaseService for database operations. Create supabase-user.repository.ts, supabase-puppy.repository.ts, supabase-event.repository.ts, supabase-training.repository.ts, supabase-ai.repository.ts, and supabase-analytics.repository.ts. Update module providers to use environment-based repository selection (InMemory for tests, Supabase for production). Map domain entities to/from Supabase table schemas. Implement proper error handling and transaction support. Follow DDD patterns from docs/project-plan.md and ensure all code is self-documenting without comments.",
+            "status": "pending",
+            "testStrategy": "Supabase repositories implement all abstract repository methods, integrate correctly with SupabaseService, handle errors gracefully, map entities properly, and work in production environment. Integration tests verify database operations using real Supabase instance. In-memory repositories remain for unit testing. All tests follow AAA pattern from docs/testing-strategy.md.",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-10T00:00:00.000Z"
           }
         ],
         "updatedAt": "2025-10-08T09:20:03.588Z",
