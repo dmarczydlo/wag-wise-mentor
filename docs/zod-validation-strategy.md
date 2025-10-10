@@ -17,10 +17,12 @@ Wag Wise Mentor uses **Zod** for runtime validation of all controller DTOs. This
 ### 1. DTO Files with Zod Schemas
 
 Each controller module has a `.dto.ts` file containing:
+
 - Zod schemas (for validation)
 - TypeScript types (inferred from schemas)
 
 **Example: `auth.dto.ts`**
+
 ```typescript
 import { z } from "zod";
 import { UserRoleType } from "../../domain/auth/user.entity";
@@ -71,10 +73,7 @@ Controllers use `@UsePipes` decorator with the validation pipe:
 ```typescript
 import { Controller, Post, Body, UsePipes } from "@nestjs/common";
 import { ZodValidationPipe } from "../../common/pipes/zod-validation.pipe";
-import {
-  CreateProfileDto,
-  CreateProfileDtoSchema,
-} from "./auth.dto";
+import { CreateProfileDto, CreateProfileDtoSchema } from "./auth.dto";
 
 @Controller("users")
 export class AuthController {
@@ -163,20 +162,21 @@ items: z.array(z.string()).min(1).max(10),
 
 ## Module Validation Summary
 
-| Module | POST/PUT Endpoints | DTOs with Validation |
-|--------|-------------------|----------------------|
-| **Auth** | Profile management | CreateProfileDto, UpdateProfileDto |
-| **Puppy** | Create puppy, Update weight | CreatePuppyDto, UpdatePuppyWeightDto |
-| **Calendar** | Create event, Update event, Generate timeline | CreateEventDto, UpdateEventDto, GenerateHealthTimelineDto |
-| **Training** | Create session, Update notes | CreateTrainingSessionDto, UpdateTrainingNotesDto |
-| **AI** | Generate recommendation, Update confidence | GenerateRecommendationDto, UpdateConfidenceDto |
-| **Analytics** | Track event, Enrich event | TrackEventDto, EnrichEventDto |
+| Module        | POST/PUT Endpoints                            | DTOs with Validation                                      |
+| ------------- | --------------------------------------------- | --------------------------------------------------------- |
+| **Auth**      | Profile management                            | CreateProfileDto, UpdateProfileDto                        |
+| **Puppy**     | Create puppy, Update weight                   | CreatePuppyDto, UpdatePuppyWeightDto                      |
+| **Calendar**  | Create event, Update event, Generate timeline | CreateEventDto, UpdateEventDto, GenerateHealthTimelineDto |
+| **Training**  | Create session, Update notes                  | CreateTrainingSessionDto, UpdateTrainingNotesDto          |
+| **AI**        | Generate recommendation, Update confidence    | GenerateRecommendationDto, UpdateConfidenceDto            |
+| **Analytics** | Track event, Enrich event                     | TrackEventDto, EnrichEventDto                             |
 
 ## Error Handling
 
 When validation fails, Zod returns a `BadRequestException` with:
 
 **Response Format:**
+
 ```json
 {
   "statusCode": 400,
@@ -267,15 +267,16 @@ export const CreateEventDtoSchema = z.object({
 
 ```typescript
 // ✅ Good: Clear purpose
-CreatePuppyDto, UpdatePuppyWeightDto
+(CreatePuppyDto, UpdatePuppyWeightDto);
 
 // ❌ Bad: Ambiguous
-PuppyDto, WeightDto
+(PuppyDto, WeightDto);
 ```
 
 ## Migration from Class-Validator
 
 ### Before (class-validator):
+
 ```typescript
 export class CreatePuppyDto {
   @IsString()
@@ -289,6 +290,7 @@ export class CreatePuppyDto {
 ```
 
 ### After (Zod):
+
 ```typescript
 export const CreatePuppyDtoSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -299,6 +301,7 @@ export type CreatePuppyDto = z.infer<typeof CreatePuppyDtoSchema>;
 ```
 
 ### Benefits:
+
 - No decorators (cleaner)
 - Type inference (no duplicate definitions)
 - Better error messages
@@ -309,6 +312,7 @@ export type CreatePuppyDto = z.infer<typeof CreatePuppyDtoSchema>;
 To add Zod validation to an existing controller:
 
 1. **Create `.dto.ts` file**:
+
 ```typescript
 import { z } from "zod";
 
@@ -320,12 +324,14 @@ export type MyDto = z.infer<typeof MyDtoSchema>;
 ```
 
 2. **Import in controller**:
+
 ```typescript
 import { ZodValidationPipe } from "../../common/pipes/zod-validation.pipe";
 import { MyDto, MyDtoSchema } from "./my.dto";
 ```
 
 3. **Apply to endpoints**:
+
 ```typescript
 @Post()
 @UsePipes(new ZodValidationPipe(MyDtoSchema))
@@ -335,6 +341,7 @@ async create(@Body() dto: MyDto) {
 ```
 
 4. **Update tests** (usually no changes needed):
+
 ```typescript
 it("should validate input", async () => {
   const dto = { field: "value" };
@@ -348,12 +355,13 @@ it("should validate input", async () => {
 ### Issue: "Expected 2-3 arguments, but got 1"
 
 **Problem**: Zod record type needs explicit key and value types:
+
 ```typescript
 // ❌ Error
-metadata: z.record(z.any())
+metadata: z.record(z.any());
 
 // ✅ Fixed
-metadata: z.record(z.string(), z.any())
+metadata: z.record(z.string(), z.any());
 ```
 
 ### Issue: Validation passes but TypeScript errors
@@ -361,6 +369,7 @@ metadata: z.record(z.string(), z.any())
 **Problem**: DTO type doesn't match use case command interface
 
 **Solution**: Ensure DTO field names match command interface:
+
 ```typescript
 // Use case expects:
 interface Command {
@@ -378,6 +387,7 @@ export const DtoSchema = z.object({
 **Problem**: Zod treats undefined differently than missing
 
 **Solution**: Use `.optional()` consistently:
+
 ```typescript
 description: z.string().optional(), // Allows undefined or missing
 ```
@@ -395,4 +405,3 @@ description: z.string().optional(), // Allows undefined or missing
 - [NestJS Pipes](https://docs.nestjs.com/pipes)
 - [docs/testing-strategy.md](./testing-strategy.md)
 - [docs/repository-pattern.md](./repository-pattern.md)
-

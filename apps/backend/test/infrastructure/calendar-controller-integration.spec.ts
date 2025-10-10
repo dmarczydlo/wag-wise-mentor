@@ -193,7 +193,7 @@ describe("CalendarController Integration Tests - AAA Pattern", () => {
           eventType: EventTypeEnum.TRAINING,
           title: "Training Session",
           description: "Basic obedience training",
-          scheduledDate: new Date("2024-01-17T14:00:00Z"),
+          eventDateTime: new Date("2024-01-17T14:00:00Z"),
         },
       ];
 
