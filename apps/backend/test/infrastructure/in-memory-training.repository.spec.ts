@@ -1,0 +1,195 @@
+import { describe, it, beforeEach } from "mocha";
+import { expect } from "chai";
+import { InMemoryTrainingRepository } from "../../src/infrastructure/training/in-memory-training.repository";
+import { TrainingSession } from "../../src/domain/training/training-session.entity";
+
+describe("InMemoryTrainingRepository - AAA Pattern", () => {
+  let repository: InMemoryTrainingRepository;
+
+  beforeEach(() => {
+    // Arrange
+    repository = new InMemoryTrainingRepository();
+  });
+
+  describe("save", () => {
+    it("should save training session successfully", async () => {
+      // Arrange
+      const session = TrainingSession.create(
+        "session-1",
+        "puppy-1",
+        "obedience",
+        30,
+        "Good progress",
+        new Date()
+      );
+
+      // Act
+      const savedSession = await repository.save(session);
+
+      // Assert
+      expect(savedSession).to.deep.equal(session);
+    });
+
+    it("should update existing session when saving with same ID", async () => {
+      // Arrange
+      const sessionId = "session-1";
+      const originalSession = TrainingSession.create(
+        sessionId,
+        "puppy-1",
+        "obedience",
+        30,
+        "Original notes",
+        new Date()
+      );
+      await repository.save(originalSession);
+
+      const updatedSession = originalSession.updateNotes("Updated notes");
+
+      // Act
+      const savedSession = await repository.save(updatedSession);
+
+      // Assert
+      expect(savedSession.notes).to.equal("Updated notes");
+      const foundSession = await repository.findById(sessionId);
+      expect(foundSession!.notes).to.equal("Updated notes");
+    });
+  });
+
+  describe("findById", () => {
+    it("should return training session when found", async () => {
+      // Arrange
+      const session = TrainingSession.create(
+        "session-1",
+        "puppy-1",
+        "obedience",
+        30,
+        "Good progress",
+        new Date()
+      );
+      await repository.save(session);
+
+      // Act
+      const foundSession = await repository.findById("session-1");
+
+      // Assert
+      expect(foundSession).to.not.be.null;
+      expect(foundSession!.id).to.equal("session-1");
+    });
+
+    it("should return null when session not found", async () => {
+      // Arrange
+      const nonExistentId = "non-existent";
+
+      // Act
+      const foundSession = await repository.findById(nonExistentId);
+
+      // Assert
+      expect(foundSession).to.be.null;
+    });
+  });
+
+  describe("findByPuppyId", () => {
+    it("should return all training sessions for a puppy", async () => {
+      // Arrange
+      const puppyId = "puppy-1";
+      const session1 = TrainingSession.create(
+        "session-1",
+        puppyId,
+        "obedience",
+        30,
+        "Session 1",
+        new Date()
+      );
+      const session2 = TrainingSession.create(
+        "session-2",
+        puppyId,
+        "agility",
+        45,
+        "Session 2",
+        new Date()
+      );
+      await repository.save(session1);
+      await repository.save(session2);
+
+      // Act
+      const sessions = await repository.findByPuppyId(puppyId);
+
+      // Assert
+      expect(sessions).to.have.length(2);
+      expect(sessions).to.deep.include(session1);
+      expect(sessions).to.deep.include(session2);
+    });
+
+    it("should return empty array when puppy has no sessions", async () => {
+      // Arrange
+      const puppyId = "puppy-with-no-sessions";
+
+      // Act
+      const sessions = await repository.findByPuppyId(puppyId);
+
+      // Assert
+      expect(sessions).to.be.an("array").that.is.empty;
+    });
+
+    it("should only return sessions for specified puppy", async () => {
+      // Arrange
+      const puppy1 = "puppy-1";
+      const puppy2 = "puppy-2";
+      const session1 = TrainingSession.create(
+        "session-1",
+        puppy1,
+        "obedience",
+        30,
+        "Session 1",
+        new Date()
+      );
+      const session2 = TrainingSession.create(
+        "session-2",
+        puppy2,
+        "agility",
+        45,
+        "Session 2",
+        new Date()
+      );
+      await repository.save(session1);
+      await repository.save(session2);
+
+      // Act
+      const sessions = await repository.findByPuppyId(puppy1);
+
+      // Assert
+      expect(sessions).to.have.length(1);
+      expect(sessions[0]).to.deep.equal(session1);
+    });
+  });
+
+  describe("delete", () => {
+    it("should delete existing training session", async () => {
+      // Arrange
+      const session = TrainingSession.create(
+        "session-1",
+        "puppy-1",
+        "obedience",
+        30,
+        "Session to delete",
+        new Date()
+      );
+      await repository.save(session);
+
+      // Act
+      await repository.delete("session-1");
+
+      // Assert
+      const foundSession = await repository.findById("session-1");
+      expect(foundSession).to.be.null;
+    });
+
+    it("should handle deletion of non-existent session gracefully", async () => {
+      // Arrange
+      const nonExistentId = "non-existent";
+
+      // Act & Assert
+      await repository.delete(nonExistentId);
+    });
+  });
+});
