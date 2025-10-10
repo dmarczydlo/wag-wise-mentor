@@ -7,28 +7,29 @@ import {
   Body,
   Param,
   Query,
+  UsePipes,
 } from "@nestjs/common";
 import { AnalyticsUseCases } from "../../application/analytics/analytics.use-cases";
+import { ZodValidationPipe } from "../../common/pipes/zod-validation.pipe";
+import {
+  TrackEventDto,
+  TrackEventDtoSchema,
+  EnrichEventDto,
+  EnrichEventDtoSchema,
+} from "./analytics.dto";
 
 @Controller("analytics")
 export class AnalyticsController {
   constructor(private readonly analyticsUseCases: AnalyticsUseCases) {}
 
   @Post("events")
-  async trackEvent(
-    @Body()
-    body: {
-      userId: string;
-      eventType: string;
-      eventName: string;
-      properties?: Record<string, any>;
-    }
-  ) {
+  @UsePipes(new ZodValidationPipe(TrackEventDtoSchema))
+  async trackEvent(@Body() dto: TrackEventDto) {
     return await this.analyticsUseCases.trackEvent(
-      body.userId,
-      body.eventType,
-      body.eventName,
-      body.properties
+      dto.userId,
+      dto.eventType,
+      dto.eventName,
+      dto.properties
     );
   }
 
@@ -62,11 +63,12 @@ export class AnalyticsController {
   }
 
   @Put("events/:id/enrich")
+  @UsePipes(new ZodValidationPipe(EnrichEventDtoSchema))
   async enrichEvent(
     @Param("id") id: string,
-    @Body() body: { properties: Record<string, any> }
+    @Body() dto: EnrichEventDto
   ) {
-    return await this.analyticsUseCases.enrichEvent(id, body.properties);
+    return await this.analyticsUseCases.enrichEvent(id, dto.properties);
   }
 
   @Delete("events/:id")

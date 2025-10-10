@@ -3,74 +3,112 @@ import {
   User,
   UserId,
   Email,
-  Password,
   UserRole,
   UserRoleType,
 } from "../../domain/auth/user.entity";
 import { UserRepository } from "../../domain/auth/user.repository";
-import * as bcrypt from "bcrypt";
 
 export const USER_REPOSITORY = Symbol("UserRepository");
 
-export interface RegisterUserCommand {
+export interface GetUserCommand {
+  userId: string;
+}
+
+export interface GetUserResult {
+  success: boolean;
+  user?: User;
+  error?: string;
+}
+
+export interface CreateUserProfileCommand {
+  userId: string;
   email: string;
-  password: string;
   role?: UserRoleType;
 }
 
-export interface RegisterUserResult {
+export interface CreateUserProfileResult {
   success: boolean;
   user?: User;
   error?: string;
 }
 
-export interface LoginCommand {
-  email: string;
-  password: string;
+export interface UpdateUserProfileCommand {
+  userId: string;
+  role?: UserRoleType;
+  isActive?: boolean;
 }
 
-export interface LoginResult {
+export interface UpdateUserProfileResult {
   success: boolean;
   user?: User;
-  token?: string;
   error?: string;
 }
 
-export interface PasswordResetCommand {
-  email: string;
+export interface DeleteUserProfileCommand {
+  userId: string;
 }
 
-export interface PasswordResetResult {
+export interface DeleteUserProfileResult {
   success: boolean;
   message?: string;
   error?: string;
 }
 
 @Injectable()
-export class RegisterUserUseCase {
+export class GetUserUseCase {
   constructor(
     @Inject(USER_REPOSITORY) private readonly userRepository: UserRepository
   ) {}
 
-  async execute(command: RegisterUserCommand): Promise<RegisterUserResult> {
+  async execute(command: GetUserCommand): Promise<GetUserResult> {
     try {
-      const email = new Email(command.email);
-      const password = new Password(command.password);
-      const role = new UserRole(command.role || UserRoleType.USER);
+      const userId = new UserId(command.userId);
+      const user = await this.userRepository.findById(userId);
 
-      const existingUser = await this.userRepository.findByEmail(email.value);
-      if (existingUser) {
+      if (!user) {
         return {
           success: false,
-          error: "User with this email already exists",
+          error: "User not found",
         };
       }
 
-      const hashedPassword = await bcrypt.hash(password.value, 10);
-      const userId = new UserId(this.generateId());
+      return {
+        success: true,
+        user,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error:
+          error instanceof Error ? error.message : "Unknown error occurred",
+      };
+    }
+  }
+}
+
+@Injectable()
+export class CreateUserProfileUseCase {
+  constructor(
+    @Inject(USER_REPOSITORY) private readonly userRepository: UserRepository
+  ) {}
+
+  async execute(
+    command: CreateUserProfileCommand
+  ): Promise<CreateUserProfileResult> {
+    try {
+      const userId = new UserId(command.userId);
+      const email = new Email(command.email);
+      const role = new UserRole(command.role || UserRoleType.USER);
+
+      const existingUser = await this.userRepository.findById(userId);
+      if (existingUser) {
+        return {
+          success: false,
+          error: "User profile already exists",
+        };
+      }
 
       const user = User.create(userId, email, role);
-
       const savedUser = await this.userRepository.save(user);
 
       return {
@@ -85,55 +123,45 @@ export class RegisterUserUseCase {
       };
     }
   }
-
-  private generateId(): string {
-    return `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
 }
 
 @Injectable()
-export class LoginUseCase {
+export class UpdateUserProfileUseCase {
   constructor(
     @Inject(USER_REPOSITORY) private readonly userRepository: UserRepository
   ) {}
 
-  async execute(command: LoginCommand): Promise<LoginResult> {
+  async execute(
+    command: UpdateUserProfileCommand
+  ): Promise<UpdateUserProfileResult> {
     try {
-      const email = new Email(command.email);
-      const password = new Password(command.password);
+      const userId = new UserId(command.userId);
+      const user = await this.userRepository.findById(userId);
 
-      const user = await this.userRepository.findByEmail(email.value);
       if (!user) {
         return {
           success: false,
-          error: "Invalid email or password",
+          error: "User not found",
         };
       }
 
-      if (!user.isActive) {
-        return {
-          success: false,
-          error: "Account is deactivated",
-        };
+      let updatedUser = user;
+
+      if (command.role !== undefined) {
+        updatedUser = updatedUser.changeRole(new UserRole(command.role));
       }
 
-      const isValidPassword = await bcrypt.compare(
-        password.value,
-        command.password
-      );
-      if (!isValidPassword) {
-        return {
-          success: false,
-          error: "Invalid email or password",
-        };
+      if (command.isActive !== undefined) {
+        updatedUser = command.isActive
+          ? updatedUser.activate()
+          : updatedUser.deactivate();
       }
 
-      const token = this.generateJwtToken(user);
+      const savedUser = await this.userRepository.update(updatedUser);
 
       return {
         success: true,
-        user,
-        token,
+        user: savedUser,
       };
     } catch (error) {
       return {
@@ -143,36 +171,33 @@ export class LoginUseCase {
       };
     }
   }
-
-  private generateJwtToken(user: User): string {
-    return `jwt_token_${user.id.value}_${Date.now()}`;
-  }
 }
 
 @Injectable()
-export class PasswordResetUseCase {
+export class DeleteUserProfileUseCase {
   constructor(
     @Inject(USER_REPOSITORY) private readonly userRepository: UserRepository
   ) {}
 
-  async execute(command: PasswordResetCommand): Promise<PasswordResetResult> {
+  async execute(
+    command: DeleteUserProfileCommand
+  ): Promise<DeleteUserProfileResult> {
     try {
-      const email = new Email(command.email);
+      const userId = new UserId(command.userId);
+      const user = await this.userRepository.findById(userId);
 
-      const user = await this.userRepository.findByEmail(email.value);
       if (!user) {
         return {
-          success: true,
-          message: "If the email exists, a password reset link has been sent",
+          success: false,
+          error: "User not found",
         };
       }
 
-      const resetToken = this.generateResetToken();
-      await this.sendPasswordResetEmail(email.value, resetToken);
+      await this.userRepository.delete(userId);
 
       return {
         success: true,
-        message: "Password reset link has been sent to your email",
+        message: "User profile deleted successfully",
       };
     } catch (error) {
       return {
@@ -181,16 +206,5 @@ export class PasswordResetUseCase {
           error instanceof Error ? error.message : "Unknown error occurred",
       };
     }
-  }
-
-  private generateResetToken(): string {
-    return `reset_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
-
-  private async sendPasswordResetEmail(
-    email: string,
-    token: string
-  ): Promise<void> {
-    console.log(`Password reset email sent to ${email} with token ${token}`);
   }
 }

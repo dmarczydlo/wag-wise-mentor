@@ -23,6 +23,12 @@ export default defineConfig({
         "**/*.config.*",
         "**/test/**",
       ],
+      thresholds: {
+        lines: 10,
+        functions: 10,
+        branches: 10,
+        statements: 10,
+      },
     },
   },
 });

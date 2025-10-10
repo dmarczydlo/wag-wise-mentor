@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Put } from "@nestjs/common";
+import { Controller, Post, Body, Get, Param, Put, UsePipes } from "@nestjs/common";
 import { ApiTags, ApiOperation, ApiResponse } from "@nestjs/swagger";
 import {
   CreateEventUseCase,
@@ -8,6 +8,15 @@ import {
   GenerateHealthTimelineUseCase,
   GenerateHealthTimelineCommand,
 } from "../../application/calendar/calendar.use-cases";
+import { ZodValidationPipe } from "../../common/pipes/zod-validation.pipe";
+import {
+  CreateEventDto,
+  CreateEventDtoSchema,
+  UpdateEventDto,
+  UpdateEventDtoSchema,
+  GenerateHealthTimelineDto,
+  GenerateHealthTimelineDtoSchema,
+} from "./calendar.dto";
 
 @ApiTags("Calendar")
 @Controller("calendar")
@@ -19,36 +28,39 @@ export class CalendarController {
   ) {}
 
   @Post("events")
+  @UsePipes(new ZodValidationPipe(CreateEventDtoSchema))
   @ApiOperation({ summary: "Create a new event" })
   @ApiResponse({ status: 201, description: "Event created successfully" })
   @ApiResponse({ status: 400, description: "Invalid input" })
-  async createEvent(@Body() command: CreateEventCommand) {
-    return await this.createEventUseCase.execute(command);
+  async createEvent(@Body() dto: CreateEventDto) {
+    return await this.createEventUseCase.execute(dto as CreateEventCommand);
   }
 
   @Put("events/:id")
+  @UsePipes(new ZodValidationPipe(UpdateEventDtoSchema))
   @ApiOperation({ summary: "Update an existing event" })
   @ApiResponse({ status: 200, description: "Event updated successfully" })
   @ApiResponse({ status: 404, description: "Event not found" })
   async updateEvent(
     @Param("id") eventId: string,
-    @Body() command: Omit<UpdateEventCommand, "eventId">
+    @Body() dto: UpdateEventDto
   ) {
     return await this.updateEventUseCase.execute({
-      ...command,
+      ...dto,
       eventId,
-    });
+    } as UpdateEventCommand);
   }
 
   @Post("health-timeline")
+  @UsePipes(new ZodValidationPipe(GenerateHealthTimelineDtoSchema))
   @ApiOperation({ summary: "Generate health timeline for a puppy" })
   @ApiResponse({
     status: 201,
     description: "Health timeline generated successfully",
   })
   @ApiResponse({ status: 400, description: "Invalid input" })
-  async generateHealthTimeline(@Body() command: GenerateHealthTimelineCommand) {
-    return await this.generateHealthTimelineUseCase.execute(command);
+  async generateHealthTimeline(@Body() dto: GenerateHealthTimelineDto) {
+    return await this.generateHealthTimelineUseCase.execute(dto as GenerateHealthTimelineCommand);
   }
 
   @Get("health-timeline/:puppyId")

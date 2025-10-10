@@ -65,7 +65,7 @@ describe("PuppyController Integration Tests", () => {
 
       // Assert
       expect(response.status).to.equal(HttpStatus.BAD_REQUEST);
-      expect(response.body.message).to.equal("PuppyName cannot be empty");
+      expect(response.body.message).to.equal("Validation failed");
     });
 
     it("should return 400 when weight is negative", async () => {
@@ -86,7 +86,7 @@ describe("PuppyController Integration Tests", () => {
 
       // Assert
       expect(response.status).to.equal(HttpStatus.BAD_REQUEST);
-      expect(response.body.message).to.equal("Weight must be positive");
+      expect(response.body.message).to.equal("Validation failed");
     });
   });
 
@@ -241,7 +241,7 @@ describe("PuppyController Integration Tests", () => {
 
       // Assert
       expect(response.status).to.equal(HttpStatus.BAD_REQUEST);
-      expect(response.body.message).to.equal("Puppy not found");
+      expect(response.body.message).to.include("Puppy not found");
     });
   });
 });

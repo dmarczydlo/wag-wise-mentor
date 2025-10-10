@@ -6,28 +6,29 @@ import {
   Delete,
   Body,
   Param,
+  UsePipes,
 } from "@nestjs/common";
 import { TrainingUseCases } from "../../application/training/training.use-cases";
+import { ZodValidationPipe } from "../../common/pipes/zod-validation.pipe";
+import {
+  CreateTrainingSessionDto,
+  CreateTrainingSessionDtoSchema,
+  UpdateTrainingNotesDto,
+  UpdateTrainingNotesDtoSchema,
+} from "./training.dto";
 
 @Controller("training")
 export class TrainingController {
   constructor(private readonly trainingUseCases: TrainingUseCases) {}
 
   @Post()
-  async createSession(
-    @Body()
-    body: {
-      puppyId: string;
-      sessionType: string;
-      duration: number;
-      notes: string;
-    }
-  ) {
+  @UsePipes(new ZodValidationPipe(CreateTrainingSessionDtoSchema))
+  async createSession(@Body() dto: CreateTrainingSessionDto) {
     return await this.trainingUseCases.createTrainingSession(
-      body.puppyId,
-      body.sessionType,
-      body.duration,
-      body.notes
+      dto.puppyId,
+      dto.sessionType,
+      dto.duration,
+      dto.notes
     );
   }
 
@@ -42,8 +43,9 @@ export class TrainingController {
   }
 
   @Put(":id/notes")
-  async updateNotes(@Param("id") id: string, @Body() body: { notes: string }) {
-    return await this.trainingUseCases.updateTrainingNotes(id, body.notes);
+  @UsePipes(new ZodValidationPipe(UpdateTrainingNotesDtoSchema))
+  async updateNotes(@Param("id") id: string, @Body() dto: UpdateTrainingNotesDto) {
+    return await this.trainingUseCases.updateTrainingNotes(id, dto.notes);
   }
 
   @Delete(":id")

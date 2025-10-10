@@ -7,6 +7,7 @@ import {
   Param,
   HttpStatus,
   HttpException,
+  UsePipes,
 } from "@nestjs/common";
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from "@nestjs/swagger";
 import {
@@ -17,21 +18,13 @@ import {
 import { GetPuppyByIdUseCase } from "../../application/puppy/puppy.use-cases";
 import { GetPuppiesByOwnerUseCase } from "../../application/puppy/puppy.use-cases";
 import { UpdatePuppyWeightUseCase } from "../../application/puppy/puppy.use-cases";
-import { WeightUnit } from "../../domain/puppy/puppy.entity";
-
-export class CreatePuppyDto {
-  name: string;
-  breed: string;
-  birthDate: Date;
-  currentWeight: number;
-  weightUnit: WeightUnit;
-  ownerId: string;
-}
-
-export class UpdatePuppyWeightDto {
-  newWeight: number;
-  weightUnit: WeightUnit;
-}
+import { ZodValidationPipe } from "../../common/pipes/zod-validation.pipe";
+import {
+  CreatePuppyDto,
+  CreatePuppyDtoSchema,
+  UpdatePuppyWeightDto,
+  UpdatePuppyWeightDtoSchema,
+} from "./puppy.dto";
 
 @ApiTags("Puppies")
 @Controller("puppies")
@@ -47,7 +40,10 @@ export class PuppyController {
   @ApiOperation({ summary: "Create a new puppy" })
   @ApiResponse({ status: 201, description: "Puppy created successfully" })
   @ApiResponse({ status: 400, description: "Invalid input data" })
-  async createPuppy(@Body() createPuppyDto: CreatePuppyDto) {
+  async createPuppy(
+    @Body(new ZodValidationPipe(CreatePuppyDtoSchema))
+    createPuppyDto: CreatePuppyDto
+  ) {
     const command: CreatePuppyCommand = {
       name: createPuppyDto.name,
       breed: createPuppyDto.breed,
@@ -107,7 +103,8 @@ export class PuppyController {
   @ApiResponse({ status: 404, description: "Puppy not found" })
   async updatePuppyWeight(
     @Param("id") id: string,
-    @Body() updateWeightDto: UpdatePuppyWeightDto
+    @Body(new ZodValidationPipe(UpdatePuppyWeightDtoSchema))
+    updateWeightDto: UpdatePuppyWeightDto
   ) {
     const command: UpdatePuppyWeightCommand = {
       puppyId: id,

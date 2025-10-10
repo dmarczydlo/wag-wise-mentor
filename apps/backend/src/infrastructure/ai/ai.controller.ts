@@ -7,30 +7,30 @@ import {
   Body,
   Param,
   Query,
+  UsePipes,
 } from "@nestjs/common";
 import { AIUseCases } from "../../application/ai/ai.use-cases";
+import { ZodValidationPipe } from "../../common/pipes/zod-validation.pipe";
+import {
+  GenerateRecommendationDto,
+  GenerateRecommendationDtoSchema,
+  UpdateConfidenceDto,
+  UpdateConfidenceDtoSchema,
+} from "./ai.dto";
 
 @Controller("ai")
 export class AIController {
   constructor(private readonly aiUseCases: AIUseCases) {}
 
   @Post("recommendations")
-  async generateRecommendation(
-    @Body()
-    body: {
-      puppyId: string;
-      category: string;
-      recommendation: string;
-      confidence: number;
-      metadata?: Record<string, any>;
-    }
-  ) {
+  @UsePipes(new ZodValidationPipe(GenerateRecommendationDtoSchema))
+  async generateRecommendation(@Body() dto: GenerateRecommendationDto) {
     return await this.aiUseCases.generateRecommendation(
-      body.puppyId,
-      body.category,
-      body.recommendation,
-      body.confidence,
-      body.metadata
+      dto.puppyId,
+      dto.category,
+      dto.recommendation,
+      dto.confidence,
+      dto.metadata
     );
   }
 
@@ -50,11 +50,12 @@ export class AIController {
   }
 
   @Put("recommendations/:id/confidence")
+  @UsePipes(new ZodValidationPipe(UpdateConfidenceDtoSchema))
   async updateConfidence(
     @Param("id") id: string,
-    @Body() body: { confidence: number }
+    @Body() dto: UpdateConfidenceDto
   ) {
-    return await this.aiUseCases.updateConfidence(id, body.confidence);
+    return await this.aiUseCases.updateConfidence(id, dto.confidence);
   }
 
   @Delete("recommendations/:id")
