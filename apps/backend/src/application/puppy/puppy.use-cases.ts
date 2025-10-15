@@ -9,6 +9,7 @@ import {
   WeightUnit,
 } from "../../domain/puppy/puppy.entity";
 import { PuppyRepository } from "../../domain/puppy/puppy.repository";
+import { DomainResult, DomainError, Result } from "../../common/result/result";
 
 export const PUPPY_REPOSITORY = Symbol("PuppyRepository");
 
@@ -21,10 +22,10 @@ export interface CreatePuppyCommand {
   ownerId: string;
 }
 
-export interface CreatePuppyResult {
-  success: boolean;
-  puppy?: Puppy;
-  error?: string;
+export interface UpdatePuppyWeightCommand {
+  puppyId: string;
+  newWeight: number;
+  weightUnit: WeightUnit;
 }
 
 @Injectable()
@@ -33,39 +34,43 @@ export class CreatePuppyUseCase {
     @Inject(PUPPY_REPOSITORY) private readonly puppyRepository: PuppyRepository
   ) {}
 
-  async execute(command: CreatePuppyCommand): Promise<CreatePuppyResult> {
-    try {
-      const puppyId = new PuppyId(this.generateId());
-      const name = new PuppyName(command.name);
-      const breed = new Breed(command.breed);
-      const birthDate = new BirthDate(command.birthDate);
-      const currentWeight = new Weight(
-        command.currentWeight,
-        command.weightUnit
-      );
+  async execute(command: CreatePuppyCommand): Promise<DomainResult<Puppy>> {
+    // Create all value objects
+    const puppyIdResult = PuppyId.create(this.generateId());
+    const nameResult = PuppyName.create(command.name);
+    const breedResult = Breed.create(command.breed);
+    const birthDateResult = BirthDate.create(command.birthDate);
+    const weightResult = Weight.create(
+      command.currentWeight,
+      command.weightUnit
+    );
 
-      const puppy = Puppy.create(
-        puppyId,
-        name,
-        breed,
-        birthDate,
-        currentWeight,
-        command.ownerId
-      );
+    // Check if any creation failed
+    if (puppyIdResult.isFailure())
+      return Result.failure(puppyIdResult.getError());
+    if (nameResult.isFailure()) return Result.failure(nameResult.getError());
+    if (breedResult.isFailure()) return Result.failure(breedResult.getError());
+    if (birthDateResult.isFailure())
+      return Result.failure(birthDateResult.getError());
+    if (weightResult.isFailure())
+      return Result.failure(weightResult.getError());
 
-      const savedPuppy = await this.puppyRepository.save(puppy);
+    // Create the puppy
+    const puppyResult = Puppy.create(
+      puppyIdResult.getValue(),
+      nameResult.getValue(),
+      breedResult.getValue(),
+      birthDateResult.getValue(),
+      weightResult.getValue(),
+      command.ownerId
+    );
 
-      return {
-        success: true,
-        puppy: savedPuppy,
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error:
-          error instanceof Error ? error.message : "Unknown error occurred",
-      };
+    if (puppyResult.isFailure()) {
+      return puppyResult;
     }
+
+    // Save the puppy
+    return await this.puppyRepository.save(puppyResult.getValue());
   }
 
   private generateId(): string {
@@ -79,9 +84,12 @@ export class GetPuppyByIdUseCase {
     @Inject(PUPPY_REPOSITORY) private readonly puppyRepository: PuppyRepository
   ) {}
 
-  async execute(id: string): Promise<Puppy | null> {
-    const puppyId = new PuppyId(id);
-    return await this.puppyRepository.findById(puppyId);
+  async execute(id: string): Promise<DomainResult<Puppy | null>> {
+    const puppyIdResult = PuppyId.create(id);
+    if (puppyIdResult.isFailure()) {
+      return Result.failure(puppyIdResult.getError());
+    }
+    return await this.puppyRepository.findById(puppyIdResult.getValue());
   }
 }
 
@@ -91,7 +99,7 @@ export class GetPuppiesByOwnerUseCase {
     @Inject(PUPPY_REPOSITORY) private readonly puppyRepository: PuppyRepository
   ) {}
 
-  async execute(ownerId: string): Promise<Puppy[]> {
+  async execute(ownerId: string): Promise<DomainResult<Puppy[]>> {
     return await this.puppyRepository.findByOwnerId(ownerId);
   }
 }
@@ -108,33 +116,32 @@ export class UpdatePuppyWeightUseCase {
     @Inject(PUPPY_REPOSITORY) private readonly puppyRepository: PuppyRepository
   ) {}
 
-  async execute(command: UpdatePuppyWeightCommand): Promise<CreatePuppyResult> {
-    try {
-      const puppyId = new PuppyId(command.puppyId);
-      const puppy = await this.puppyRepository.findById(puppyId);
-
-      if (!puppy) {
-        return {
-          success: false,
-          error: "Puppy not found",
-        };
-      }
-
-      const newWeight = new Weight(command.newWeight, command.weightUnit);
-      const updatedPuppy = puppy.updateWeight(newWeight);
-
-      const savedPuppy = await this.puppyRepository.update(updatedPuppy);
-
-      return {
-        success: true,
-        puppy: savedPuppy,
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error:
-          error instanceof Error ? error.message : "Unknown error occurred",
-      };
+  async execute(
+    command: UpdatePuppyWeightCommand
+  ): Promise<DomainResult<Puppy>> {
+    const puppyIdResult = PuppyId.create(command.puppyId);
+    if (puppyIdResult.isFailure()) {
+      return Result.failure(puppyIdResult.getError());
     }
+
+    const puppyResult = await this.puppyRepository.findById(
+      puppyIdResult.getValue()
+    );
+    if (puppyResult.isFailure()) {
+      return puppyResult;
+    }
+
+    const puppy = puppyResult.getValue();
+    if (!puppy) {
+      return Result.failure(DomainError.notFound("Puppy", command.puppyId));
+    }
+
+    const weightResult = Weight.create(command.newWeight, command.weightUnit);
+    if (weightResult.isFailure()) {
+      return Result.failure(weightResult.getError());
+    }
+
+    const updatedPuppy = puppy.updateWeight(weightResult.getValue());
+    return await this.puppyRepository.update(updatedPuppy);
   }
 }

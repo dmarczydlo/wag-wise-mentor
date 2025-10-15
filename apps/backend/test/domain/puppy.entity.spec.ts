@@ -25,12 +25,12 @@ describe("Puppy Entity - DDD Tests", () => {
       const puppy = Puppy.create(id, name, breed, birthDate, weight, ownerId);
 
       // Assert
-      expect(puppy.id).to.equal(id);
-      expect(puppy.name).to.equal(name);
-      expect(puppy.breed).to.equal(breed);
-      expect(puppy.birthDate).to.equal(birthDate);
-      expect(puppy.currentWeight).to.equal(weight);
-      expect(puppy.ownerId).to.equal(ownerId);
+      expect(puppy.getValue().id).to.equal(id);
+      expect(puppy.getValue().name).to.equal(name);
+      expect(puppy.getValue().breed).to.equal(breed);
+      expect(puppy.getValue().birthDate).to.equal(birthDate);
+      expect(puppy.getValue().currentWeight).to.equal(weight);
+      expect(puppy.getValue().ownerId).to.equal(ownerId);
     });
 
     it("should throw error when owner ID is empty", () => {
@@ -43,9 +43,9 @@ describe("Puppy Entity - DDD Tests", () => {
       const ownerId = "";
 
       // Act & Assert
-      expect(() => {
-        Puppy.create(id, name, breed, birthDate, weight, ownerId);
-      }).to.throw("OwnerId cannot be empty");
+      const result = Puppy.create(id, name, breed, birthDate, weight, ownerId);
+      expect(result.isFailure()).to.be.true;
+      expect(result.getError().message).to.equal("OwnerId cannot be empty");
     });
   });
 
@@ -62,7 +62,7 @@ describe("Puppy Entity - DDD Tests", () => {
       const puppy = Puppy.create(id, name, breed, birthDate, weight, ownerId);
 
       // Act
-      const isAdult = puppy.isAdult();
+      const isAdult = puppy.getValue().isAdult();
 
       // Assert
       expect(isAdult).to.be.true;
@@ -80,7 +80,7 @@ describe("Puppy Entity - DDD Tests", () => {
       const puppy = Puppy.create(id, name, breed, birthDate, weight, ownerId);
 
       // Act
-      const isAdult = puppy.isAdult();
+      const isAdult = puppy.getValue().isAdult();
 
       // Assert
       expect(isAdult).to.be.false;
@@ -100,7 +100,7 @@ describe("Puppy Entity - DDD Tests", () => {
       const puppy = Puppy.create(id, name, breed, birthDate, weight, ownerId);
 
       // Act
-      const frequency = puppy.getFeedingFrequency();
+      const frequency = puppy.getValue().getFeedingFrequency();
 
       // Assert
       expect(frequency).to.equal(4);
@@ -118,7 +118,7 @@ describe("Puppy Entity - DDD Tests", () => {
       const puppy = Puppy.create(id, name, breed, birthDate, weight, ownerId);
 
       // Act
-      const frequency = puppy.getFeedingFrequency();
+      const frequency = puppy.getValue().getFeedingFrequency();
 
       // Assert
       expect(frequency).to.equal(2);
@@ -136,8 +136,8 @@ describe("Weight Value Object", () => {
       const weightInLbs = weightInKg.convertTo(WeightUnit.LBS);
 
       // Assert
-      expect(weightInLbs.unit).to.equal(WeightUnit.LBS);
-      expect(weightInLbs.value).to.be.closeTo(22.046, 0.1);
+      expect(weightInLbs.getValue().unit).to.equal(WeightUnit.LBS);
+      expect(weightInLbs.getValue().value).to.be.closeTo(22.046, 0.1);
     });
 
     it("should convert from lbs to kg", () => {
@@ -148,8 +148,8 @@ describe("Weight Value Object", () => {
       const weightInKg = weightInLbs.convertTo(WeightUnit.KG);
 
       // Assert
-      expect(weightInKg.unit).to.equal(WeightUnit.KG);
-      expect(weightInKg.value).to.be.closeTo(10, 0.1);
+      expect(weightInKg.getValue().unit).to.equal(WeightUnit.KG);
+      expect(weightInKg.getValue().value).to.be.closeTo(10, 0.1);
     });
 
     it("should return same weight when converting to same unit", () => {
@@ -157,10 +157,11 @@ describe("Weight Value Object", () => {
       const weight = new Weight(10, WeightUnit.KG);
 
       // Act
-      const convertedWeight = weight.convertTo(WeightUnit.KG);
+      const convertedWeightResult = weight.convertTo(WeightUnit.KG);
 
       // Assert
-      expect(convertedWeight).to.equal(weight);
+      expect(convertedWeightResult.isSuccess()).to.be.true;
+      expect(convertedWeightResult.getValue()).to.deep.equal(weight);
     });
   });
 });

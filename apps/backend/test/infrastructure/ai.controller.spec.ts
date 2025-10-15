@@ -43,11 +43,11 @@ describe("AIController Integration Tests - AAA Pattern", () => {
 
       // Assert
       expect(result).to.not.be.null;
-      expect(result.puppyId).to.equal(body.puppyId);
-      expect(result.category).to.equal(body.category);
-      expect(result.recommendation).to.equal(body.recommendation);
-      expect(result.confidence).to.equal(body.confidence);
-      expect(result.metadata).to.deep.equal(body.metadata);
+      expect(result.getValue().puppyId).to.equal(body.puppyId);
+      expect(result.getValue().category).to.equal(body.category);
+      expect(result.getValue().recommendation).to.equal(body.recommendation);
+      expect(result.getValue().confidence).to.equal(body.confidence);
+      expect(result.getValue().metadata).to.deep.equal(body.metadata);
     });
 
     it("should return valid recommendation with ID", async () => {
@@ -63,7 +63,7 @@ describe("AIController Integration Tests - AAA Pattern", () => {
       const result = await controller.generateRecommendation(body);
 
       // Assert
-      expect(result.id).to.not.be.undefined;
+      expect(result.getValue().id).to.not.be.undefined;
     });
   });
 
@@ -78,12 +78,14 @@ describe("AIController Integration Tests - AAA Pattern", () => {
       );
 
       // Act
-      const result = await controller.getRecommendation(recommendation.id);
+      const result = await controller.getRecommendation(
+        recommendation.getValue().id
+      );
 
       // Assert
       expect(result).to.not.be.null;
-      expect(result.id).to.equal(recommendation.id);
-      expect(result.puppyId).to.equal("puppy-123");
+      expect(result.getValue().id).to.equal(recommendation.getValue().id);
+      expect(result.getValue().puppyId).to.equal("puppy-123");
     });
 
     it("should throw NotFoundException when recommendation not found", async () => {
@@ -91,12 +93,9 @@ describe("AIController Integration Tests - AAA Pattern", () => {
       const nonExistentId = "non-existent-id";
 
       // Act & Assert
-      try {
-        await controller.getRecommendation(nonExistentId);
-        expect.fail("Should have thrown NotFoundException");
-      } catch (error) {
-        expect(error).to.be.instanceOf(NotFoundException);
-      }
+      const result = await controller.getRecommendation(nonExistentId);
+      expect(result.isFailure()).to.be.true;
+      expect(result.getError().code).to.equal("NOT_FOUND");
     });
   });
 
@@ -121,9 +120,11 @@ describe("AIController Integration Tests - AAA Pattern", () => {
       const result = await controller.getPuppyRecommendations(puppyId);
 
       // Assert
-      expect(result).to.have.length(2);
-      expect(result[0].puppyId).to.equal(puppyId);
-      expect(result[1].puppyId).to.equal(puppyId);
+      expect(result.isSuccess()).to.be.true;
+      const recommendations = result.getValue();
+      expect(recommendations).to.have.length(2);
+      expect(recommendations[0].puppyId).to.equal(puppyId);
+      expect(recommendations[1].puppyId).to.equal(puppyId);
     });
 
     it("should return empty array when puppy has no recommendations", async () => {
@@ -134,7 +135,9 @@ describe("AIController Integration Tests - AAA Pattern", () => {
       const result = await controller.getPuppyRecommendations(puppyId);
 
       // Assert
-      expect(result).to.be.an("array").that.is.empty;
+      expect(result.isSuccess()).to.be.true;
+      const recommendations = result.getValue();
+      expect(recommendations).to.be.an("array").that.is.empty;
     });
   });
 
@@ -159,9 +162,11 @@ describe("AIController Integration Tests - AAA Pattern", () => {
       const result = await controller.getRecommendationsByCategory(category);
 
       // Assert
-      expect(result).to.have.length(2);
-      expect(result[0].category).to.equal(category);
-      expect(result[1].category).to.equal(category);
+      expect(result.isSuccess()).to.be.true;
+      const recommendations = result.getValue();
+      expect(recommendations).to.have.length(2);
+      expect(recommendations[0].category).to.equal(category);
+      expect(recommendations[1].category).to.equal(category);
     });
 
     it("should return empty array when category not provided", async () => {
@@ -169,7 +174,9 @@ describe("AIController Integration Tests - AAA Pattern", () => {
       const result = await controller.getRecommendationsByCategory("");
 
       // Assert
-      expect(result).to.be.an("array").that.is.empty;
+      expect(result.isSuccess()).to.be.true;
+      const recommendations = result.getValue();
+      expect(recommendations).to.be.an("array").that.is.empty;
     });
   });
 
@@ -185,11 +192,14 @@ describe("AIController Integration Tests - AAA Pattern", () => {
       const body = { confidence: 0.95 };
 
       // Act
-      const result = await controller.updateConfidence(recommendation.id, body);
+      const result = await controller.updateConfidence(
+        recommendation.getValue().id,
+        body
+      );
 
       // Assert
-      expect(result.confidence).to.equal(body.confidence);
-      expect(result.id).to.equal(recommendation.id);
+      expect(result.getValue().confidence).to.equal(body.confidence);
+      expect(result.getValue().id).to.equal(recommendation.getValue().id);
     });
 
     it("should throw NotFoundException when updating non-existent recommendation", async () => {
@@ -198,12 +208,9 @@ describe("AIController Integration Tests - AAA Pattern", () => {
       const body = { confidence: 0.95 };
 
       // Act & Assert
-      try {
-        await controller.updateConfidence(nonExistentId, body);
-        expect.fail("Should have thrown NotFoundException");
-      } catch (error) {
-        expect(error).to.be.instanceOf(NotFoundException);
-      }
+      const result = await controller.updateConfidence(nonExistentId, body);
+      expect(result.isFailure()).to.be.true;
+      expect(result.getError().code).to.equal("NOT_FOUND");
     });
   });
 
@@ -218,7 +225,9 @@ describe("AIController Integration Tests - AAA Pattern", () => {
       );
 
       // Act
-      const result = await controller.deleteRecommendation(recommendation.id);
+      const result = await controller.deleteRecommendation(
+        recommendation.getValue().id
+      );
 
       // Assert
       expect(result.message).to.equal("AI recommendation deleted successfully");

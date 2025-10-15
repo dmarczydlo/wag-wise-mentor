@@ -25,6 +25,11 @@ import {
   UpdatePuppyWeightDto,
   UpdatePuppyWeightDtoSchema,
 } from "./puppy.dto";
+import {
+  ApiSuccessResponse,
+  ApiErrorResponse,
+} from "../../common/dto/api-response.dto";
+import { DomainErrorMapper } from "../../common/utils/domain-error-mapper";
 
 @ApiTags("Puppies")
 @Controller("puppies")
@@ -43,7 +48,7 @@ export class PuppyController {
   async createPuppy(
     @Body(new ZodValidationPipe(CreatePuppyDtoSchema))
     createPuppyDto: CreatePuppyDto
-  ) {
+  ): Promise<ApiSuccessResponse<any> | ApiErrorResponse> {
     const command: CreatePuppyCommand = {
       name: createPuppyDto.name,
       breed: createPuppyDto.breed,
@@ -55,14 +60,15 @@ export class PuppyController {
 
     const result = await this.createPuppyUseCase.execute(command);
 
-    if (!result.success) {
-      throw new HttpException(result.error, HttpStatus.BAD_REQUEST);
+    if (result.isFailure()) {
+      const error = result.getError();
+      throw new HttpException(
+        error.message,
+        DomainErrorMapper.mapToHttpStatus(error.code)
+      );
     }
 
-    return {
-      success: true,
-      data: result.puppy,
-    };
+    return new ApiSuccessResponse(result.getValue());
   }
 
   @Get(":id")
@@ -70,30 +76,45 @@ export class PuppyController {
   @ApiParam({ name: "id", description: "Puppy ID" })
   @ApiResponse({ status: 200, description: "Puppy found" })
   @ApiResponse({ status: 404, description: "Puppy not found" })
-  async getPuppyById(@Param("id") id: string) {
-    const puppy = await this.getPuppyByIdUseCase.execute(id);
+  async getPuppyById(
+    @Param("id") id: string
+  ): Promise<ApiSuccessResponse<any> | ApiErrorResponse> {
+    const result = await this.getPuppyByIdUseCase.execute(id);
 
+    if (result.isFailure()) {
+      const error = result.getError();
+      throw new HttpException(
+        error.message,
+        DomainErrorMapper.mapToHttpStatus(error.code)
+      );
+    }
+
+    const puppy = result.getValue();
     if (!puppy) {
       throw new HttpException("Puppy not found", HttpStatus.NOT_FOUND);
     }
 
-    return {
-      success: true,
-      data: puppy,
-    };
+    return new ApiSuccessResponse(puppy);
   }
 
   @Get("owner/:ownerId")
   @ApiOperation({ summary: "Get puppies by owner ID" })
   @ApiParam({ name: "ownerId", description: "Owner ID" })
   @ApiResponse({ status: 200, description: "Puppies found" })
-  async getPuppiesByOwner(@Param("ownerId") ownerId: string) {
-    const puppies = await this.getPuppiesByOwnerUseCase.execute(ownerId);
+  async getPuppiesByOwner(
+    @Param("ownerId") ownerId: string
+  ): Promise<ApiSuccessResponse<any> | ApiErrorResponse> {
+    const result = await this.getPuppiesByOwnerUseCase.execute(ownerId);
 
-    return {
-      success: true,
-      data: puppies,
-    };
+    if (result.isFailure()) {
+      const error = result.getError();
+      throw new HttpException(
+        error.message,
+        DomainErrorMapper.mapToHttpStatus(error.code)
+      );
+    }
+
+    return new ApiSuccessResponse(result.getValue());
   }
 
   @Put(":id/weight")
@@ -105,7 +126,7 @@ export class PuppyController {
     @Param("id") id: string,
     @Body(new ZodValidationPipe(UpdatePuppyWeightDtoSchema))
     updateWeightDto: UpdatePuppyWeightDto
-  ) {
+  ): Promise<ApiSuccessResponse<any> | ApiErrorResponse> {
     const command: UpdatePuppyWeightCommand = {
       puppyId: id,
       newWeight: updateWeightDto.newWeight,
@@ -114,13 +135,14 @@ export class PuppyController {
 
     const result = await this.updatePuppyWeightUseCase.execute(command);
 
-    if (!result.success) {
-      throw new HttpException(result.error, HttpStatus.BAD_REQUEST);
+    if (result.isFailure()) {
+      const error = result.getError();
+      throw new HttpException(
+        error.message,
+        DomainErrorMapper.mapToHttpStatus(error.code)
+      );
     }
 
-    return {
-      success: true,
-      data: result.puppy,
-    };
+    return new ApiSuccessResponse(result.getValue());
   }
 }

@@ -51,14 +51,13 @@ describe("CreatePuppyUseCase - AAA Pattern", () => {
       const result = await useCase.execute(command);
 
       // Assert
-      expect(result.success).to.be.true;
-      expect(result.puppy).to.not.be.undefined;
-      expect(result.puppy?.name.value).to.equal("Buddy");
-      expect(result.puppy?.breed.value).to.equal("Golden Retriever");
-      expect(result.puppy?.currentWeight.value).to.equal(5.5);
-      expect(result.puppy?.currentWeight.unit).to.equal(WeightUnit.KG);
-      expect(result.puppy?.ownerId).to.equal("owner-123");
-      expect(result.error).to.be.undefined;
+      expect(result.isSuccess()).to.be.true;
+      const puppy = result.getValue();
+      expect(puppy.name.value).to.equal("Buddy");
+      expect(puppy.breed.value).to.equal("Golden Retriever");
+      expect(puppy.currentWeight.value).to.equal(5.5);
+      expect(puppy.currentWeight.unit).to.equal(WeightUnit.KG);
+      expect(puppy.ownerId).to.equal("owner-123");
     });
 
     it("should return error when puppy name is empty", async () => {
@@ -76,9 +75,8 @@ describe("CreatePuppyUseCase - AAA Pattern", () => {
       const result = await useCase.execute(command);
 
       // Assert
-      expect(result.success).to.be.false;
-      expect(result.error).to.equal("PuppyName cannot be empty");
-      expect(result.puppy).to.be.undefined;
+      expect(result.isFailure()).to.be.true;
+      expect(result.getError().message).to.equal("PuppyName cannot be empty");
     });
 
     it("should return error when breed is empty", async () => {
@@ -96,9 +94,8 @@ describe("CreatePuppyUseCase - AAA Pattern", () => {
       const result = await useCase.execute(command);
 
       // Assert
-      expect(result.success).to.be.false;
-      expect(result.error).to.equal("Breed cannot be empty");
-      expect(result.puppy).to.be.undefined;
+      expect(result.isFailure()).to.be.true;
+      expect(result.getError().message).to.equal("Breed cannot be empty");
     });
 
     it("should return error when weight is negative", async () => {
@@ -116,9 +113,8 @@ describe("CreatePuppyUseCase - AAA Pattern", () => {
       const result = await useCase.execute(command);
 
       // Assert
-      expect(result.success).to.be.false;
-      expect(result.error).to.equal("Weight must be positive");
-      expect(result.puppy).to.be.undefined;
+      expect(result.isFailure()).to.be.true;
+      expect(result.getError().message).to.equal("Weight must be positive");
     });
 
     it("should return error when birth date is in the future", async () => {
@@ -139,9 +135,10 @@ describe("CreatePuppyUseCase - AAA Pattern", () => {
       const result = await useCase.execute(command);
 
       // Assert
-      expect(result.success).to.be.false;
-      expect(result.error).to.equal("BirthDate cannot be in the future");
-      expect(result.puppy).to.be.undefined;
+      expect(result.isFailure()).to.be.true;
+      expect(result.getError().message).to.equal(
+        "BirthDate cannot be in the future"
+      );
     });
 
     it("should return error when owner ID is empty", async () => {
@@ -159,9 +156,8 @@ describe("CreatePuppyUseCase - AAA Pattern", () => {
       const result = await useCase.execute(command);
 
       // Assert
-      expect(result.success).to.be.false;
-      expect(result.error).to.equal("OwnerId cannot be empty");
-      expect(result.puppy).to.be.undefined;
+      expect(result.isFailure()).to.be.true;
+      expect(result.getError().message).to.equal("OwnerId cannot be empty");
     });
 
     it("should save puppy to repository", async () => {
@@ -179,7 +175,8 @@ describe("CreatePuppyUseCase - AAA Pattern", () => {
       const result = await useCase.execute(command);
 
       // Assert
-      expect(result.success).to.be.true;
+      expect(result.isSuccess()).to.be.true;
+      const puppy = result.getValue();
       expect(repository.getCount()).to.equal(1);
 
       const savedPuppies = repository.getAllPuppies();

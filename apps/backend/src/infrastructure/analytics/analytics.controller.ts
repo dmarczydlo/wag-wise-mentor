@@ -48,7 +48,7 @@ export class AnalyticsController {
     if (eventType) {
       return await this.analyticsUseCases.getEventsByType(eventType);
     }
-    return [];
+    return await this.analyticsUseCases.getEventsByType("");
   }
 
   @Get("events/date-range")
@@ -64,10 +64,7 @@ export class AnalyticsController {
 
   @Put("events/:id/enrich")
   @UsePipes(new ZodValidationPipe(EnrichEventDtoSchema))
-  async enrichEvent(
-    @Param("id") id: string,
-    @Body() dto: EnrichEventDto
-  ) {
+  async enrichEvent(@Param("id") id: string, @Body() dto: EnrichEventDto) {
     return await this.analyticsUseCases.enrichEvent(id, dto.properties);
   }
 

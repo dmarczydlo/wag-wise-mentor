@@ -1,6 +1,7 @@
-import { Injectable, Inject, NotFoundException } from "@nestjs/common";
+import { Injectable, Inject } from "@nestjs/common";
 import { AnalyticsRepository } from "../../domain/analytics/analytics.repository";
 import { AnalyticsEvent } from "../../domain/analytics/analytics-event.entity";
+import { DomainResult, DomainError, Result } from "../../common/result/result";
 
 @Injectable()
 export class AnalyticsUseCases {
@@ -14,7 +15,7 @@ export class AnalyticsUseCases {
     eventType: string,
     eventName: string,
     properties: Record<string, any> = {}
-  ): Promise<AnalyticsEvent> {
+  ): Promise<DomainResult<AnalyticsEvent>> {
     const event = AnalyticsEvent.create(
       crypto.randomUUID(),
       userId,
@@ -26,39 +27,52 @@ export class AnalyticsUseCases {
     return await this.analyticsRepository.save(event);
   }
 
-  async getEvent(id: string): Promise<AnalyticsEvent> {
-    const event = await this.analyticsRepository.findById(id);
-    if (!event) {
-      throw new NotFoundException(`Analytics event with id ${id} not found`);
+  async getEvent(id: string): Promise<DomainResult<AnalyticsEvent>> {
+    const eventResult = await this.analyticsRepository.findById(id);
+    if (eventResult.isFailure()) {
+      return eventResult;
     }
-    return event;
+
+    const event = eventResult.getValue();
+    if (!event) {
+      return Result.failure(DomainError.notFound("Analytics event", id));
+    }
+
+    return Result.success(event);
   }
 
-  async getUserEvents(userId: string): Promise<AnalyticsEvent[]> {
+  async getUserEvents(userId: string): Promise<DomainResult<AnalyticsEvent[]>> {
     return await this.analyticsRepository.findByUserId(userId);
   }
 
-  async getEventsByType(eventType: string): Promise<AnalyticsEvent[]> {
+  async getEventsByType(
+    eventType: string
+  ): Promise<DomainResult<AnalyticsEvent[]>> {
     return await this.analyticsRepository.findByEventType(eventType);
   }
 
   async getEventsByDateRange(
     startDate: Date,
     endDate: Date
-  ): Promise<AnalyticsEvent[]> {
+  ): Promise<DomainResult<AnalyticsEvent[]>> {
     return await this.analyticsRepository.findByDateRange(startDate, endDate);
   }
 
   async enrichEvent(
     id: string,
     additionalProperties: Record<string, any>
-  ): Promise<AnalyticsEvent> {
-    const event = await this.getEvent(id);
+  ): Promise<DomainResult<AnalyticsEvent>> {
+    const eventResult = await this.getEvent(id);
+    if (eventResult.isFailure()) {
+      return eventResult;
+    }
+
+    const event = eventResult.getValue();
     const enriched = event.enrichProperties(additionalProperties);
     return await this.analyticsRepository.save(enriched);
   }
 
-  async deleteEvent(id: string): Promise<void> {
-    await this.analyticsRepository.delete(id);
+  async deleteEvent(id: string): Promise<DomainResult<void>> {
+    return await this.analyticsRepository.delete(id);
   }
 }

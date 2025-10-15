@@ -1,6 +1,7 @@
-import { Injectable, Inject, NotFoundException } from "@nestjs/common";
+import { Injectable, Inject } from "@nestjs/common";
 import { TrainingRepository } from "../../domain/training/training.repository";
 import { TrainingSession } from "../../domain/training/training-session.entity";
+import { DomainResult, DomainError, Result } from "../../common/result/result";
 
 @Injectable()
 export class TrainingUseCases {
@@ -14,7 +15,7 @@ export class TrainingUseCases {
     sessionType: string,
     duration: number,
     notes: string
-  ): Promise<TrainingSession> {
+  ): Promise<DomainResult<TrainingSession>> {
     const session = TrainingSession.create(
       crypto.randomUUID(),
       puppyId,
@@ -26,28 +27,41 @@ export class TrainingUseCases {
     return await this.trainingRepository.save(session);
   }
 
-  async getTrainingSession(id: string): Promise<TrainingSession> {
-    const session = await this.trainingRepository.findById(id);
-    if (!session) {
-      throw new NotFoundException(`Training session with id ${id} not found`);
+  async getTrainingSession(id: string): Promise<DomainResult<TrainingSession>> {
+    const sessionResult = await this.trainingRepository.findById(id);
+    if (sessionResult.isFailure()) {
+      return sessionResult;
     }
-    return session;
+
+    const session = sessionResult.getValue();
+    if (!session) {
+      return Result.failure(DomainError.notFound("Training session", id));
+    }
+
+    return Result.success(session);
   }
 
-  async getPuppyTrainingSessions(puppyId: string): Promise<TrainingSession[]> {
+  async getPuppyTrainingSessions(
+    puppyId: string
+  ): Promise<DomainResult<TrainingSession[]>> {
     return await this.trainingRepository.findByPuppyId(puppyId);
   }
 
   async updateTrainingNotes(
     id: string,
     notes: string
-  ): Promise<TrainingSession> {
-    const session = await this.getTrainingSession(id);
+  ): Promise<DomainResult<TrainingSession>> {
+    const sessionResult = await this.getTrainingSession(id);
+    if (sessionResult.isFailure()) {
+      return sessionResult;
+    }
+
+    const session = sessionResult.getValue();
     const updatedSession = session.updateNotes(notes);
     return await this.trainingRepository.save(updatedSession);
   }
 
-  async deleteTrainingSession(id: string): Promise<void> {
-    await this.trainingRepository.delete(id);
+  async deleteTrainingSession(id: string): Promise<DomainResult<void>> {
+    return await this.trainingRepository.delete(id);
   }
 }

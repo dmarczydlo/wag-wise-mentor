@@ -1,46 +1,65 @@
 import { Entity } from "../shared/base.entity";
 import { ValueObject } from "../shared/base.entity";
+import { Result, DomainError, DomainResult } from "../../common/result/result";
 
 export class UserId extends ValueObject {
   constructor(public readonly value: string) {
     super();
+  }
+
+  static create(value: string): DomainResult<UserId> {
     if (!value || value.trim().length === 0) {
-      throw new Error("UserId cannot be empty");
+      return Result.failure(DomainError.validation("UserId cannot be empty"));
     }
+    return Result.success(new UserId(value));
   }
 }
 
 export class Email extends ValueObject {
   constructor(public readonly value: string) {
     super();
+  }
+
+  static create(value: string): DomainResult<Email> {
     if (!value || value.trim().length === 0) {
-      throw new Error("Email cannot be empty");
+      return Result.failure(DomainError.validation("Email cannot be empty"));
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(value)) {
-      throw new Error("Email format is invalid");
+      return Result.failure(DomainError.validation("Email format is invalid"));
     }
+    return Result.success(new Email(value));
   }
 }
 
 export class Password extends ValueObject {
   constructor(public readonly value: string) {
     super();
+  }
+
+  static create(value: string): DomainResult<Password> {
     if (!value || value.trim().length === 0) {
-      throw new Error("Password cannot be empty");
+      return Result.failure(DomainError.validation("Password cannot be empty"));
     }
     if (value.length < 8) {
-      throw new Error("Password must be at least 8 characters long");
+      return Result.failure(
+        DomainError.validation("Password must be at least 8 characters long")
+      );
     }
+    return Result.success(new Password(value));
   }
 }
 
 export class UserRole extends ValueObject {
   constructor(public readonly value: UserRoleType) {
     super();
+  }
+
+  static create(value: UserRoleType): DomainResult<UserRole> {
     if (!Object.values(UserRoleType).includes(value)) {
-      throw new Error("Invalid user role");
+      return Result.failure(DomainError.validation("Invalid user role"));
     }
+    return Result.success(new UserRole(value));
   }
 }
 
@@ -66,8 +85,8 @@ export class User extends Entity<UserId> {
     id: UserId,
     email: Email,
     role: UserRole = new UserRole(UserRoleType.USER)
-  ): User {
-    return new User(id, email, role, true);
+  ): DomainResult<User> {
+    return Result.success(new User(id, email, role, true));
   }
 
   public deactivate(): User {

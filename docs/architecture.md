@@ -334,6 +334,7 @@ Source Code ──► TypeScript Compilation ──► Bundle ──► Producti
 - **Database**: Supabase (PostgreSQL)
 - **Testing**: Mocha + Chai
 - **Dependency Injection**: Abstract Classes + Symbol Tokens
+- **Error Handling**: Result Pattern (no exceptions in business logic)
 
 ### Frontend Stack
 
@@ -349,6 +350,48 @@ Source Code ──► TypeScript Compilation ──► Bundle ──► Producti
 - **Utilities**: Date/time, validation, formatting
 - **UI Components**: Reusable React components
 - **Validation**: Zod schemas
+
+## Error Handling Architecture
+
+### Result Pattern Implementation
+
+The backend implements a comprehensive Result pattern to handle errors without throwing exceptions in business logic:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    Error Handling Flow                          │
+└─────────────────────────────────────────────────────────────────┘
+
+Domain Layer ──► Result<T, DomainError> ──► Application Layer
+     │                                           │
+     │                                           ▼
+     │                                    Result<T, DomainError>
+     │                                           │
+     │                                           ▼
+     └─────────────────────────────────► Infrastructure Layer
+                                              │
+                                              ▼
+                                        HTTP Exceptions
+                                              │
+                                              ▼
+                                        HTTP Response
+```
+
+**Key Principles:**
+
+- Domain and Application layers return `Result<T, DomainError>` objects
+- No exceptions thrown in business logic
+- Infrastructure layer converts domain errors to HTTP exceptions
+- Type-safe error handling with explicit success/failure states
+
+**Benefits:**
+
+- Explicit error handling in method signatures
+- Functional programming patterns (map, flatMap)
+- Better testability and type safety
+- Clear separation of concerns
+
+For detailed implementation, see [Error Handling Strategy](error-handling-strategy.md).
 
 ## Security Architecture
 

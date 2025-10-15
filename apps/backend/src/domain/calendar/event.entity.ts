@@ -1,42 +1,67 @@
 import { Entity } from "../shared/base.entity";
 import { ValueObject } from "../shared/base.entity";
+import { Result, DomainError, DomainResult } from "../../common/result/result";
 
 export class EventId extends ValueObject {
   constructor(public readonly value: string) {
     super();
+  }
+
+  static create(value: string): DomainResult<EventId> {
     if (!value || value.trim().length === 0) {
-      throw new Error("EventId cannot be empty");
+      return Result.failure(DomainError.validation("EventId cannot be empty"));
     }
+    return Result.success(new EventId(value));
   }
 }
 
 export class EventTitle extends ValueObject {
   constructor(public readonly value: string) {
     super();
+  }
+
+  static create(value: string): DomainResult<EventTitle> {
     if (!value || value.trim().length === 0) {
-      throw new Error("EventTitle cannot be empty");
+      return Result.failure(
+        DomainError.validation("EventTitle cannot be empty")
+      );
     }
     if (value.length > 200) {
-      throw new Error("EventTitle cannot exceed 200 characters");
+      return Result.failure(
+        DomainError.validation("EventTitle cannot exceed 200 characters")
+      );
     }
+    return Result.success(new EventTitle(value));
   }
 }
 
 export class EventDescription extends ValueObject {
   constructor(public readonly value: string) {
     super();
+  }
+
+  static create(value: string): DomainResult<EventDescription> {
     if (value.length > 1000) {
-      throw new Error("EventDescription cannot exceed 1000 characters");
+      return Result.failure(
+        DomainError.validation("EventDescription cannot exceed 1000 characters")
+      );
     }
+    return Result.success(new EventDescription(value));
   }
 }
 
 export class EventDateTime extends ValueObject {
   constructor(public readonly value: Date) {
     super();
+  }
+
+  static create(value: Date): DomainResult<EventDateTime> {
     if (!value) {
-      throw new Error("EventDateTime cannot be null");
+      return Result.failure(
+        DomainError.validation("EventDateTime cannot be null")
+      );
     }
+    return Result.success(new EventDateTime(value));
   }
 
   public isPast(): boolean {
@@ -57,9 +82,13 @@ export class EventDateTime extends ValueObject {
 export class EventType extends ValueObject {
   constructor(public readonly value: EventTypeEnum) {
     super();
+  }
+
+  static create(value: EventTypeEnum): DomainResult<EventType> {
     if (!Object.values(EventTypeEnum).includes(value)) {
-      throw new Error("Invalid event type");
+      return Result.failure(DomainError.validation("Invalid event type"));
     }
+    return Result.success(new EventType(value));
   }
 }
 
@@ -80,12 +109,24 @@ export class RecurringPattern extends ValueObject {
     public readonly endDate?: Date
   ) {
     super();
+  }
+
+  static create(
+    type: RecurringType,
+    interval: number,
+    endDate?: Date
+  ): DomainResult<RecurringPattern> {
     if (interval <= 0) {
-      throw new Error("Recurring interval must be positive");
+      return Result.failure(
+        DomainError.validation("Recurring interval must be positive")
+      );
     }
     if (endDate && endDate <= new Date()) {
-      throw new Error("Recurring end date must be in the future");
+      return Result.failure(
+        DomainError.validation("Recurring end date must be in the future")
+      );
     }
+    return Result.success(new RecurringPattern(type, interval, endDate));
   }
 
   public shouldRecur(currentDate: Date): boolean {
@@ -97,13 +138,13 @@ export class RecurringPattern extends ValueObject {
 
   public getNextOccurrence(fromDate: Date): Date {
     const nextDate = new Date(fromDate);
-    
+
     switch (this.type) {
       case RecurringType.DAILY:
         nextDate.setDate(nextDate.getDate() + this.interval);
         break;
       case RecurringType.WEEKLY:
-        nextDate.setDate(nextDate.getDate() + (7 * this.interval));
+        nextDate.setDate(nextDate.getDate() + 7 * this.interval);
         break;
       case RecurringType.MONTHLY:
         nextDate.setMonth(nextDate.getMonth() + this.interval);
@@ -112,7 +153,7 @@ export class RecurringPattern extends ValueObject {
         nextDate.setFullYear(nextDate.getFullYear() + this.interval);
         break;
     }
-    
+
     return nextDate;
   }
 }
@@ -147,19 +188,21 @@ export class Event extends Entity<EventId> {
     eventType: EventType,
     puppyId: string,
     recurringPattern?: RecurringPattern
-  ): Event {
+  ): DomainResult<Event> {
     if (!puppyId || puppyId.trim().length === 0) {
-      throw new Error("PuppyId cannot be empty");
+      return Result.failure(DomainError.validation("PuppyId cannot be empty"));
     }
 
-    return new Event(
-      id,
-      title,
-      description,
-      eventDateTime,
-      eventType,
-      puppyId,
-      recurringPattern
+    return Result.success(
+      new Event(
+        id,
+        title,
+        description,
+        eventDateTime,
+        eventType,
+        puppyId,
+        recurringPattern
+      )
     );
   }
 
@@ -214,12 +257,15 @@ export class Event extends Entity<EventId> {
   }
 
   public isOverdue(): boolean {
-    return this.eventDateTime.isPast() && this.eventType.value === EventTypeEnum.VACCINATION;
+    return (
+      this.eventDateTime.isPast() &&
+      this.eventType.value === EventTypeEnum.VACCINATION
+    );
   }
 
   public getUrgencyLevel(): "low" | "medium" | "high" {
     const daysUntil = this.eventDateTime.getDaysUntil();
-    
+
     if (daysUntil <= 1) {
       return "high";
     } else if (daysUntil <= 7) {

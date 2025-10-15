@@ -26,7 +26,7 @@ describe("GetPuppyByIdUseCase - AAA Pattern", () => {
     it("should return puppy when found", async () => {
       // Arrange
       const puppyId = "test-puppy-1";
-      const puppy = Puppy.create(
+      const puppyResult = Puppy.create(
         new PuppyId(puppyId),
         new PuppyName("Buddy"),
         new Breed("Golden Retriever"),
@@ -34,13 +34,17 @@ describe("GetPuppyByIdUseCase - AAA Pattern", () => {
         new Weight(10, WeightUnit.KG),
         "owner-1"
       );
+      expect(puppyResult.isSuccess()).to.be.true;
+      const puppy = puppyResult.getValue();
       await repository.save(puppy);
 
       // Act
       const result = await useCase.execute(puppyId);
 
       // Assert
-      expect(result).to.deep.equal(puppy);
+      expect(result.isSuccess()).to.be.true;
+      const foundPuppy = result.getValue();
+      expect(foundPuppy).to.deep.equal(puppy);
     });
 
     it("should return null when puppy not found", async () => {
@@ -51,7 +55,9 @@ describe("GetPuppyByIdUseCase - AAA Pattern", () => {
       const result = await useCase.execute(nonExistentId);
 
       // Assert
-      expect(result).to.be.null;
+      expect(result.isSuccess()).to.be.true;
+      const foundPuppy = result.getValue();
+      expect(foundPuppy).to.be.null;
     });
 
     it("should handle repository errors gracefully", async () => {

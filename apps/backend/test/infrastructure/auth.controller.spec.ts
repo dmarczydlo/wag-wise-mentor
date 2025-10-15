@@ -69,7 +69,7 @@ describe("AuthController Integration Tests - AAA Pattern", () => {
       const email = new Email("current@example.com");
       const role = new UserRole(UserRoleType.USER);
       const user = User.create(userId, email, role);
-      await repository.save(user);
+      await repository.save(user.getValue());
 
       const mockRequest = {
         user: { id: "current-user", email: "current@example.com" },
@@ -79,8 +79,8 @@ describe("AuthController Integration Tests - AAA Pattern", () => {
       const result = await controller.getCurrentUser(mockRequest);
 
       // Assert
-      expect(result.success).to.be.true;
-      expect(result.user?.id.value).to.equal("current-user");
+      expect(result.isSuccess()).to.be.true;
+      expect(result.getValue().id.value).to.equal("current-user");
     });
   });
 
@@ -91,14 +91,14 @@ describe("AuthController Integration Tests - AAA Pattern", () => {
       const email = new Email("test@example.com");
       const role = new UserRole(UserRoleType.USER);
       const user = User.create(userId, email, role);
-      await repository.save(user);
+      await repository.save(user.getValue());
 
       // Act
       const result = await controller.getUserById("test-user");
 
       // Assert
-      expect(result.success).to.be.true;
-      expect(result.user?.id.value).to.equal("test-user");
+      expect(result.isSuccess()).to.be.true;
+      expect(result.getValue().id.value).to.equal("test-user");
     });
 
     it("should return error when user not found", async () => {
@@ -109,8 +109,10 @@ describe("AuthController Integration Tests - AAA Pattern", () => {
       const result = await controller.getUserById(userId);
 
       // Assert
-      expect(result.success).to.be.false;
-      expect(result.error).to.equal("User not found");
+      expect(result.isFailure()).to.be.true;
+      expect(result.getError().message).to.equal(
+        "User with id non-existent-user not found"
+      );
     });
   });
 
@@ -128,9 +130,9 @@ describe("AuthController Integration Tests - AAA Pattern", () => {
       const result = await controller.createUserProfile(mockRequest, command);
 
       // Assert
-      expect(result.success).to.be.true;
-      expect(result.user?.id.value).to.equal("new-user-id");
-      expect(result.user?.email.value).to.equal("new@example.com");
+      expect(result.isSuccess()).to.be.true;
+      expect(result.getValue().id.value).to.equal("new-user-id");
+      expect(result.getValue().email.value).to.equal("new@example.com");
     });
 
     it("should return error when profile already exists", async () => {
@@ -139,7 +141,7 @@ describe("AuthController Integration Tests - AAA Pattern", () => {
       const email = new Email("existing@example.com");
       const role = new UserRole(UserRoleType.USER);
       const user = User.create(userId, email, role);
-      await repository.save(user);
+      await repository.save(user.getValue());
 
       const mockRequest = {
         user: { id: "existing-user", email: "existing@example.com" },
@@ -152,8 +154,8 @@ describe("AuthController Integration Tests - AAA Pattern", () => {
       const result = await controller.createUserProfile(mockRequest, command);
 
       // Assert
-      expect(result.success).to.be.false;
-      expect(result.error).to.equal("User profile already exists");
+      expect(result.isFailure()).to.be.true;
+      expect(result.getError().message).to.equal("User profile already exists");
     });
   });
 
@@ -164,7 +166,7 @@ describe("AuthController Integration Tests - AAA Pattern", () => {
       const email = new Email("update@example.com");
       const role = new UserRole(UserRoleType.USER);
       const user = User.create(userId, email, role);
-      await repository.save(user);
+      await repository.save(user.getValue());
 
       const command = {
         role: UserRoleType.ADMIN,
@@ -177,8 +179,8 @@ describe("AuthController Integration Tests - AAA Pattern", () => {
       );
 
       // Assert
-      expect(result.success).to.be.true;
-      expect(result.user?.role.value).to.equal(UserRoleType.ADMIN);
+      expect(result.isSuccess()).to.be.true;
+      expect(result.getValue().role.value).to.equal(UserRoleType.ADMIN);
     });
 
     it("should return error when user not found", async () => {
@@ -194,8 +196,10 @@ describe("AuthController Integration Tests - AAA Pattern", () => {
       );
 
       // Assert
-      expect(result.success).to.be.false;
-      expect(result.error).to.equal("User not found");
+      expect(result.isFailure()).to.be.true;
+      expect(result.getError().message).to.equal(
+        "User with id non-existent-user not found"
+      );
     });
   });
 
@@ -206,14 +210,13 @@ describe("AuthController Integration Tests - AAA Pattern", () => {
       const email = new Email("delete@example.com");
       const role = new UserRole(UserRoleType.USER);
       const user = User.create(userId, email, role);
-      await repository.save(user);
+      await repository.save(user.getValue());
 
       // Act
       const result = await controller.deleteUserProfile("user-to-delete");
 
       // Assert
-      expect(result.success).to.be.true;
-      expect(result.message).to.equal("User profile deleted successfully");
+      expect(result.isSuccess()).to.be.true;
     });
 
     it("should return error when user not found", async () => {
@@ -224,8 +227,10 @@ describe("AuthController Integration Tests - AAA Pattern", () => {
       const result = await controller.deleteUserProfile(userId);
 
       // Assert
-      expect(result.success).to.be.false;
-      expect(result.error).to.equal("User not found");
+      expect(result.isFailure()).to.be.true;
+      expect(result.getError().message).to.equal(
+        "User with id non-existent-user not found"
+      );
     });
   });
 });

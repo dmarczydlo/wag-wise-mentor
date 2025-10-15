@@ -240,8 +240,10 @@ describe("PuppyController Integration Tests", () => {
         .send(updateWeightDto);
 
       // Assert
-      expect(response.status).to.equal(HttpStatus.BAD_REQUEST);
-      expect(response.body.message).to.include("Puppy not found");
+      expect(response.status).to.equal(HttpStatus.NOT_FOUND);
+      expect(response.body.message).to.include(
+        "Puppy with id non-existent-id not found"
+      );
     });
   });
 });

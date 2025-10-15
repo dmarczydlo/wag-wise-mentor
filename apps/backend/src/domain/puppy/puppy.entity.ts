@@ -1,33 +1,50 @@
 import { Entity } from "../shared/base.entity";
 import { ValueObject } from "../shared/base.entity";
+import { Result, DomainError, DomainResult } from "../../common/result/result";
 
 export class PuppyId extends ValueObject {
   constructor(public readonly value: string) {
     super();
+  }
+
+  static create(value: string): DomainResult<PuppyId> {
     if (!value || value.trim().length === 0) {
-      throw new Error("PuppyId cannot be empty");
+      return Result.failure(DomainError.validation("PuppyId cannot be empty"));
     }
+    return Result.success(new PuppyId(value));
   }
 }
 
 export class PuppyName extends ValueObject {
   constructor(public readonly value: string) {
     super();
+  }
+
+  static create(value: string): DomainResult<PuppyName> {
     if (!value || value.trim().length === 0) {
-      throw new Error("PuppyName cannot be empty");
+      return Result.failure(
+        DomainError.validation("PuppyName cannot be empty")
+      );
     }
     if (value.length > 100) {
-      throw new Error("PuppyName cannot exceed 100 characters");
+      return Result.failure(
+        DomainError.validation("PuppyName cannot exceed 100 characters")
+      );
     }
+    return Result.success(new PuppyName(value));
   }
 }
 
 export class Breed extends ValueObject {
   constructor(public readonly value: string) {
     super();
+  }
+
+  static create(value: string): DomainResult<Breed> {
     if (!value || value.trim().length === 0) {
-      throw new Error("Breed cannot be empty");
+      return Result.failure(DomainError.validation("Breed cannot be empty"));
     }
+    return Result.success(new Breed(value));
   }
 }
 
@@ -37,14 +54,18 @@ export class Weight extends ValueObject {
     public readonly unit: WeightUnit
   ) {
     super();
-    if (value <= 0) {
-      throw new Error("Weight must be positive");
-    }
   }
 
-  public convertTo(targetUnit: WeightUnit): Weight {
+  static create(value: number, unit: WeightUnit): DomainResult<Weight> {
+    if (value <= 0) {
+      return Result.failure(DomainError.validation("Weight must be positive"));
+    }
+    return Result.success(new Weight(value, unit));
+  }
+
+  public convertTo(targetUnit: WeightUnit): DomainResult<Weight> {
     if (this.unit === targetUnit) {
-      return this;
+      return Result.success(this);
     }
 
     let kgValue: number;
@@ -53,7 +74,9 @@ export class Weight extends ValueObject {
     } else if (this.unit === WeightUnit.LBS) {
       kgValue = this.value * 0.453592;
     } else {
-      throw new Error(`Unsupported weight unit: ${this.unit}`);
+      return Result.failure(
+        DomainError.validation(`Unsupported weight unit: ${this.unit}`)
+      );
     }
 
     let targetValue: number;
@@ -62,10 +85,12 @@ export class Weight extends ValueObject {
     } else if (targetUnit === WeightUnit.LBS) {
       targetValue = kgValue / 0.453592;
     } else {
-      throw new Error(`Unsupported target weight unit: ${targetUnit}`);
+      return Result.failure(
+        DomainError.validation(`Unsupported target weight unit: ${targetUnit}`)
+      );
     }
 
-    return new Weight(targetValue, targetUnit);
+    return Result.success(new Weight(targetValue, targetUnit));
   }
 }
 
@@ -77,12 +102,18 @@ export enum WeightUnit {
 export class BirthDate extends ValueObject {
   constructor(public readonly value: Date) {
     super();
+  }
+
+  static create(value: Date): DomainResult<BirthDate> {
     if (!value) {
-      throw new Error("BirthDate cannot be null");
+      return Result.failure(DomainError.validation("BirthDate cannot be null"));
     }
     if (value > new Date()) {
-      throw new Error("BirthDate cannot be in the future");
+      return Result.failure(
+        DomainError.validation("BirthDate cannot be in the future")
+      );
     }
+    return Result.success(new BirthDate(value));
   }
 
   public getAgeInDays(): number {
@@ -127,12 +158,14 @@ export class Puppy extends Entity<PuppyId> {
     birthDate: BirthDate,
     currentWeight: Weight,
     ownerId: string
-  ): Puppy {
+  ): DomainResult<Puppy> {
     if (!ownerId || ownerId.trim().length === 0) {
-      throw new Error("OwnerId cannot be empty");
+      return Result.failure(DomainError.validation("OwnerId cannot be empty"));
     }
 
-    return new Puppy(id, name, breed, birthDate, currentWeight, ownerId);
+    return Result.success(
+      new Puppy(id, name, breed, birthDate, currentWeight, ownerId)
+    );
   }
 
   public updateWeight(newWeight: Weight): Puppy {

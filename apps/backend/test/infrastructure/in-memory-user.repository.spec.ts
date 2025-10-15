@@ -20,56 +20,67 @@ describe("InMemoryUserRepository - AAA Pattern", () => {
   describe("save", () => {
     it("should save user successfully", async () => {
       // Arrange
-      const user = User.create(
+      const userResult = User.create(
         new UserId("user-1"),
         new Email("test@example.com")
       );
+      expect(userResult.isSuccess()).to.be.true;
+      const user = userResult.getValue();
 
       // Act
       const result = await repository.save(user);
 
       // Assert
-      expect(result).to.deep.equal(user);
+      expect(result.isSuccess()).to.be.true;
+      expect(result.getValue()).to.deep.equal(user);
       expect(repository.getCount()).to.equal(1);
     });
 
     it("should update existing user when saving with same ID", async () => {
       // Arrange
-      const user = User.create(
+      const userResult = User.create(
         new UserId("user-1"),
         new Email("test@example.com")
       );
+      expect(userResult.isSuccess()).to.be.true;
+      const user = userResult.getValue();
       await repository.save(user);
 
-      const updatedUser = User.create(
+      const updatedUserResult = User.create(
         new UserId("user-1"),
         new Email("test@example.com")
       );
+      expect(updatedUserResult.isSuccess()).to.be.true;
+      const updatedUser = updatedUserResult.getValue();
 
       // Act
       const result = await repository.save(updatedUser);
 
       // Assert
-      expect(result).to.deep.equal(updatedUser);
+      expect(result.isSuccess()).to.be.true;
+      expect(result.getValue()).to.deep.equal(updatedUser);
       expect(repository.getCount()).to.equal(1);
-      expect(result.email.value).to.equal("test@example.com");
+      expect(result.getValue().email.value).to.equal("test@example.com");
     });
   });
 
   describe("findById", () => {
     it("should return user when found", async () => {
       // Arrange
-      const user = User.create(
+      const userResult = User.create(
         new UserId("user-1"),
         new Email("test@example.com")
       );
+      expect(userResult.isSuccess()).to.be.true;
+      const user = userResult.getValue();
       await repository.save(user);
 
       // Act
       const result = await repository.findById(new UserId("user-1"));
 
       // Assert
-      expect(result).to.deep.equal(user);
+      expect(result.isSuccess()).to.be.true;
+      expect(result.getValue()).to.deep.equal(user);
     });
 
     it("should return null when user not found", async () => {
@@ -80,24 +91,28 @@ describe("InMemoryUserRepository - AAA Pattern", () => {
       const result = await repository.findById(nonExistentId);
 
       // Assert
-      expect(result).to.be.null;
+      expect(result.isSuccess()).to.be.true;
+      expect(result.getValue()).to.be.null;
     });
   });
 
   describe("findByEmail", () => {
     it("should return user when found by email", async () => {
       // Arrange
-      const user = User.create(
+      const userResult = User.create(
         new UserId("user-1"),
         new Email("test@example.com")
       );
+      expect(userResult.isSuccess()).to.be.true;
+      const user = userResult.getValue();
       await repository.save(user);
 
       // Act
       const result = await repository.findByEmail("test@example.com");
 
       // Assert
-      expect(result).to.deep.equal(user);
+      expect(result.isSuccess()).to.be.true;
+      expect(result.getValue()).to.deep.equal(user);
     });
 
     it("should return null when user not found by email", async () => {
@@ -108,19 +123,24 @@ describe("InMemoryUserRepository - AAA Pattern", () => {
       const result = await repository.findByEmail(nonExistentEmail);
 
       // Assert
-      expect(result).to.be.null;
+      expect(result.isSuccess()).to.be.true;
+      expect(result.getValue()).to.be.null;
     });
 
     it("should return correct user when multiple users exist", async () => {
       // Arrange
-      const user1 = User.create(
+      const user1Result = User.create(
         new UserId("user-1"),
         new Email("test1@example.com")
       );
-      const user2 = User.create(
+      const user2Result = User.create(
         new UserId("user-2"),
         new Email("test2@example.com")
       );
+      expect(user1Result.isSuccess()).to.be.true;
+      expect(user2Result.isSuccess()).to.be.true;
+      const user1 = user1Result.getValue();
+      const user2 = user2Result.getValue();
       await repository.save(user1);
       await repository.save(user2);
 
@@ -128,72 +148,88 @@ describe("InMemoryUserRepository - AAA Pattern", () => {
       const result = await repository.findByEmail("test2@example.com");
 
       // Assert
-      expect(result).to.deep.equal(user2);
+      expect(result.isSuccess()).to.be.true;
+      expect(result.getValue()).to.deep.equal(user2);
     });
   });
 
   describe("update", () => {
     it("should update existing user", async () => {
       // Arrange
-      const user = User.create(
+      const userResult = User.create(
         new UserId("user-1"),
         new Email("test@example.com")
       );
+      expect(userResult.isSuccess()).to.be.true;
+      const user = userResult.getValue();
       await repository.save(user);
 
-      const updatedUser = User.create(
+      const updatedUserResult = User.create(
         new UserId("user-1"),
         new Email("test@example.com")
       );
+      expect(updatedUserResult.isSuccess()).to.be.true;
+      const updatedUser = updatedUserResult.getValue();
 
       // Act
       const result = await repository.update(updatedUser);
 
       // Assert
-      expect(result).to.deep.equal(updatedUser);
-      expect(result.email.value).to.equal("test@example.com");
+      expect(result.isSuccess()).to.be.true;
+      expect(result.getValue()).to.deep.equal(updatedUser);
+      expect(result.getValue().email.value).to.equal("test@example.com");
     });
   });
 
   describe("delete", () => {
     it("should delete existing user", async () => {
       // Arrange
-      const user = User.create(
+      const userResult = User.create(
         new UserId("user-1"),
         new Email("test@example.com")
       );
+      expect(userResult.isSuccess()).to.be.true;
+      const user = userResult.getValue();
       await repository.save(user);
 
       // Act
-      await repository.delete(new UserId("user-1"));
+      const result = await repository.delete(new UserId("user-1"));
 
       // Assert
+      expect(result.isSuccess()).to.be.true;
       expect(repository.getCount()).to.equal(0);
-      const result = await repository.findById(new UserId("user-1"));
-      expect(result).to.be.null;
+      const foundResult = await repository.findById(new UserId("user-1"));
+      expect(foundResult.isSuccess()).to.be.true;
+      expect(foundResult.getValue()).to.be.null;
     });
 
     it("should handle deletion of non-existent user gracefully", async () => {
       // Arrange
       const nonExistentId = new UserId("non-existent");
 
-      // Act & Assert
-      await repository.delete(nonExistentId);
-      expect(true).to.be.true; // If we get here, no error was thrown
+      // Act
+      const result = await repository.delete(nonExistentId);
+
+      // Assert
+      expect(result.isSuccess()).to.be.true;
     });
   });
 
   describe("findAll", () => {
     it("should return all users", async () => {
       // Arrange
-      const user1 = User.create(
+      const user1Result = User.create(
         new UserId("user-1"),
         new Email("test1@example.com")
       );
-      const user2 = User.create(
+      const user2Result = User.create(
         new UserId("user-2"),
         new Email("test2@example.com")
       );
+      expect(user1Result.isSuccess()).to.be.true;
+      expect(user2Result.isSuccess()).to.be.true;
+      const user1 = user1Result.getValue();
+      const user2 = user2Result.getValue();
       await repository.save(user1);
       await repository.save(user2);
 
@@ -201,9 +237,11 @@ describe("InMemoryUserRepository - AAA Pattern", () => {
       const result = await repository.findAll();
 
       // Assert
-      expect(result).to.have.length(2);
-      expect(result).to.deep.include(user1);
-      expect(result).to.deep.include(user2);
+      expect(result.isSuccess()).to.be.true;
+      const users = result.getValue();
+      expect(users).to.have.length(2);
+      expect(users).to.deep.include(user1);
+      expect(users).to.deep.include(user2);
     });
 
     it("should return empty array when no users exist", async () => {
@@ -211,18 +249,21 @@ describe("InMemoryUserRepository - AAA Pattern", () => {
       const result = await repository.findAll();
 
       // Assert
-      expect(result).to.be.an("array").that.is.empty;
+      expect(result.isSuccess()).to.be.true;
+      expect(result.getValue()).to.be.an("array").that.is.empty;
     });
   });
 
   describe("test helper methods", () => {
-    it("should clear all users", () => {
+    it("should clear all users", async () => {
       // Arrange
-      const user = User.create(
+      const userResult = User.create(
         new UserId("user-1"),
         new Email("test@example.com")
       );
-      repository.save(user);
+      expect(userResult.isSuccess()).to.be.true;
+      const user = userResult.getValue();
+      await repository.save(user);
 
       // Act
       repository.clear();
@@ -231,18 +272,22 @@ describe("InMemoryUserRepository - AAA Pattern", () => {
       expect(repository.getCount()).to.equal(0);
     });
 
-    it("should return correct count", () => {
+    it("should return correct count", async () => {
       // Arrange
-      const user1 = User.create(
+      const user1Result = User.create(
         new UserId("user-1"),
         new Email("test1@example.com")
       );
-      const user2 = User.create(
+      const user2Result = User.create(
         new UserId("user-2"),
         new Email("test2@example.com")
       );
-      repository.save(user1);
-      repository.save(user2);
+      expect(user1Result.isSuccess()).to.be.true;
+      expect(user2Result.isSuccess()).to.be.true;
+      const user1 = user1Result.getValue();
+      const user2 = user2Result.getValue();
+      await repository.save(user1);
+      await repository.save(user2);
 
       // Act
       const count = repository.getCount();
@@ -251,18 +296,22 @@ describe("InMemoryUserRepository - AAA Pattern", () => {
       expect(count).to.equal(2);
     });
 
-    it("should return all users via getAllUsers", () => {
+    it("should return all users via getAllUsers", async () => {
       // Arrange
-      const user1 = User.create(
+      const user1Result = User.create(
         new UserId("user-1"),
         new Email("test1@example.com")
       );
-      const user2 = User.create(
+      const user2Result = User.create(
         new UserId("user-2"),
         new Email("test2@example.com")
       );
-      repository.save(user1);
-      repository.save(user2);
+      expect(user1Result.isSuccess()).to.be.true;
+      expect(user2Result.isSuccess()).to.be.true;
+      const user1 = user1Result.getValue();
+      const user2 = user2Result.getValue();
+      await repository.save(user1);
+      await repository.save(user2);
 
       // Act
       const users = repository.getAllUsers();

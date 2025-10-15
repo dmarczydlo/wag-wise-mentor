@@ -24,10 +24,11 @@ describe("InMemoryAnalyticsRepository - AAA Pattern", () => {
       );
 
       // Act
-      const savedEvent = await repository.save(event);
+      const result = await repository.save(event);
 
       // Assert
-      expect(savedEvent).to.deep.equal(event);
+      expect(result.isSuccess()).to.be.true;
+      expect(result.getValue()).to.deep.equal(event);
     });
 
     it("should update existing event when saving with same ID", async () => {
@@ -48,15 +49,17 @@ describe("InMemoryAnalyticsRepository - AAA Pattern", () => {
       });
 
       // Act
-      const savedEvent = await repository.save(updatedEvent);
+      const result = await repository.save(updatedEvent);
 
       // Assert
-      expect(savedEvent.properties).to.deep.equal({
+      expect(result.isSuccess()).to.be.true;
+      expect(result.getValue().properties).to.deep.equal({
         puppyId: "puppy-456",
         breed: "Golden Retriever",
       });
-      const foundEvent = await repository.findById(eventId);
-      expect(foundEvent!.properties).to.deep.equal({
+      const foundEventResult = await repository.findById(eventId);
+      expect(foundEventResult.isSuccess()).to.be.true;
+      expect(foundEventResult.getValue()!.properties).to.deep.equal({
         puppyId: "puppy-456",
         breed: "Golden Retriever",
       });
@@ -77,11 +80,12 @@ describe("InMemoryAnalyticsRepository - AAA Pattern", () => {
       await repository.save(event);
 
       // Act
-      const foundEvent = await repository.findById("event-1");
+      const result = await repository.findById("event-1");
 
       // Assert
-      expect(foundEvent).to.not.be.null;
-      expect(foundEvent!.id).to.equal("event-1");
+      expect(result.isSuccess()).to.be.true;
+      expect(result.getValue()).to.not.be.null;
+      expect(result.getValue()!.id).to.equal("event-1");
     });
 
     it("should return null when event not found", async () => {
@@ -89,10 +93,11 @@ describe("InMemoryAnalyticsRepository - AAA Pattern", () => {
       const nonExistentId = "non-existent";
 
       // Act
-      const foundEvent = await repository.findById(nonExistentId);
+      const result = await repository.findById(nonExistentId);
 
       // Assert
-      expect(foundEvent).to.be.null;
+      expect(result.isSuccess()).to.be.true;
+      expect(result.getValue()).to.be.null;
     });
   });
 
@@ -120,9 +125,11 @@ describe("InMemoryAnalyticsRepository - AAA Pattern", () => {
       await repository.save(event2);
 
       // Act
-      const events = await repository.findByUserId(userId);
+      const result = await repository.findByUserId(userId);
 
       // Assert
+      expect(result.isSuccess()).to.be.true;
+      const events = result.getValue();
       expect(events).to.have.length(2);
       expect(events).to.deep.include(event1);
       expect(events).to.deep.include(event2);
@@ -133,9 +140,11 @@ describe("InMemoryAnalyticsRepository - AAA Pattern", () => {
       const userId = "user-with-no-events";
 
       // Act
-      const events = await repository.findByUserId(userId);
+      const result = await repository.findByUserId(userId);
 
       // Assert
+      expect(result.isSuccess()).to.be.true;
+      const events = result.getValue();
       expect(events).to.be.an("array").that.is.empty;
     });
 
@@ -163,9 +172,11 @@ describe("InMemoryAnalyticsRepository - AAA Pattern", () => {
       await repository.save(event2);
 
       // Act
-      const events = await repository.findByUserId(user1);
+      const result = await repository.findByUserId(user1);
 
       // Assert
+      expect(result.isSuccess()).to.be.true;
+      const events = result.getValue();
       expect(events).to.have.length(1);
       expect(events[0]).to.deep.equal(event1);
     });
@@ -204,9 +215,11 @@ describe("InMemoryAnalyticsRepository - AAA Pattern", () => {
       await repository.save(event3);
 
       // Act
-      const events = await repository.findByEventType(eventType);
+      const result = await repository.findByEventType(eventType);
 
       // Assert
+      expect(result.isSuccess()).to.be.true;
+      const events = result.getValue();
       expect(events).to.have.length(2);
       expect(events).to.deep.include(event1);
       expect(events).to.deep.include(event2);
@@ -217,9 +230,11 @@ describe("InMemoryAnalyticsRepository - AAA Pattern", () => {
       const eventType = "non-existent-type";
 
       // Act
-      const events = await repository.findByEventType(eventType);
+      const result = await repository.findByEventType(eventType);
 
       // Assert
+      expect(result.isSuccess()).to.be.true;
+      const events = result.getValue();
       expect(events).to.be.an("array").that.is.empty;
     });
   });
@@ -251,9 +266,11 @@ describe("InMemoryAnalyticsRepository - AAA Pattern", () => {
       await repository.save(event2);
 
       // Act
-      const events = await repository.findByDateRange(startDate, endDate);
+      const result = await repository.findByDateRange(startDate, endDate);
 
       // Assert
+      expect(result.isSuccess()).to.be.true;
+      const events = result.getValue();
       expect(events).to.have.length(1);
       expect(events[0]).to.deep.equal(event1);
     });
@@ -264,9 +281,11 @@ describe("InMemoryAnalyticsRepository - AAA Pattern", () => {
       const endDate = new Date("2020-12-31");
 
       // Act
-      const events = await repository.findByDateRange(startDate, endDate);
+      const result = await repository.findByDateRange(startDate, endDate);
 
       // Assert
+      expect(result.isSuccess()).to.be.true;
+      const events = result.getValue();
       expect(events).to.be.an("array").that.is.empty;
     });
   });
@@ -288,8 +307,9 @@ describe("InMemoryAnalyticsRepository - AAA Pattern", () => {
       await repository.delete("event-1");
 
       // Assert
-      const foundEvent = await repository.findById("event-1");
-      expect(foundEvent).to.be.null;
+      const result = await repository.findById("event-1");
+      expect(result.isSuccess()).to.be.true;
+      expect(result.getValue()).to.be.null;
     });
 
     it("should handle deletion of non-existent event gracefully", async () => {
