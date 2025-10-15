@@ -1,9 +1,15 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
+import { Button } from "@wag-wise-mentor/ui/components/button";
+import { Input } from "@wag-wise-mentor/ui/components/input";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@wag-wise-mentor/ui/components/card";
+import { Label } from "@wag-wise-mentor/ui/components/label";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Heart } from "lucide-react";
@@ -28,7 +34,9 @@ const Auth = () => {
       }
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
       if (session) {
         navigate("/dashboard");
       }
@@ -39,7 +47,7 @@ const Auth = () => {
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       authSchema.parse({ email, password });
     } catch (error) {
@@ -70,7 +78,7 @@ const Auth = () => {
         toast.success("Welcome back!");
       } else {
         const redirectUrl = `${window.location.origin}/dashboard`;
-        
+
         const { error } = await supabase.auth.signUp({
           email,
           password,
@@ -81,7 +89,9 @@ const Auth = () => {
 
         if (error) {
           if (error.message.includes("already registered")) {
-            toast.error("This email is already registered. Please sign in instead.");
+            toast.error(
+              "This email is already registered. Please sign in instead."
+            );
           } else {
             toast.error(error.message);
           }
@@ -146,7 +156,11 @@ const Auth = () => {
               className="w-full bg-primary hover:bg-primary-light shadow-soft transition-smooth"
               disabled={loading}
             >
-              {loading ? "Please wait..." : isLogin ? "Sign In" : "Create Account"}
+              {loading
+                ? "Please wait..."
+                : isLogin
+                  ? "Sign In"
+                  : "Create Account"}
             </Button>
           </form>
 
@@ -155,8 +169,12 @@ const Auth = () => {
               onClick={() => setIsLogin(!isLogin)}
               className="text-sm text-muted-foreground hover:text-primary transition-smooth"
             >
-              {isLogin ? "Don't have an account? " : "Already have an account? "}
-              <span className="font-semibold">{isLogin ? "Sign Up" : "Sign In"}</span>
+              {isLogin
+                ? "Don't have an account? "
+                : "Already have an account? "}
+              <span className="font-semibold">
+                {isLogin ? "Sign Up" : "Sign In"}
+              </span>
             </button>
           </div>
         </CardContent>

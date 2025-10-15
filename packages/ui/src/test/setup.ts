@@ -7,4 +7,5 @@ global.ResizeObserver = class ResizeObserver {
 };
 
 global.HTMLElement.prototype.scrollIntoView = () => {};
+// @ts-ignore - requestSubmit is not implemented in JSDOM
 global.HTMLElement.prototype.requestSubmit = () => {};
