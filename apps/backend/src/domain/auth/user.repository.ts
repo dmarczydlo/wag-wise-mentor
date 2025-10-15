@@ -1,10 +1,11 @@
 import { User, UserId } from "./user.entity";
+import { DomainResult } from "../../common/result/result";
 
 export abstract class UserRepository {
-  abstract save(user: User): Promise<User>;
-  abstract findById(id: UserId): Promise<User | null>;
-  abstract findByEmail(email: string): Promise<User | null>;
-  abstract update(user: User): Promise<User>;
-  abstract delete(id: UserId): Promise<void>;
-  abstract findAll(): Promise<User[]>;
+  abstract save(user: User): Promise<DomainResult<User>>;
+  abstract findById(id: UserId): Promise<DomainResult<User | null>>;
+  abstract findByEmail(email: string): Promise<DomainResult<User | null>>;
+  abstract update(user: User): Promise<DomainResult<User>>;
+  abstract delete(id: UserId): Promise<DomainResult<void>>;
+  abstract findAll(): Promise<DomainResult<User[]>>;
 }

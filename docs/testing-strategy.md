@@ -61,6 +61,7 @@ git push origin feature/your-feature-name
 4. **Automated Testing**: All tests must run in CI/CD pipeline
 5. **Fast Feedback**: Tests should provide quick feedback during development
 6. **Abstract Class Pattern**: Use abstract classes for repositories and services to enable clean dependency injection without string tokens
+7. **Result Pattern Testing**: Test success and failure cases explicitly using Result objects instead of exception handling
 
 ## Testing Stack
 
@@ -235,24 +236,24 @@ e2e/
    ```typescript
    // Domain Layer - Abstract Repository
    export abstract class PuppyRepository {
-     abstract save(puppy: Puppy): Promise<Puppy>;
-     abstract findById(id: PuppyId): Promise<Puppy | null>;
-     abstract findByOwnerId(ownerId: string): Promise<Puppy[]>;
+     abstract save(puppy: Puppy): Promise<DomainResult<Puppy>>;
+     abstract findById(id: PuppyId): Promise<DomainResult<Puppy | null>>;
+     abstract findByOwnerId(ownerId: string): Promise<DomainResult<Puppy[]>>;
    }
 
    // Infrastructure Layer - Concrete Implementation
    @Injectable()
    export class InMemoryPuppyRepository extends PuppyRepository {
-     async save(puppy: Puppy): Promise<Puppy> {
-       // Implementation
+     async save(puppy: Puppy): Promise<DomainResult<Puppy>> {
+       // Implementation with Result pattern
      }
 
-     async findById(id: PuppyId): Promise<Puppy | null> {
-       // Implementation
+     async findById(id: PuppyId): Promise<DomainResult<Puppy | null>> {
+       // Implementation with Result pattern
      }
 
-     async findByOwnerId(ownerId: string): Promise<Puppy[]> {
-       // Implementation
+     async findByOwnerId(ownerId: string): Promise<DomainResult<Puppy[]>> {
+       // Implementation with Result pattern
      }
    }
 
@@ -266,6 +267,78 @@ e2e/
      ],
    })
    export class PuppyModule {}
+   ```
+
+5. **Result Pattern Testing**
+
+   ```typescript
+   // Testing Use Cases with Result Pattern
+   describe("CreatePuppyUseCase", () => {
+     it("should return validation error for invalid name", async () => {
+       const command = {
+         name: "",
+         breed: "Golden Retriever",
+         birthDate: new Date(),
+       };
+       const result = await useCase.execute(command);
+
+       expect(result.isFailure()).toBe(true);
+       expect(result.getError().code).toBe("VALIDATION_ERROR");
+       expect(result.getError().message).toContain(
+         "Puppy name cannot be empty"
+       );
+     });
+
+     it("should return success for valid command", async () => {
+       const command = {
+         name: "Buddy",
+         breed: "Golden Retriever",
+         birthDate: new Date(),
+       };
+       const result = await useCase.execute(command);
+
+       expect(result.isSuccess()).toBe(true);
+       expect(result.getValue()).toBeInstanceOf(Puppy);
+       expect(result.getValue().name.value).toBe("Buddy");
+     });
+
+     it("should chain operations correctly", async () => {
+       const command = {
+         name: "Buddy",
+         breed: "Golden Retriever",
+         birthDate: new Date(),
+       };
+       const result = await useCase
+         .execute(command)
+         .flatMap((puppy) => puppyRepository.save(puppy))
+         .map((savedPuppy) => savedPuppy.id);
+
+       expect(result.isSuccess()).toBe(true);
+       expect(result.getValue()).toBeDefined();
+     });
+   });
+
+   // Testing Domain Entities with Result Pattern
+   describe("Puppy Entity", () => {
+     it("should create puppy successfully", () => {
+       const result = Puppy.create(
+         PuppyId.create("puppy-123").getValue(),
+         PuppyName.create("Buddy").getValue(),
+         Breed.create("Golden Retriever").getValue(),
+         BirthDate.create(new Date()).getValue()
+       );
+
+       expect(result.isSuccess()).toBe(true);
+       expect(result.getValue()).toBeInstanceOf(Puppy);
+     });
+
+     it("should return validation error for empty name", () => {
+       const nameResult = PuppyName.create("");
+
+       expect(nameResult.isFailure()).toBe(true);
+       expect(nameResult.getError().code).toBe("VALIDATION_ERROR");
+     });
+   });
    ```
 
 ### Frontend Testing (Dual App Structure)

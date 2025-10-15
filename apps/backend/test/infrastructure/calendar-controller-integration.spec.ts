@@ -42,11 +42,11 @@ describe("CalendarController Integration Tests - AAA Pattern", () => {
       const result = await controller.createEvent(createEventDto);
 
       // Assert
-      expect(result.success).to.be.true;
-      expect(result.event).to.not.be.undefined;
-      expect(result.event!.puppyId).to.equal("puppy-1");
-      expect(result.event!.eventType.value).to.equal(EventTypeEnum.FEEDING);
-      expect(result.event!.title.value).to.equal("Morning Feeding");
+      expect(result.isSuccess()).to.be.true;
+      expect(result.getValue()).to.not.be.undefined;
+      expect(result.getValue().puppyId).to.equal("puppy-1");
+      expect(result.getValue().eventType.value).to.equal(EventTypeEnum.FEEDING);
+      expect(result.getValue().title.value).to.equal("Morning Feeding");
     });
 
     it("should return 400 when puppy ID is empty", async () => {
@@ -63,9 +63,8 @@ describe("CalendarController Integration Tests - AAA Pattern", () => {
       const result = await controller.createEvent(createEventDto);
 
       // Assert
-      expect(result.success).to.be.false;
-      expect(result.error).to.equal("PuppyId cannot be empty");
-      expect(result.event).to.be.undefined;
+      expect(result.isFailure()).to.be.true;
+      expect(result.getError().message).to.equal("PuppyId cannot be empty");
     });
 
     it("should return 400 when event type is invalid", async () => {
@@ -88,9 +87,8 @@ describe("CalendarController Integration Tests - AAA Pattern", () => {
       const result = await controller.createEvent(createEventDto);
 
       // Assert
-      expect(result.success).to.be.false;
-      expect(result.error).to.equal("EventTitle cannot be empty");
-      expect(result.event).to.be.undefined;
+      expect(result.isFailure()).to.be.true;
+      expect(result.getError().message).to.equal("EventTitle cannot be empty");
     });
   });
 
@@ -107,7 +105,7 @@ describe("CalendarController Integration Tests - AAA Pattern", () => {
         eventDateTime: new Date("2024-01-15T08:00:00Z"),
       };
       const createResult = await controller.createEvent(createEventDto);
-      existingEventId = createResult.event!.id.value;
+      existingEventId = createResult.getValue().id.value;
     });
 
     it("should update event successfully", async () => {
@@ -124,10 +122,12 @@ describe("CalendarController Integration Tests - AAA Pattern", () => {
       );
 
       // Assert
-      expect(result.success).to.be.true;
-      expect(result.event).to.not.be.undefined;
-      expect(result.event!.title.value).to.equal("Updated Morning Feeding");
-      expect(result.event!.description.value).to.equal("Updated description");
+      expect(result.isSuccess()).to.be.true;
+      expect(result.getValue()).to.not.be.undefined;
+      expect(result.getValue().title.value).to.equal("Updated Morning Feeding");
+      expect(result.getValue().description.value).to.equal(
+        "Updated description"
+      );
     });
 
     it("should return 404 when event not found", async () => {
@@ -145,9 +145,10 @@ describe("CalendarController Integration Tests - AAA Pattern", () => {
       );
 
       // Assert
-      expect(result.success).to.be.false;
-      expect(result.error).to.equal("Event not found");
-      expect(result.event).to.be.undefined;
+      expect(result.isFailure()).to.be.true;
+      expect(result.getError().message).to.equal(
+        "Event with id non-existent-event not found"
+      );
     });
 
     it("should return 400 when new title is empty", async () => {
@@ -164,9 +165,8 @@ describe("CalendarController Integration Tests - AAA Pattern", () => {
       );
 
       // Assert
-      expect(result.success).to.be.false;
-      expect(result.error).to.equal("EventTitle cannot be empty");
-      expect(result.event).to.be.undefined;
+      expect(result.isFailure()).to.be.true;
+      expect(result.getError().message).to.equal("EventTitle cannot be empty");
     });
   });
 
@@ -214,10 +214,10 @@ describe("CalendarController Integration Tests - AAA Pattern", () => {
       const result = await controller.generateHealthTimeline(command);
 
       // Assert
-      expect(result.success).to.be.true;
-      expect(result.events).to.not.be.undefined;
-      expect(result.events).to.be.an("array");
-      expect(result.events.length).to.be.greaterThan(0);
+      expect(result.isSuccess()).to.be.true;
+      expect(result.getValue()).to.not.be.undefined;
+      expect(result.getValue()).to.be.an("array");
+      expect(result.getValue().length).to.be.greaterThan(0);
     });
 
     it("should return 400 when puppy ID is empty", async () => {
@@ -232,9 +232,8 @@ describe("CalendarController Integration Tests - AAA Pattern", () => {
       const result = await controller.generateHealthTimeline(command);
 
       // Assert
-      expect(result.success).to.be.false;
-      expect(result.error).to.equal("PuppyId cannot be empty");
-      expect(result.events).to.be.undefined;
+      expect(result.isFailure()).to.be.true;
+      expect(result.getError().message).to.equal("PuppyId cannot be empty");
     });
 
     it("should return empty timeline when no events found", async () => {
@@ -249,8 +248,8 @@ describe("CalendarController Integration Tests - AAA Pattern", () => {
       const result = await controller.generateHealthTimeline(command);
 
       // Assert
-      expect(result.success).to.be.true;
-      expect(result.events).to.be.an("array").that.is.empty;
+      expect(result.isSuccess()).to.be.true;
+      expect(result.getValue()).to.be.an("array").that.is.empty;
     });
   });
 });

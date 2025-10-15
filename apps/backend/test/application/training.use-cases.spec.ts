@@ -42,11 +42,12 @@ describe("Training Use Cases - AAA Pattern", () => {
       );
 
       // Assert
-      expect(result).to.not.be.null;
-      expect(result.puppyId).to.equal(puppyId);
-      expect(result.sessionType).to.equal(sessionType);
-      expect(result.duration).to.equal(duration);
-      expect(result.notes).to.equal(notes);
+      expect(result.isSuccess()).to.be.true;
+      const session = result.getValue();
+      expect(session.puppyId).to.equal(puppyId);
+      expect(session.sessionType).to.equal(sessionType);
+      expect(session.duration).to.equal(duration);
+      expect(session.notes).to.equal(notes);
     });
 
     it("should save training session to repository", async () => {
@@ -57,15 +58,18 @@ describe("Training Use Cases - AAA Pattern", () => {
       const notes = "Good progress";
 
       // Act
-      await useCases.createTrainingSession(
+      const createResult = await useCases.createTrainingSession(
         puppyId,
         sessionType,
         duration,
         notes
       );
+      expect(createResult.isSuccess()).to.be.true;
 
       // Assert
-      const sessions = await repository.findByPuppyId(puppyId);
+      const sessionsResult = await repository.findByPuppyId(puppyId);
+      expect(sessionsResult.isSuccess()).to.be.true;
+      const sessions = sessionsResult.getValue();
       expect(sessions).to.have.length(1);
       expect(sessions[0].puppyId).to.equal(puppyId);
     });
@@ -74,34 +78,35 @@ describe("Training Use Cases - AAA Pattern", () => {
   describe("getTrainingSession", () => {
     it("should return training session when found", async () => {
       // Arrange
-      const session = await useCases.createTrainingSession(
+      const createResult = await useCases.createTrainingSession(
         "puppy-123",
         "obedience",
         30,
         "Good progress"
       );
+      expect(createResult.isSuccess()).to.be.true;
+      const session = createResult.getValue();
 
       // Act
       const result = await useCases.getTrainingSession(session.id);
 
       // Assert
-      expect(result).to.not.be.null;
-      expect(result.id).to.equal(session.id);
-      expect(result.puppyId).to.equal("puppy-123");
+      expect(result.isSuccess()).to.be.true;
+      const foundSession = result.getValue();
+      expect(foundSession.id).to.equal(session.id);
+      expect(foundSession.puppyId).to.equal("puppy-123");
     });
 
-    it("should throw NotFoundException when session not found", async () => {
+    it("should return failure when session not found", async () => {
       // Arrange
       const nonExistentId = "non-existent-id";
 
-      // Act & Assert
-      try {
-        await useCases.getTrainingSession(nonExistentId);
-        expect.fail("Should have thrown NotFoundException");
-      } catch (error) {
-        expect(error).to.be.instanceOf(NotFoundException);
-        expect(error.message).to.include(nonExistentId);
-      }
+      // Act
+      const result = await useCases.getTrainingSession(nonExistentId);
+
+      // Assert
+      expect(result.isFailure()).to.be.true;
+      expect(result.getError().code).to.equal("NOT_FOUND");
     });
   });
 
@@ -109,21 +114,30 @@ describe("Training Use Cases - AAA Pattern", () => {
     it("should return all training sessions for a puppy", async () => {
       // Arrange
       const puppyId = "puppy-123";
-      await useCases.createTrainingSession(
+      const result1 = await useCases.createTrainingSession(
         puppyId,
         "obedience",
         30,
         "Session 1"
       );
-      await useCases.createTrainingSession(puppyId, "agility", 45, "Session 2");
+      const result2 = await useCases.createTrainingSession(
+        puppyId,
+        "agility",
+        45,
+        "Session 2"
+      );
+      expect(result1.isSuccess()).to.be.true;
+      expect(result2.isSuccess()).to.be.true;
 
       // Act
       const result = await useCases.getPuppyTrainingSessions(puppyId);
 
       // Assert
-      expect(result).to.have.length(2);
-      expect(result[0].puppyId).to.equal(puppyId);
-      expect(result[1].puppyId).to.equal(puppyId);
+      expect(result.isSuccess()).to.be.true;
+      const sessions = result.getValue();
+      expect(sessions).to.have.length(2);
+      expect(sessions[0].puppyId).to.equal(puppyId);
+      expect(sessions[1].puppyId).to.equal(puppyId);
     });
 
     it("should return empty array when puppy has no sessions", async () => {
@@ -134,98 +148,113 @@ describe("Training Use Cases - AAA Pattern", () => {
       const result = await useCases.getPuppyTrainingSessions(puppyId);
 
       // Assert
-      expect(result).to.be.an("array").that.is.empty;
+      expect(result.isSuccess()).to.be.true;
+      const sessions = result.getValue();
+      expect(sessions).to.be.an("array").that.is.empty;
     });
 
     it("should only return sessions for specified puppy", async () => {
       // Arrange
       const puppy1 = "puppy-1";
       const puppy2 = "puppy-2";
-      await useCases.createTrainingSession(
+      const result1 = await useCases.createTrainingSession(
         puppy1,
         "obedience",
         30,
         "Puppy 1 session"
       );
-      await useCases.createTrainingSession(
+      const result2 = await useCases.createTrainingSession(
         puppy2,
         "agility",
         45,
         "Puppy 2 session"
       );
+      expect(result1.isSuccess()).to.be.true;
+      expect(result2.isSuccess()).to.be.true;
 
       // Act
       const result = await useCases.getPuppyTrainingSessions(puppy1);
 
       // Assert
-      expect(result).to.have.length(1);
-      expect(result[0].puppyId).to.equal(puppy1);
+      expect(result.isSuccess()).to.be.true;
+      const sessions = result.getValue();
+      expect(sessions).to.have.length(1);
+      expect(sessions[0].puppyId).to.equal(puppy1);
     });
   });
 
   describe("updateTrainingNotes", () => {
     it("should update training session notes successfully", async () => {
       // Arrange
-      const session = await useCases.createTrainingSession(
+      const createResult = await useCases.createTrainingSession(
         "puppy-123",
         "obedience",
         30,
         "Original notes"
       );
+      expect(createResult.isSuccess()).to.be.true;
+      const session = createResult.getValue();
       const newNotes = "Updated notes with more detail";
 
       // Act
       const result = await useCases.updateTrainingNotes(session.id, newNotes);
 
       // Assert
-      expect(result.notes).to.equal(newNotes);
-      expect(result.id).to.equal(session.id);
-      expect(result.puppyId).to.equal(session.puppyId);
+      expect(result.isSuccess()).to.be.true;
+      const updatedSession = result.getValue();
+      expect(updatedSession.notes).to.equal(newNotes);
+      expect(updatedSession.id).to.equal(session.id);
+      expect(updatedSession.puppyId).to.equal(session.puppyId);
     });
 
-    it("should throw NotFoundException when updating non-existent session", async () => {
+    it("should return failure when updating non-existent session", async () => {
       // Arrange
       const nonExistentId = "non-existent-id";
       const newNotes = "New notes";
 
-      // Act & Assert
-      try {
-        await useCases.updateTrainingNotes(nonExistentId, newNotes);
-        expect.fail("Should have thrown NotFoundException");
-      } catch (error) {
-        expect(error).to.be.instanceOf(NotFoundException);
-      }
+      // Act
+      const result = await useCases.updateTrainingNotes(
+        nonExistentId,
+        newNotes
+      );
+
+      // Assert
+      expect(result.isFailure()).to.be.true;
+      expect(result.getError().code).to.equal("NOT_FOUND");
     });
   });
 
   describe("deleteTrainingSession", () => {
     it("should delete training session successfully", async () => {
       // Arrange
-      const session = await useCases.createTrainingSession(
+      const createResult = await useCases.createTrainingSession(
         "puppy-123",
         "obedience",
         30,
         "Session to delete"
       );
+      expect(createResult.isSuccess()).to.be.true;
+      const session = createResult.getValue();
 
       // Act
-      await useCases.deleteTrainingSession(session.id);
+      const deleteResult = await useCases.deleteTrainingSession(session.id);
 
       // Assert
-      try {
-        await useCases.getTrainingSession(session.id);
-        expect.fail("Should have thrown NotFoundException");
-      } catch (error) {
-        expect(error).to.be.instanceOf(NotFoundException);
-      }
+      expect(deleteResult.isSuccess()).to.be.true;
+      const getResult = await useCases.getTrainingSession(session.id);
+      expect(getResult.isFailure()).to.be.true;
+      expect(getResult.getError().code).to.equal("NOT_FOUND");
     });
 
     it("should handle deletion of non-existent session gracefully", async () => {
       // Arrange
       const nonExistentId = "non-existent-id";
 
-      // Act & Assert
-      await useCases.deleteTrainingSession(nonExistentId);
+      // Act
+      const result = await useCases.deleteTrainingSession(nonExistentId);
+
+      // Assert
+      expect(result.isSuccess()).to.be.true;
     });
   });
 });

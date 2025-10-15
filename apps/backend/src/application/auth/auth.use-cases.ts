@@ -7,17 +7,12 @@ import {
   UserRoleType,
 } from "../../domain/auth/user.entity";
 import { UserRepository } from "../../domain/auth/user.repository";
+import { DomainResult, DomainError, Result } from "../../common/result/result";
 
 export const USER_REPOSITORY = Symbol("UserRepository");
 
 export interface GetUserCommand {
   userId: string;
-}
-
-export interface GetUserResult {
-  success: boolean;
-  user?: User;
-  error?: string;
 }
 
 export interface CreateUserProfileCommand {
@@ -26,32 +21,14 @@ export interface CreateUserProfileCommand {
   role?: UserRoleType;
 }
 
-export interface CreateUserProfileResult {
-  success: boolean;
-  user?: User;
-  error?: string;
-}
-
 export interface UpdateUserProfileCommand {
   userId: string;
   role?: UserRoleType;
   isActive?: boolean;
 }
 
-export interface UpdateUserProfileResult {
-  success: boolean;
-  user?: User;
-  error?: string;
-}
-
 export interface DeleteUserProfileCommand {
   userId: string;
-}
-
-export interface DeleteUserProfileResult {
-  success: boolean;
-  message?: string;
-  error?: string;
 }
 
 @Injectable()
@@ -60,29 +37,25 @@ export class GetUserUseCase {
     @Inject(USER_REPOSITORY) private readonly userRepository: UserRepository
   ) {}
 
-  async execute(command: GetUserCommand): Promise<GetUserResult> {
-    try {
-      const userId = new UserId(command.userId);
-      const user = await this.userRepository.findById(userId);
-
-      if (!user) {
-        return {
-          success: false,
-          error: "User not found",
-        };
-      }
-
-      return {
-        success: true,
-        user,
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error:
-          error instanceof Error ? error.message : "Unknown error occurred",
-      };
+  async execute(command: GetUserCommand): Promise<DomainResult<User>> {
+    const userIdResult = UserId.create(command.userId);
+    if (userIdResult.isFailure()) {
+      return Result.failure(userIdResult.getError());
     }
+
+    const userResult = await this.userRepository.findById(
+      userIdResult.getValue()
+    );
+    if (userResult.isFailure()) {
+      return userResult;
+    }
+
+    const user = userResult.getValue();
+    if (!user) {
+      return Result.failure(DomainError.notFound("User", command.userId));
+    }
+
+    return Result.success(user);
   }
 }
 
@@ -94,34 +67,46 @@ export class CreateUserProfileUseCase {
 
   async execute(
     command: CreateUserProfileCommand
-  ): Promise<CreateUserProfileResult> {
-    try {
-      const userId = new UserId(command.userId);
-      const email = new Email(command.email);
-      const role = new UserRole(command.role || UserRoleType.USER);
-
-      const existingUser = await this.userRepository.findById(userId);
-      if (existingUser) {
-        return {
-          success: false,
-          error: "User profile already exists",
-        };
-      }
-
-      const user = User.create(userId, email, role);
-      const savedUser = await this.userRepository.save(user);
-
-      return {
-        success: true,
-        user: savedUser,
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error:
-          error instanceof Error ? error.message : "Unknown error occurred",
-      };
+  ): Promise<DomainResult<User>> {
+    const userIdResult = UserId.create(command.userId);
+    if (userIdResult.isFailure()) {
+      return Result.failure(userIdResult.getError());
     }
+
+    const emailResult = Email.create(command.email);
+    if (emailResult.isFailure()) {
+      return Result.failure(emailResult.getError());
+    }
+
+    const roleResult = UserRole.create(command.role || UserRoleType.USER);
+    if (roleResult.isFailure()) {
+      return Result.failure(roleResult.getError());
+    }
+
+    const existingUserResult = await this.userRepository.findById(
+      userIdResult.getValue()
+    );
+    if (existingUserResult.isFailure()) {
+      return existingUserResult;
+    }
+
+    const existingUser = existingUserResult.getValue();
+    if (existingUser) {
+      return Result.failure(
+        DomainError.conflict("User profile already exists")
+      );
+    }
+
+    const userResult = User.create(
+      userIdResult.getValue(),
+      emailResult.getValue(),
+      roleResult.getValue()
+    );
+    if (userResult.isFailure()) {
+      return userResult;
+    }
+
+    return await this.userRepository.save(userResult.getValue());
   }
 }
 
@@ -133,43 +118,41 @@ export class UpdateUserProfileUseCase {
 
   async execute(
     command: UpdateUserProfileCommand
-  ): Promise<UpdateUserProfileResult> {
-    try {
-      const userId = new UserId(command.userId);
-      const user = await this.userRepository.findById(userId);
-
-      if (!user) {
-        return {
-          success: false,
-          error: "User not found",
-        };
-      }
-
-      let updatedUser = user;
-
-      if (command.role !== undefined) {
-        updatedUser = updatedUser.changeRole(new UserRole(command.role));
-      }
-
-      if (command.isActive !== undefined) {
-        updatedUser = command.isActive
-          ? updatedUser.activate()
-          : updatedUser.deactivate();
-      }
-
-      const savedUser = await this.userRepository.update(updatedUser);
-
-      return {
-        success: true,
-        user: savedUser,
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error:
-          error instanceof Error ? error.message : "Unknown error occurred",
-      };
+  ): Promise<DomainResult<User>> {
+    const userIdResult = UserId.create(command.userId);
+    if (userIdResult.isFailure()) {
+      return Result.failure(userIdResult.getError());
     }
+
+    const userResult = await this.userRepository.findById(
+      userIdResult.getValue()
+    );
+    if (userResult.isFailure()) {
+      return userResult;
+    }
+
+    const user = userResult.getValue();
+    if (!user) {
+      return Result.failure(DomainError.notFound("User", command.userId));
+    }
+
+    let updatedUser = user;
+
+    if (command.role !== undefined) {
+      const roleResult = UserRole.create(command.role);
+      if (roleResult.isFailure()) {
+        return Result.failure(roleResult.getError());
+      }
+      updatedUser = updatedUser.changeRole(roleResult.getValue());
+    }
+
+    if (command.isActive !== undefined) {
+      updatedUser = command.isActive
+        ? updatedUser.activate()
+        : updatedUser.deactivate();
+    }
+
+    return await this.userRepository.update(updatedUser);
   }
 }
 
@@ -181,30 +164,24 @@ export class DeleteUserProfileUseCase {
 
   async execute(
     command: DeleteUserProfileCommand
-  ): Promise<DeleteUserProfileResult> {
-    try {
-      const userId = new UserId(command.userId);
-      const user = await this.userRepository.findById(userId);
-
-      if (!user) {
-        return {
-          success: false,
-          error: "User not found",
-        };
-      }
-
-      await this.userRepository.delete(userId);
-
-      return {
-        success: true,
-        message: "User profile deleted successfully",
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error:
-          error instanceof Error ? error.message : "Unknown error occurred",
-      };
+  ): Promise<DomainResult<void>> {
+    const userIdResult = UserId.create(command.userId);
+    if (userIdResult.isFailure()) {
+      return Result.failure(userIdResult.getError());
     }
+
+    const userResult = await this.userRepository.findById(
+      userIdResult.getValue()
+    );
+    if (userResult.isFailure()) {
+      return Result.failure(userResult.getError());
+    }
+
+    const user = userResult.getValue();
+    if (!user) {
+      return Result.failure(DomainError.notFound("User", command.userId));
+    }
+
+    return await this.userRepository.delete(userIdResult.getValue());
   }
 }

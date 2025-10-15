@@ -42,11 +42,12 @@ describe("Analytics Use Cases - AAA Pattern", () => {
       );
 
       // Assert
-      expect(result).to.not.be.null;
-      expect(result.userId).to.equal(userId);
-      expect(result.eventType).to.equal(eventType);
-      expect(result.eventName).to.equal(eventName);
-      expect(result.properties).to.deep.equal(properties);
+      expect(result.isSuccess()).to.be.true;
+      const event = result.getValue();
+      expect(event.userId).to.equal(userId);
+      expect(event.eventType).to.equal(eventType);
+      expect(event.eventName).to.equal(eventName);
+      expect(event.properties).to.deep.equal(properties);
     });
 
     it("should save analytics event to repository", async () => {
@@ -59,7 +60,9 @@ describe("Analytics Use Cases - AAA Pattern", () => {
       await useCases.trackEvent(userId, eventType, eventName);
 
       // Assert
-      const events = await repository.findByUserId(userId);
+      const result = await repository.findByUserId(userId);
+      expect(result.isSuccess()).to.be.true;
+      const events = result.getValue();
       expect(events).to.have.length(1);
       expect(events[0].userId).to.equal(userId);
     });
@@ -74,41 +77,44 @@ describe("Analytics Use Cases - AAA Pattern", () => {
       const result = await useCases.trackEvent(userId, eventType, eventName);
 
       // Assert
-      expect(result.properties).to.deep.equal({});
+      expect(result.isSuccess()).to.be.true;
+      const event = result.getValue();
+      expect(event.properties).to.deep.equal({});
     });
   });
 
   describe("getEvent", () => {
     it("should return analytics event when found", async () => {
       // Arrange
-      const event = await useCases.trackEvent(
+      const createResult = await useCases.trackEvent(
         "user-123",
         "user_action",
         "puppy_created",
         { puppyId: "puppy-456" }
       );
+      expect(createResult.isSuccess()).to.be.true;
+      const event = createResult.getValue();
 
       // Act
       const result = await useCases.getEvent(event.id);
 
       // Assert
-      expect(result).to.not.be.null;
-      expect(result.id).to.equal(event.id);
-      expect(result.userId).to.equal("user-123");
+      expect(result.isSuccess()).to.be.true;
+      const foundEvent = result.getValue();
+      expect(foundEvent.id).to.equal(event.id);
+      expect(foundEvent.userId).to.equal("user-123");
     });
 
-    it("should throw NotFoundException when event not found", async () => {
+    it("should return failure when event not found", async () => {
       // Arrange
       const nonExistentId = "non-existent-id";
 
-      // Act & Assert
-      try {
-        await useCases.getEvent(nonExistentId);
-        expect.fail("Should have thrown NotFoundException");
-      } catch (error) {
-        expect(error).to.be.instanceOf(NotFoundException);
-        expect(error.message).to.include(nonExistentId);
-      }
+      // Act
+      const result = await useCases.getEvent(nonExistentId);
+
+      // Assert
+      expect(result.isFailure()).to.be.true;
+      expect(result.getError().code).to.equal("NOT_FOUND");
     });
   });
 
@@ -116,16 +122,24 @@ describe("Analytics Use Cases - AAA Pattern", () => {
     it("should return all analytics events for a user", async () => {
       // Arrange
       const userId = "user-123";
-      await useCases.trackEvent(userId, "user_action", "Event 1");
-      await useCases.trackEvent(userId, "page_view", "Event 2");
+      const result1 = await useCases.trackEvent(
+        userId,
+        "user_action",
+        "Event 1"
+      );
+      const result2 = await useCases.trackEvent(userId, "page_view", "Event 2");
+      expect(result1.isSuccess()).to.be.true;
+      expect(result2.isSuccess()).to.be.true;
 
       // Act
       const result = await useCases.getUserEvents(userId);
 
       // Assert
-      expect(result).to.have.length(2);
-      expect(result[0].userId).to.equal(userId);
-      expect(result[1].userId).to.equal(userId);
+      expect(result.isSuccess()).to.be.true;
+      const events = result.getValue();
+      expect(events).to.have.length(2);
+      expect(events[0].userId).to.equal(userId);
+      expect(events[1].userId).to.equal(userId);
     });
 
     it("should return empty array when user has no events", async () => {
@@ -136,22 +150,36 @@ describe("Analytics Use Cases - AAA Pattern", () => {
       const result = await useCases.getUserEvents(userId);
 
       // Assert
-      expect(result).to.be.an("array").that.is.empty;
+      expect(result.isSuccess()).to.be.true;
+      const events = result.getValue();
+      expect(events).to.be.an("array").that.is.empty;
     });
 
     it("should only return events for specified user", async () => {
       // Arrange
       const user1 = "user-1";
       const user2 = "user-2";
-      await useCases.trackEvent(user1, "user_action", "User 1 event");
-      await useCases.trackEvent(user2, "user_action", "User 2 event");
+      const result1 = await useCases.trackEvent(
+        user1,
+        "user_action",
+        "User 1 event"
+      );
+      const result2 = await useCases.trackEvent(
+        user2,
+        "user_action",
+        "User 2 event"
+      );
+      expect(result1.isSuccess()).to.be.true;
+      expect(result2.isSuccess()).to.be.true;
 
       // Act
       const result = await useCases.getUserEvents(user1);
 
       // Assert
-      expect(result).to.have.length(1);
-      expect(result[0].userId).to.equal(user1);
+      expect(result.isSuccess()).to.be.true;
+      const events = result.getValue();
+      expect(events).to.have.length(1);
+      expect(events[0].userId).to.equal(user1);
     });
   });
 
@@ -159,17 +187,26 @@ describe("Analytics Use Cases - AAA Pattern", () => {
     it("should return all events for an event type", async () => {
       // Arrange
       const eventType = "user_action";
-      await useCases.trackEvent("user-1", eventType, "Event 1");
-      await useCases.trackEvent("user-2", eventType, "Event 2");
-      await useCases.trackEvent("user-3", "page_view", "Different type");
+      const result1 = await useCases.trackEvent("user-1", eventType, "Event 1");
+      const result2 = await useCases.trackEvent("user-2", eventType, "Event 2");
+      const result3 = await useCases.trackEvent(
+        "user-3",
+        "page_view",
+        "Different type"
+      );
+      expect(result1.isSuccess()).to.be.true;
+      expect(result2.isSuccess()).to.be.true;
+      expect(result3.isSuccess()).to.be.true;
 
       // Act
       const result = await useCases.getEventsByType(eventType);
 
       // Assert
-      expect(result).to.have.length(2);
-      expect(result[0].eventType).to.equal(eventType);
-      expect(result[1].eventType).to.equal(eventType);
+      expect(result.isSuccess()).to.be.true;
+      const events = result.getValue();
+      expect(events).to.have.length(2);
+      expect(events[0].eventType).to.equal(eventType);
+      expect(events[1].eventType).to.equal(eventType);
     });
 
     it("should return empty array when no events of type exist", async () => {
@@ -180,7 +217,9 @@ describe("Analytics Use Cases - AAA Pattern", () => {
       const result = await useCases.getEventsByType(eventType);
 
       // Assert
-      expect(result).to.be.an("array").that.is.empty;
+      expect(result.isSuccess()).to.be.true;
+      const events = result.getValue();
+      expect(events).to.be.an("array").that.is.empty;
     });
   });
 
@@ -190,14 +229,26 @@ describe("Analytics Use Cases - AAA Pattern", () => {
       const now = new Date();
       const startDate = new Date(now.getTime() - 1000);
       const endDate = new Date(now.getTime() + 1000);
-      await useCases.trackEvent("user-1", "user_action", "Event 1");
-      await useCases.trackEvent("user-2", "user_action", "Event 2");
+      const result1 = await useCases.trackEvent(
+        "user-1",
+        "user_action",
+        "Event 1"
+      );
+      const result2 = await useCases.trackEvent(
+        "user-2",
+        "user_action",
+        "Event 2"
+      );
+      expect(result1.isSuccess()).to.be.true;
+      expect(result2.isSuccess()).to.be.true;
 
       // Act
       const result = await useCases.getEventsByDateRange(startDate, endDate);
 
       // Assert
-      expect(result.length).to.be.greaterThan(0);
+      expect(result.isSuccess()).to.be.true;
+      const events = result.getValue();
+      expect(events.length).to.be.greaterThan(0);
     });
 
     it("should return empty array when no events in date range", async () => {
@@ -209,75 +260,86 @@ describe("Analytics Use Cases - AAA Pattern", () => {
       const result = await useCases.getEventsByDateRange(startDate, endDate);
 
       // Assert
-      expect(result).to.be.an("array").that.is.empty;
+      expect(result.isSuccess()).to.be.true;
+      const events = result.getValue();
+      expect(events).to.be.an("array").that.is.empty;
     });
   });
 
   describe("enrichEvent", () => {
     it("should enrich event properties successfully", async () => {
       // Arrange
-      const event = await useCases.trackEvent(
+      const createResult = await useCases.trackEvent(
         "user-123",
         "user_action",
         "puppy_created",
         { puppyId: "puppy-456" }
       );
+      expect(createResult.isSuccess()).to.be.true;
+      const event = createResult.getValue();
       const additionalProperties = { breed: "Golden Retriever", age: 3 };
 
       // Act
       const result = await useCases.enrichEvent(event.id, additionalProperties);
 
       // Assert
-      expect(result.properties).to.deep.equal({
+      expect(result.isSuccess()).to.be.true;
+      const enrichedEvent = result.getValue();
+      expect(enrichedEvent.properties).to.deep.equal({
         puppyId: "puppy-456",
         breed: "Golden Retriever",
         age: 3,
       });
-      expect(result.id).to.equal(event.id);
+      expect(enrichedEvent.id).to.equal(event.id);
     });
 
-    it("should throw NotFoundException when enriching non-existent event", async () => {
+    it("should return failure when enriching non-existent event", async () => {
       // Arrange
       const nonExistentId = "non-existent-id";
       const additionalProperties = { key: "value" };
 
-      // Act & Assert
-      try {
-        await useCases.enrichEvent(nonExistentId, additionalProperties);
-        expect.fail("Should have thrown NotFoundException");
-      } catch (error) {
-        expect(error).to.be.instanceOf(NotFoundException);
-      }
+      // Act
+      const result = await useCases.enrichEvent(
+        nonExistentId,
+        additionalProperties
+      );
+
+      // Assert
+      expect(result.isFailure()).to.be.true;
+      expect(result.getError().code).to.equal("NOT_FOUND");
     });
   });
 
   describe("deleteEvent", () => {
     it("should delete analytics event successfully", async () => {
       // Arrange
-      const event = await useCases.trackEvent(
+      const createResult = await useCases.trackEvent(
         "user-123",
         "user_action",
         "Event to delete"
       );
+      expect(createResult.isSuccess()).to.be.true;
+      const event = createResult.getValue();
 
       // Act
-      await useCases.deleteEvent(event.id);
+      const deleteResult = await useCases.deleteEvent(event.id);
 
       // Assert
-      try {
-        await useCases.getEvent(event.id);
-        expect.fail("Should have thrown NotFoundException");
-      } catch (error) {
-        expect(error).to.be.instanceOf(NotFoundException);
-      }
+      expect(deleteResult.isSuccess()).to.be.true;
+      const getResult = await useCases.getEvent(event.id);
+      expect(getResult.isFailure()).to.be.true;
+      expect(getResult.getError().code).to.equal("NOT_FOUND");
     });
 
     it("should handle deletion of non-existent event gracefully", async () => {
       // Arrange
       const nonExistentId = "non-existent-id";
 
-      // Act & Assert
-      await useCases.deleteEvent(nonExistentId);
+      // Act
+      const result = await useCases.deleteEvent(nonExistentId);
+
+      // Assert
+      expect(result.isSuccess()).to.be.true;
     });
   });
 });

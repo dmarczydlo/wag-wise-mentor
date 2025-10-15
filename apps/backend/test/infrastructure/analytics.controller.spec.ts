@@ -42,10 +42,10 @@ describe("AnalyticsController Integration Tests - AAA Pattern", () => {
 
       // Assert
       expect(result).to.not.be.null;
-      expect(result.userId).to.equal(body.userId);
-      expect(result.eventType).to.equal(body.eventType);
-      expect(result.eventName).to.equal(body.eventName);
-      expect(result.properties).to.deep.equal(body.properties);
+      expect(result.getValue().userId).to.equal(body.userId);
+      expect(result.getValue().eventType).to.equal(body.eventType);
+      expect(result.getValue().eventName).to.equal(body.eventName);
+      expect(result.getValue().properties).to.deep.equal(body.properties);
     });
 
     it("should return valid event with ID and timestamp", async () => {
@@ -60,8 +60,8 @@ describe("AnalyticsController Integration Tests - AAA Pattern", () => {
       const result = await controller.trackEvent(body);
 
       // Assert
-      expect(result.id).to.not.be.undefined;
-      expect(result.timestamp).to.be.instanceOf(Date);
+      expect(result.getValue().id).to.not.be.undefined;
+      expect(result.getValue().timestamp).to.be.instanceOf(Date);
     });
   });
 
@@ -76,12 +76,12 @@ describe("AnalyticsController Integration Tests - AAA Pattern", () => {
       );
 
       // Act
-      const result = await controller.getEvent(event.id);
+      const result = await controller.getEvent(event.getValue().id);
 
       // Assert
       expect(result).to.not.be.null;
-      expect(result.id).to.equal(event.id);
-      expect(result.userId).to.equal("user-123");
+      expect(result.getValue().id).to.equal(event.getValue().id);
+      expect(result.getValue().userId).to.equal("user-123");
     });
 
     it("should throw NotFoundException when event not found", async () => {
@@ -89,12 +89,9 @@ describe("AnalyticsController Integration Tests - AAA Pattern", () => {
       const nonExistentId = "non-existent-id";
 
       // Act & Assert
-      try {
-        await controller.getEvent(nonExistentId);
-        expect.fail("Should have thrown NotFoundException");
-      } catch (error) {
-        expect(error).to.be.instanceOf(NotFoundException);
-      }
+      const result = await controller.getEvent(nonExistentId);
+      expect(result.isFailure()).to.be.true;
+      expect(result.getError().code).to.equal("NOT_FOUND");
     });
   });
 
@@ -109,9 +106,11 @@ describe("AnalyticsController Integration Tests - AAA Pattern", () => {
       const result = await controller.getUserEvents(userId);
 
       // Assert
-      expect(result).to.have.length(2);
-      expect(result[0].userId).to.equal(userId);
-      expect(result[1].userId).to.equal(userId);
+      expect(result.isSuccess()).to.be.true;
+      const events = result.getValue();
+      expect(events).to.have.length(2);
+      expect(events[0].userId).to.equal(userId);
+      expect(events[1].userId).to.equal(userId);
     });
 
     it("should return empty array when user has no events", async () => {
@@ -122,7 +121,9 @@ describe("AnalyticsController Integration Tests - AAA Pattern", () => {
       const result = await controller.getUserEvents(userId);
 
       // Assert
-      expect(result).to.be.an("array").that.is.empty;
+      expect(result.isSuccess()).to.be.true;
+      const events = result.getValue();
+      expect(events).to.be.an("array").that.is.empty;
     });
   });
 
@@ -137,9 +138,11 @@ describe("AnalyticsController Integration Tests - AAA Pattern", () => {
       const result = await controller.getEventsByType(eventType);
 
       // Assert
-      expect(result).to.have.length(2);
-      expect(result[0].eventType).to.equal(eventType);
-      expect(result[1].eventType).to.equal(eventType);
+      expect(result.isSuccess()).to.be.true;
+      const events = result.getValue();
+      expect(events).to.have.length(2);
+      expect(events[0].eventType).to.equal(eventType);
+      expect(events[1].eventType).to.equal(eventType);
     });
 
     it("should return empty array when event type not provided", async () => {
@@ -147,7 +150,9 @@ describe("AnalyticsController Integration Tests - AAA Pattern", () => {
       const result = await controller.getEventsByType("");
 
       // Assert
-      expect(result).to.be.an("array").that.is.empty;
+      expect(result.isSuccess()).to.be.true;
+      const events = result.getValue();
+      expect(events).to.be.an("array").that.is.empty;
     });
   });
 
@@ -164,7 +169,7 @@ describe("AnalyticsController Integration Tests - AAA Pattern", () => {
       const result = await controller.getEventsByDateRange(startDate, endDate);
 
       // Assert
-      expect(result.length).to.be.greaterThan(0);
+      expect(result.getValue().length).to.be.greaterThan(0);
     });
 
     it("should return empty array when no events in date range", async () => {
@@ -176,7 +181,9 @@ describe("AnalyticsController Integration Tests - AAA Pattern", () => {
       const result = await controller.getEventsByDateRange(startDate, endDate);
 
       // Assert
-      expect(result).to.be.an("array").that.is.empty;
+      expect(result.isSuccess()).to.be.true;
+      const events = result.getValue();
+      expect(events).to.be.an("array").that.is.empty;
     });
   });
 
@@ -192,15 +199,15 @@ describe("AnalyticsController Integration Tests - AAA Pattern", () => {
       const body = { properties: { breed: "Golden Retriever", age: 3 } };
 
       // Act
-      const result = await controller.enrichEvent(event.id, body);
+      const result = await controller.enrichEvent(event.getValue().id, body);
 
       // Assert
-      expect(result.properties).to.deep.equal({
+      expect(result.getValue().properties).to.deep.equal({
         puppyId: "puppy-456",
         breed: "Golden Retriever",
         age: 3,
       });
-      expect(result.id).to.equal(event.id);
+      expect(result.getValue().id).to.equal(event.getValue().id);
     });
 
     it("should throw NotFoundException when enriching non-existent event", async () => {
@@ -209,12 +216,9 @@ describe("AnalyticsController Integration Tests - AAA Pattern", () => {
       const body = { properties: { key: "value" } };
 
       // Act & Assert
-      try {
-        await controller.enrichEvent(nonExistentId, body);
-        expect.fail("Should have thrown NotFoundException");
-      } catch (error) {
-        expect(error).to.be.instanceOf(NotFoundException);
-      }
+      const result = await controller.enrichEvent(nonExistentId, body);
+      expect(result.isFailure()).to.be.true;
+      expect(result.getError().code).to.equal("NOT_FOUND");
     });
   });
 
@@ -228,7 +232,7 @@ describe("AnalyticsController Integration Tests - AAA Pattern", () => {
       );
 
       // Act
-      const result = await controller.deleteEvent(event.id);
+      const result = await controller.deleteEvent(event.getValue().id);
 
       // Assert
       expect(result.message).to.equal("Analytics event deleted successfully");

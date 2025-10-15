@@ -26,7 +26,7 @@ describe("GetPuppiesByOwnerUseCase - AAA Pattern", () => {
     it("should return all puppies for owner", async () => {
       // Arrange
       const ownerId = "owner-1";
-      const puppy1 = Puppy.create(
+      const puppy1Result = Puppy.create(
         new PuppyId("puppy-1"),
         new PuppyName("Buddy"),
         new Breed("Golden Retriever"),
@@ -34,7 +34,7 @@ describe("GetPuppiesByOwnerUseCase - AAA Pattern", () => {
         new Weight(10, WeightUnit.KG),
         ownerId
       );
-      const puppy2 = Puppy.create(
+      const puppy2Result = Puppy.create(
         new PuppyId("puppy-2"),
         new PuppyName("Max"),
         new Breed("Labrador"),
@@ -42,6 +42,10 @@ describe("GetPuppiesByOwnerUseCase - AAA Pattern", () => {
         new Weight(12, WeightUnit.KG),
         ownerId
       );
+      expect(puppy1Result.isSuccess()).to.be.true;
+      expect(puppy2Result.isSuccess()).to.be.true;
+      const puppy1 = puppy1Result.getValue();
+      const puppy2 = puppy2Result.getValue();
       await repository.save(puppy1);
       await repository.save(puppy2);
 
@@ -49,9 +53,11 @@ describe("GetPuppiesByOwnerUseCase - AAA Pattern", () => {
       const result = await useCase.execute(ownerId);
 
       // Assert
-      expect(result).to.have.length(2);
-      expect(result).to.deep.include(puppy1);
-      expect(result).to.deep.include(puppy2);
+      expect(result.isSuccess()).to.be.true;
+      const puppies = result.getValue();
+      expect(puppies).to.have.length(2);
+      expect(puppies).to.deep.include(puppy1);
+      expect(puppies).to.deep.include(puppy2);
     });
 
     it("should return empty array when owner has no puppies", async () => {
@@ -62,14 +68,16 @@ describe("GetPuppiesByOwnerUseCase - AAA Pattern", () => {
       const result = await useCase.execute(ownerId);
 
       // Assert
-      expect(result).to.be.an("array").that.is.empty;
+      expect(result.isSuccess()).to.be.true;
+      const puppies = result.getValue();
+      expect(puppies).to.be.an("array").that.is.empty;
     });
 
     it("should only return puppies for specified owner", async () => {
       // Arrange
       const owner1 = "owner-1";
       const owner2 = "owner-2";
-      const puppy1 = Puppy.create(
+      const puppy1Result = Puppy.create(
         new PuppyId("puppy-1"),
         new PuppyName("Buddy"),
         new Breed("Golden Retriever"),
@@ -77,7 +85,7 @@ describe("GetPuppiesByOwnerUseCase - AAA Pattern", () => {
         new Weight(10, WeightUnit.KG),
         owner1
       );
-      const puppy2 = Puppy.create(
+      const puppy2Result = Puppy.create(
         new PuppyId("puppy-2"),
         new PuppyName("Max"),
         new Breed("Labrador"),
@@ -85,6 +93,10 @@ describe("GetPuppiesByOwnerUseCase - AAA Pattern", () => {
         new Weight(12, WeightUnit.KG),
         owner2
       );
+      expect(puppy1Result.isSuccess()).to.be.true;
+      expect(puppy2Result.isSuccess()).to.be.true;
+      const puppy1 = puppy1Result.getValue();
+      const puppy2 = puppy2Result.getValue();
       await repository.save(puppy1);
       await repository.save(puppy2);
 
@@ -92,8 +104,10 @@ describe("GetPuppiesByOwnerUseCase - AAA Pattern", () => {
       const result = await useCase.execute(owner1);
 
       // Assert
-      expect(result).to.have.length(1);
-      expect(result[0]).to.deep.equal(puppy1);
+      expect(result.isSuccess()).to.be.true;
+      const puppies = result.getValue();
+      expect(puppies).to.have.length(1);
+      expect(puppies[0]).to.deep.equal(puppy1);
     });
 
     it("should handle repository errors gracefully", async () => {
@@ -121,7 +135,9 @@ describe("GetPuppiesByOwnerUseCase - AAA Pattern", () => {
       const result = await useCase.execute(emptyOwnerId);
 
       // Assert
-      expect(result).to.be.an("array").that.is.empty;
+      expect(result.isSuccess()).to.be.true;
+      const puppies = result.getValue();
+      expect(puppies).to.be.an("array").that.is.empty;
     });
   });
 });

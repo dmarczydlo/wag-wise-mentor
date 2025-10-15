@@ -1,6 +1,7 @@
-import { Injectable, Inject, NotFoundException } from "@nestjs/common";
+import { Injectable, Inject } from "@nestjs/common";
 import { AIRepository } from "../../domain/ai/ai.repository";
 import { AIRecommendation } from "../../domain/ai/ai-recommendation.entity";
+import { DomainResult, DomainError, Result } from "../../common/result/result";
 
 @Injectable()
 export class AIUseCases {
@@ -15,7 +16,7 @@ export class AIUseCases {
     recommendation: string,
     confidence: number,
     metadata: Record<string, any> = {}
-  ): Promise<AIRecommendation> {
+  ): Promise<DomainResult<AIRecommendation>> {
     const aiRecommendation = AIRecommendation.create(
       crypto.randomUUID(),
       puppyId,
@@ -27,34 +28,45 @@ export class AIUseCases {
     return await this.aiRepository.save(aiRecommendation);
   }
 
-  async getRecommendation(id: string): Promise<AIRecommendation> {
-    const recommendation = await this.aiRepository.findById(id);
-    if (!recommendation) {
-      throw new NotFoundException(`AI recommendation with id ${id} not found`);
+  async getRecommendation(id: string): Promise<DomainResult<AIRecommendation>> {
+    const recommendationResult = await this.aiRepository.findById(id);
+    if (recommendationResult.isFailure()) {
+      return recommendationResult;
     }
-    return recommendation;
+    
+    const recommendation = recommendationResult.getValue();
+    if (!recommendation) {
+      return Result.failure(DomainError.notFound('AI recommendation', id));
+    }
+    
+    return Result.success(recommendation);
   }
 
-  async getPuppyRecommendations(puppyId: string): Promise<AIRecommendation[]> {
+  async getPuppyRecommendations(puppyId: string): Promise<DomainResult<AIRecommendation[]>> {
     return await this.aiRepository.findByPuppyId(puppyId);
   }
 
   async getRecommendationsByCategory(
     category: string
-  ): Promise<AIRecommendation[]> {
+  ): Promise<DomainResult<AIRecommendation[]>> {
     return await this.aiRepository.findByCategory(category);
   }
 
   async updateConfidence(
     id: string,
     confidence: number
-  ): Promise<AIRecommendation> {
-    const recommendation = await this.getRecommendation(id);
+  ): Promise<DomainResult<AIRecommendation>> {
+    const recommendationResult = await this.getRecommendation(id);
+    if (recommendationResult.isFailure()) {
+      return recommendationResult;
+    }
+    
+    const recommendation = recommendationResult.getValue();
     const updated = recommendation.updateConfidence(confidence);
     return await this.aiRepository.save(updated);
   }
 
-  async deleteRecommendation(id: string): Promise<void> {
-    await this.aiRepository.delete(id);
+  async deleteRecommendation(id: string): Promise<DomainResult<void>> {
+    return await this.aiRepository.delete(id);
   }
 }

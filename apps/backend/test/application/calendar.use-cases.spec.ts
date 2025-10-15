@@ -70,15 +70,12 @@ describe("Calendar Use Cases - AAA Pattern", () => {
       const result = await createEventUseCase.execute(command);
 
       // Assert
-      expect(result.success).to.be.true;
-      expect(result.event).to.not.be.undefined;
-      expect(result.event?.puppyId).to.equal("puppy-1");
-      expect(result.event?.eventType.value).to.equal(EventTypeEnum.FEEDING);
-      expect(result.event?.title.value).to.equal("Morning Feeding");
-      expect(result.event?.description.value).to.equal(
-        "Regular morning feeding"
-      );
-      expect(result.error).to.be.undefined;
+      expect(result.isSuccess()).to.be.true;
+      const event = result.getValue();
+      expect(event.puppyId).to.equal("puppy-1");
+      expect(event.eventType.value).to.equal(EventTypeEnum.FEEDING);
+      expect(event.title.value).to.equal("Morning Feeding");
+      expect(event.description.value).to.equal("Regular morning feeding");
     });
 
     it("should return error when puppy ID is empty", async () => {
@@ -95,9 +92,8 @@ describe("Calendar Use Cases - AAA Pattern", () => {
       const result = await createEventUseCase.execute(command);
 
       // Assert
-      expect(result.success).to.be.false;
-      expect(result.error).to.equal("PuppyId cannot be empty");
-      expect(result.event).to.be.undefined;
+      expect(result.isFailure()).to.be.true;
+      expect(result.getError().message).to.equal("PuppyId cannot be empty");
     });
 
     it("should return error when event type is invalid", async () => {
@@ -120,9 +116,8 @@ describe("Calendar Use Cases - AAA Pattern", () => {
       const result = await createEventUseCase.execute(command);
 
       // Assert
-      expect(result.success).to.be.false;
-      expect(result.error).to.equal("EventTitle cannot be empty");
-      expect(result.event).to.be.undefined;
+      expect(result.isFailure()).to.be.true;
+      expect(result.getError().message).to.equal("EventTitle cannot be empty");
     });
 
     it("should save event to repository", async () => {
@@ -139,7 +134,8 @@ describe("Calendar Use Cases - AAA Pattern", () => {
       const result = await createEventUseCase.execute(command);
 
       // Assert
-      expect(result.success).to.be.true;
+      expect(result.isSuccess()).to.be.true;
+      const event = result.getValue();
       expect(repository.getCount()).to.equal(1);
 
       const savedEvents = repository.getAllEvents();
@@ -161,7 +157,8 @@ describe("Calendar Use Cases - AAA Pattern", () => {
         eventDateTime: new Date("2024-01-15T08:00:00Z"),
       };
       const createResult = await createEventUseCase.execute(createCommand);
-      existingEvent = createResult.event!;
+      expect(createResult.isSuccess()).to.be.true;
+      existingEvent = createResult.getValue();
     });
 
     it("should update event successfully", async () => {
@@ -176,11 +173,10 @@ describe("Calendar Use Cases - AAA Pattern", () => {
       const result = await updateEventUseCase.execute(command);
 
       // Assert
-      expect(result.success).to.be.true;
-      expect(result.event).to.not.be.undefined;
-      expect(result.event?.title.value).to.equal("Updated Morning Feeding");
-      expect(result.event?.description.value).to.equal("Updated description");
-      expect(result.error).to.be.undefined;
+      expect(result.isSuccess()).to.be.true;
+      const event = result.getValue();
+      expect(event.title.value).to.equal("Updated Morning Feeding");
+      expect(event.description.value).to.equal("Updated description");
     });
 
     it("should return error when event not found", async () => {
@@ -195,9 +191,10 @@ describe("Calendar Use Cases - AAA Pattern", () => {
       const result = await updateEventUseCase.execute(command);
 
       // Assert
-      expect(result.success).to.be.false;
-      expect(result.error).to.equal("Event not found");
-      expect(result.event).to.be.undefined;
+      expect(result.isFailure()).to.be.true;
+      expect(result.getError().message).to.equal(
+        "Event with id non-existent-event not found"
+      );
     });
 
     it("should return error when new title is empty", async () => {
@@ -212,9 +209,8 @@ describe("Calendar Use Cases - AAA Pattern", () => {
       const result = await updateEventUseCase.execute(command);
 
       // Assert
-      expect(result.success).to.be.false;
-      expect(result.error).to.equal("EventTitle cannot be empty");
-      expect(result.event).to.be.undefined;
+      expect(result.isFailure()).to.be.true;
+      expect(result.getError().message).to.equal("EventTitle cannot be empty");
     });
   });
 
@@ -246,7 +242,8 @@ describe("Calendar Use Cases - AAA Pattern", () => {
       ];
 
       for (const eventData of events) {
-        await createEventUseCase.execute(eventData);
+        const result = await createEventUseCase.execute(eventData);
+        expect(result.isSuccess()).to.be.true;
       }
     });
 
@@ -262,11 +259,10 @@ describe("Calendar Use Cases - AAA Pattern", () => {
       const result = await generateHealthTimelineUseCase.execute(command);
 
       // Assert
-      expect(result.success).to.be.true;
-      expect(result.events).to.not.be.undefined;
-      expect(result.events).to.be.an("array");
-      expect(result.events.length).to.be.greaterThan(0);
-      expect(result.error).to.be.undefined;
+      expect(result.isSuccess()).to.be.true;
+      const events = result.getValue();
+      expect(events).to.be.an("array");
+      expect(events.length).to.be.greaterThan(0);
     });
 
     it("should return error when puppy ID is empty", async () => {
@@ -281,9 +277,8 @@ describe("Calendar Use Cases - AAA Pattern", () => {
       const result = await generateHealthTimelineUseCase.execute(command);
 
       // Assert
-      expect(result.success).to.be.false;
-      expect(result.error).to.equal("PuppyId cannot be empty");
-      expect(result.events).to.be.undefined;
+      expect(result.isFailure()).to.be.true;
+      expect(result.getError().message).to.equal("PuppyId cannot be empty");
     });
 
     it("should return empty timeline when no events found", async () => {
@@ -298,8 +293,9 @@ describe("Calendar Use Cases - AAA Pattern", () => {
       const result = await generateHealthTimelineUseCase.execute(command);
 
       // Assert
-      expect(result.success).to.be.true;
-      expect(result.events).to.be.an("array").that.is.empty;
+      expect(result.isSuccess()).to.be.true;
+      const events = result.getValue();
+      expect(events).to.be.an("array").that.is.empty;
     });
   });
 });

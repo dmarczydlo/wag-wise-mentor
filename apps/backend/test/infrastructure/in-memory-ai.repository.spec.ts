@@ -24,10 +24,11 @@ describe("InMemoryAIRepository - AAA Pattern", () => {
       );
 
       // Act
-      const savedRecommendation = await repository.save(recommendation);
+      const result = await repository.save(recommendation);
 
       // Assert
-      expect(savedRecommendation).to.deep.equal(recommendation);
+      expect(result.isSuccess()).to.be.true;
+      expect(result.getValue()).to.deep.equal(recommendation);
     });
 
     it("should update existing recommendation when saving with same ID", async () => {
@@ -45,12 +46,14 @@ describe("InMemoryAIRepository - AAA Pattern", () => {
       const updatedRec = originalRec.updateConfidence(0.95);
 
       // Act
-      const savedRec = await repository.save(updatedRec);
+      const result = await repository.save(updatedRec);
 
       // Assert
-      expect(savedRec.confidence).to.equal(0.95);
-      const foundRec = await repository.findById(recId);
-      expect(foundRec!.confidence).to.equal(0.95);
+      expect(result.isSuccess()).to.be.true;
+      expect(result.getValue().confidence).to.equal(0.95);
+      const foundRecResult = await repository.findById(recId);
+      expect(foundRecResult.isSuccess()).to.be.true;
+      expect(foundRecResult.getValue()!.confidence).to.equal(0.95);
     });
   });
 
@@ -67,11 +70,12 @@ describe("InMemoryAIRepository - AAA Pattern", () => {
       await repository.save(recommendation);
 
       // Act
-      const foundRec = await repository.findById("rec-1");
+      const result = await repository.findById("rec-1");
 
       // Assert
-      expect(foundRec).to.not.be.null;
-      expect(foundRec!.id).to.equal("rec-1");
+      expect(result.isSuccess()).to.be.true;
+      expect(result.getValue()).to.not.be.null;
+      expect(result.getValue()!.id).to.equal("rec-1");
     });
 
     it("should return null when recommendation not found", async () => {
@@ -79,10 +83,11 @@ describe("InMemoryAIRepository - AAA Pattern", () => {
       const nonExistentId = "non-existent";
 
       // Act
-      const foundRec = await repository.findById(nonExistentId);
+      const result = await repository.findById(nonExistentId);
 
       // Assert
-      expect(foundRec).to.be.null;
+      expect(result.isSuccess()).to.be.true;
+      expect(result.getValue()).to.be.null;
     });
   });
 
@@ -108,9 +113,11 @@ describe("InMemoryAIRepository - AAA Pattern", () => {
       await repository.save(rec2);
 
       // Act
-      const recommendations = await repository.findByPuppyId(puppyId);
+      const result = await repository.findByPuppyId(puppyId);
 
       // Assert
+      expect(result.isSuccess()).to.be.true;
+      const recommendations = result.getValue();
       expect(recommendations).to.have.length(2);
       expect(recommendations).to.deep.include(rec1);
       expect(recommendations).to.deep.include(rec2);
@@ -121,9 +128,11 @@ describe("InMemoryAIRepository - AAA Pattern", () => {
       const puppyId = "puppy-with-no-recs";
 
       // Act
-      const recommendations = await repository.findByPuppyId(puppyId);
+      const result = await repository.findByPuppyId(puppyId);
 
       // Assert
+      expect(result.isSuccess()).to.be.true;
+      const recommendations = result.getValue();
       expect(recommendations).to.be.an("array").that.is.empty;
     });
 
@@ -149,9 +158,11 @@ describe("InMemoryAIRepository - AAA Pattern", () => {
       await repository.save(rec2);
 
       // Act
-      const recommendations = await repository.findByPuppyId(puppy1);
+      const result = await repository.findByPuppyId(puppy1);
 
       // Assert
+      expect(result.isSuccess()).to.be.true;
+      const recommendations = result.getValue();
       expect(recommendations).to.have.length(1);
       expect(recommendations[0]).to.deep.equal(rec1);
     });
@@ -187,9 +198,11 @@ describe("InMemoryAIRepository - AAA Pattern", () => {
       await repository.save(rec3);
 
       // Act
-      const recommendations = await repository.findByCategory(category);
+      const result = await repository.findByCategory(category);
 
       // Assert
+      expect(result.isSuccess()).to.be.true;
+      const recommendations = result.getValue();
       expect(recommendations).to.have.length(2);
       expect(recommendations).to.deep.include(rec1);
       expect(recommendations).to.deep.include(rec2);
@@ -200,9 +213,11 @@ describe("InMemoryAIRepository - AAA Pattern", () => {
       const category = "non-existent-category";
 
       // Act
-      const recommendations = await repository.findByCategory(category);
+      const result = await repository.findByCategory(category);
 
       // Assert
+      expect(result.isSuccess()).to.be.true;
+      const recommendations = result.getValue();
       expect(recommendations).to.be.an("array").that.is.empty;
     });
   });
@@ -223,8 +238,9 @@ describe("InMemoryAIRepository - AAA Pattern", () => {
       await repository.delete("rec-1");
 
       // Assert
-      const foundRec = await repository.findById("rec-1");
-      expect(foundRec).to.be.null;
+      const result = await repository.findById("rec-1");
+      expect(result.isSuccess()).to.be.true;
+      expect(result.getValue()).to.be.null;
     });
 
     it("should handle deletion of non-existent recommendation gracefully", async () => {

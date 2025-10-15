@@ -7,9 +7,12 @@ import {
   Body,
   Param,
   UsePipes,
+  HttpStatus,
+  HttpException,
 } from "@nestjs/common";
 import { TrainingUseCases } from "../../application/training/training.use-cases";
 import { ZodValidationPipe } from "../../common/pipes/zod-validation.pipe";
+import { DomainErrorMapper } from "../../common/utils/domain-error-mapper";
 import {
   CreateTrainingSessionDto,
   CreateTrainingSessionDtoSchema,
@@ -34,7 +37,12 @@ export class TrainingController {
 
   @Get(":id")
   async getSession(@Param("id") id: string) {
-    return await this.trainingUseCases.getTrainingSession(id);
+    const result = await this.trainingUseCases.getTrainingSession(id);
+    if (result.isFailure()) {
+      const status = DomainErrorMapper.mapToHttpStatus(result.getError().code);
+      throw new HttpException(result.getError().message, status);
+    }
+    return result.getValue();
   }
 
   @Get("puppy/:puppyId")
@@ -44,13 +52,23 @@ export class TrainingController {
 
   @Put(":id/notes")
   @UsePipes(new ZodValidationPipe(UpdateTrainingNotesDtoSchema))
-  async updateNotes(@Param("id") id: string, @Body() dto: UpdateTrainingNotesDto) {
-    return await this.trainingUseCases.updateTrainingNotes(id, dto.notes);
+  async updateNotes(
+    @Param("id") id: string,
+    @Body() dto: UpdateTrainingNotesDto
+  ) {
+    const result = await this.trainingUseCases.updateTrainingNotes(
+      id,
+      dto.notes
+    );
+    if (result.isFailure()) {
+      const status = DomainErrorMapper.mapToHttpStatus(result.getError().code);
+      throw new HttpException(result.getError().message, status);
+    }
+    return result.getValue();
   }
 
   @Delete(":id")
   async deleteSession(@Param("id") id: string) {
-    await this.trainingUseCases.deleteTrainingSession(id);
-    return { message: "Training session deleted successfully" };
+    return await this.trainingUseCases.deleteTrainingSession(id);
   }
 }

@@ -1,63 +1,149 @@
 import { Injectable } from "@nestjs/common";
 import { Event, EventId } from "../../domain/calendar/event.entity";
 import { EventRepository } from "../../domain/calendar/event.repository";
+import { DomainResult, Result } from "../../common/result/result";
 
 @Injectable()
 export class InMemoryEventRepository implements EventRepository {
   private events: Map<string, Event> = new Map();
 
-  async save(event: Event): Promise<Event> {
-    this.events.set(event.id.value, event);
-    return event;
+  async save(event: Event): Promise<DomainResult<Event>> {
+    try {
+      this.events.set(event.id.value, event);
+      return Result.success(event);
+    } catch (error) {
+      return Result.failure({
+        code: "INTERNAL_ERROR",
+        message:
+          error instanceof Error ? error.message : "Failed to save event",
+      });
+    }
   }
 
-  async findById(id: EventId): Promise<Event | null> {
-    return this.events.get(id.value) || null;
+  async findById(id: EventId): Promise<DomainResult<Event | null>> {
+    try {
+      const event = this.events.get(id.value) || null;
+      return Result.success(event);
+    } catch (error) {
+      return Result.failure({
+        code: "INTERNAL_ERROR",
+        message:
+          error instanceof Error ? error.message : "Failed to find event",
+      });
+    }
   }
 
-  async findByPuppyId(puppyId: string): Promise<Event[]> {
-    return Array.from(this.events.values()).filter(
-      (event) => event.puppyId === puppyId
-    );
+  async findByPuppyId(puppyId: string): Promise<DomainResult<Event[]>> {
+    try {
+      const events = Array.from(this.events.values()).filter(
+        (event) => event.puppyId === puppyId
+      );
+      return Result.success(events);
+    } catch (error) {
+      return Result.failure({
+        code: "INTERNAL_ERROR",
+        message:
+          error instanceof Error
+            ? error.message
+            : "Failed to find events by puppy ID",
+      });
+    }
   }
 
-  async findByDateRange(startDate: Date, endDate: Date): Promise<Event[]> {
-    return Array.from(this.events.values()).filter(
-      (event) =>
-        event.eventDateTime.value >= startDate &&
-        event.eventDateTime.value <= endDate
-    );
+  async findByDateRange(
+    startDate: Date,
+    endDate: Date
+  ): Promise<DomainResult<Event[]>> {
+    try {
+      const events = Array.from(this.events.values()).filter(
+        (event) =>
+          event.eventDateTime.value >= startDate &&
+          event.eventDateTime.value <= endDate
+      );
+      return Result.success(events);
+    } catch (error) {
+      return Result.failure({
+        code: "INTERNAL_ERROR",
+        message:
+          error instanceof Error
+            ? error.message
+            : "Failed to find events by date range",
+      });
+    }
   }
 
-  async findByType(eventType: string): Promise<Event[]> {
-    return Array.from(this.events.values()).filter(
-      (event) => event.eventType.value === eventType
-    );
+  async findByType(eventType: string): Promise<DomainResult<Event[]>> {
+    try {
+      const events = Array.from(this.events.values()).filter(
+        (event) => event.eventType.value === eventType
+      );
+      return Result.success(events);
+    } catch (error) {
+      return Result.failure({
+        code: "INTERNAL_ERROR",
+        message:
+          error instanceof Error
+            ? error.message
+            : "Failed to find events by type",
+      });
+    }
   }
 
-  async update(event: Event): Promise<Event> {
-    this.events.set(event.id.value, event);
-    return event;
+  async update(event: Event): Promise<DomainResult<Event>> {
+    try {
+      this.events.set(event.id.value, event);
+      return Result.success(event);
+    } catch (error) {
+      return Result.failure({
+        code: "INTERNAL_ERROR",
+        message:
+          error instanceof Error ? error.message : "Failed to update event",
+      });
+    }
   }
 
-  async delete(id: EventId): Promise<void> {
-    this.events.delete(id.value);
+  async delete(id: EventId): Promise<DomainResult<void>> {
+    try {
+      this.events.delete(id.value);
+      return Result.success(undefined);
+    } catch (error) {
+      return Result.failure({
+        code: "INTERNAL_ERROR",
+        message:
+          error instanceof Error ? error.message : "Failed to delete event",
+      });
+    }
   }
 
   async findUpcomingEvents(
     puppyId: string,
     limit: number = 10
-  ): Promise<Event[]> {
-    const puppyEvents = await this.findByPuppyId(puppyId);
-    const upcomingEvents = puppyEvents
-      .filter((event) => event.isUpcoming())
-      .sort(
-        (a, b) =>
-          a.eventDateTime.value.getTime() - b.eventDateTime.value.getTime()
-      )
-      .slice(0, limit);
+  ): Promise<DomainResult<Event[]>> {
+    try {
+      const puppyEventsResult = await this.findByPuppyId(puppyId);
+      if (puppyEventsResult.isFailure()) {
+        return puppyEventsResult;
+      }
 
-    return upcomingEvents;
+      const puppyEvents = puppyEventsResult.getValue();
+      const upcomingEvents = puppyEvents
+        .filter((event) => event.isUpcoming())
+        .sort(
+          (a, b) =>
+            a.eventDateTime.value.getTime() - b.eventDateTime.value.getTime()
+        )
+        .slice(0, limit);
+
+      return Result.success(upcomingEvents);
+    } catch (error) {
+      return Result.failure({
+        code: "INTERNAL_ERROR",
+        message:
+          error instanceof Error
+            ? error.message
+            : "Failed to find upcoming events",
+      });
+    }
   }
 
   // Test helper methods

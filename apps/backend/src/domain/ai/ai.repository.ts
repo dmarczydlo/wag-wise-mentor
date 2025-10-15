@@ -1,9 +1,10 @@
 import { AIRecommendation } from "./ai-recommendation.entity";
+import { DomainResult } from "../../common/result/result";
 
 export interface AIRepository {
-  findById(id: string): Promise<AIRecommendation | null>;
-  findByPuppyId(puppyId: string): Promise<AIRecommendation[]>;
-  findByCategory(category: string): Promise<AIRecommendation[]>;
-  save(recommendation: AIRecommendation): Promise<AIRecommendation>;
-  delete(id: string): Promise<void>;
+  findById(id: string): Promise<DomainResult<AIRecommendation | null>>;
+  findByPuppyId(puppyId: string): Promise<DomainResult<AIRecommendation[]>>;
+  findByCategory(category: string): Promise<DomainResult<AIRecommendation[]>>;
+  save(recommendation: AIRecommendation): Promise<DomainResult<AIRecommendation>>;
+  delete(id: string): Promise<DomainResult<void>>;
 }

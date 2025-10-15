@@ -24,10 +24,11 @@ describe("InMemoryTrainingRepository - AAA Pattern", () => {
       );
 
       // Act
-      const savedSession = await repository.save(session);
+      const result = await repository.save(session);
 
       // Assert
-      expect(savedSession).to.deep.equal(session);
+      expect(result.isSuccess()).to.be.true;
+      expect(result.getValue()).to.deep.equal(session);
     });
 
     it("should update existing session when saving with same ID", async () => {
@@ -46,12 +47,15 @@ describe("InMemoryTrainingRepository - AAA Pattern", () => {
       const updatedSession = originalSession.updateNotes("Updated notes");
 
       // Act
-      const savedSession = await repository.save(updatedSession);
+      const result = await repository.save(updatedSession);
 
       // Assert
-      expect(savedSession.notes).to.equal("Updated notes");
-      const foundSession = await repository.findById(sessionId);
-      expect(foundSession!.notes).to.equal("Updated notes");
+      expect(result.isSuccess()).to.be.true;
+      expect(result.getValue()).to.deep.equal(updatedSession);
+      expect(result.getValue().notes).to.equal("Updated notes");
+      const foundResult = await repository.findById(sessionId);
+      expect(foundResult.isSuccess()).to.be.true;
+      expect(foundResult.getValue().notes).to.equal("Updated notes");
     });
   });
 
@@ -69,11 +73,12 @@ describe("InMemoryTrainingRepository - AAA Pattern", () => {
       await repository.save(session);
 
       // Act
-      const foundSession = await repository.findById("session-1");
+      const result = await repository.findById("session-1");
 
       // Assert
-      expect(foundSession).to.not.be.null;
-      expect(foundSession!.id).to.equal("session-1");
+      expect(result.isSuccess()).to.be.true;
+      expect(result.getValue()).to.not.be.null;
+      expect(result.getValue()!.id).to.equal("session-1");
     });
 
     it("should return null when session not found", async () => {
@@ -81,10 +86,11 @@ describe("InMemoryTrainingRepository - AAA Pattern", () => {
       const nonExistentId = "non-existent";
 
       // Act
-      const foundSession = await repository.findById(nonExistentId);
+      const result = await repository.findById(nonExistentId);
 
       // Assert
-      expect(foundSession).to.be.null;
+      expect(result.isSuccess()).to.be.true;
+      expect(result.getValue()).to.be.null;
     });
   });
 
@@ -112,9 +118,11 @@ describe("InMemoryTrainingRepository - AAA Pattern", () => {
       await repository.save(session2);
 
       // Act
-      const sessions = await repository.findByPuppyId(puppyId);
+      const result = await repository.findByPuppyId(puppyId);
 
       // Assert
+      expect(result.isSuccess()).to.be.true;
+      const sessions = result.getValue();
       expect(sessions).to.have.length(2);
       expect(sessions).to.deep.include(session1);
       expect(sessions).to.deep.include(session2);
@@ -125,9 +133,11 @@ describe("InMemoryTrainingRepository - AAA Pattern", () => {
       const puppyId = "puppy-with-no-sessions";
 
       // Act
-      const sessions = await repository.findByPuppyId(puppyId);
+      const result = await repository.findByPuppyId(puppyId);
 
       // Assert
+      expect(result.isSuccess()).to.be.true;
+      const sessions = result.getValue();
       expect(sessions).to.be.an("array").that.is.empty;
     });
 
@@ -155,9 +165,11 @@ describe("InMemoryTrainingRepository - AAA Pattern", () => {
       await repository.save(session2);
 
       // Act
-      const sessions = await repository.findByPuppyId(puppy1);
+      const result = await repository.findByPuppyId(puppy1);
 
       // Assert
+      expect(result.isSuccess()).to.be.true;
+      const sessions = result.getValue();
       expect(sessions).to.have.length(1);
       expect(sessions[0]).to.deep.equal(session1);
     });
@@ -177,19 +189,24 @@ describe("InMemoryTrainingRepository - AAA Pattern", () => {
       await repository.save(session);
 
       // Act
-      await repository.delete("session-1");
+      const result = await repository.delete("session-1");
 
       // Assert
-      const foundSession = await repository.findById("session-1");
-      expect(foundSession).to.be.null;
+      expect(result.isSuccess()).to.be.true;
+      const foundResult = await repository.findById("session-1");
+      expect(foundResult.isSuccess()).to.be.true;
+      expect(foundResult.getValue()).to.be.null;
     });
 
     it("should handle deletion of non-existent session gracefully", async () => {
       // Arrange
       const nonExistentId = "non-existent";
 
-      // Act & Assert
-      await repository.delete(nonExistentId);
+      // Act
+      const result = await repository.delete(nonExistentId);
+
+      // Assert
+      expect(result.isSuccess()).to.be.true;
     });
   });
 });
