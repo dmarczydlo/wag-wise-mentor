@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@wag-wise-mentor/ui/components/button";
+import { Card, CardContent } from "@wag-wise-mentor/ui/components/card";
 import { Calendar, Heart, Users, Bell, Scale, BookOpen } from "lucide-react";
 import heroPuppy from "@/assets/hero-puppy.jpg";
 import { useNavigate } from "react-router-dom";
@@ -22,20 +22,20 @@ const Index = () => {
                 </span>
               </h1>
               <p className="text-xl text-muted-foreground">
-                Never miss a milestone, feeding time, or vet appointment. 
+                Never miss a milestone, feeding time, or vet appointment.
                 AI-powered care plans that grow with your puppy.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button 
-                  size="lg" 
+                <Button
+                  size="lg"
                   className="bg-primary hover:bg-primary-light shadow-soft transition-smooth text-lg font-semibold"
                   onClick={() => navigate("/auth")}
                 >
                   Get Started Free
                   <Heart className="ml-2 h-5 w-5" />
                 </Button>
-                <Button 
-                  size="lg" 
+                <Button
+                  size="lg"
                   variant="outline"
                   className="border-2 border-primary text-primary hover:bg-primary/10 transition-smooth text-lg font-semibold"
                   onClick={() => navigate("/auth")}
@@ -117,7 +117,8 @@ const Index = () => {
               Available in Your Language
             </h2>
             <p className="text-lg text-muted-foreground">
-              Currently supporting English and Polish, with more languages coming soon
+              Currently supporting English and Polish, with more languages
+              coming soon
             </p>
             <div className="flex justify-center gap-6 text-4xl">
               <span>🇬🇧</span>
@@ -138,10 +139,11 @@ const Index = () => {
                   Start Your Puppy's Journey Today
                 </h2>
                 <p className="text-xl opacity-90 max-w-2xl mx-auto">
-                  Join thousands of puppy parents who trust Puppy Mentor for expert care guidance
+                  Join thousands of puppy parents who trust Puppy Mentor for
+                  expert care guidance
                 </p>
-                <Button 
-                  size="lg" 
+                <Button
+                  size="lg"
                   className="bg-white text-primary hover:bg-white/90 shadow-soft transition-smooth text-lg font-semibold"
                   onClick={() => navigate("/auth")}
                 >
@@ -157,7 +159,10 @@ const Index = () => {
       {/* Footer */}
       <footer className="py-8 px-4 border-t border-border">
         <div className="container mx-auto text-center text-muted-foreground">
-          <p>© 2025 Puppy Mentor. Helping puppies thrive, one milestone at a time.</p>
+          <p>
+            © 2025 Puppy Mentor. Helping puppies thrive, one milestone at a
+            time.
+          </p>
         </div>
       </footer>
     </div>
@@ -182,7 +187,9 @@ const FeatureCard = ({ icon, title, description, color }: FeatureCardProps) => {
   return (
     <Card className="bg-gradient-card border-border hover:shadow-soft transition-smooth group">
       <CardContent className="p-6 space-y-4">
-        <div className={`w-16 h-16 rounded-2xl ${colorClasses[color]} flex items-center justify-center group-hover:scale-110 transition-bounce`}>
+        <div
+          className={`w-16 h-16 rounded-2xl ${colorClasses[color]} flex items-center justify-center group-hover:scale-110 transition-bounce`}
+        >
           {icon}
         </div>
         <h3 className="text-xl font-semibold text-foreground">{title}</h3>

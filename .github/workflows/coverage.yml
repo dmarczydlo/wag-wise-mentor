@@ -43,6 +43,11 @@ jobs:
           cd packages/shared
           bun run test:coverage
 
+      - name: Build UI package
+        run: |
+          cd packages/ui
+          bun run build
+
       - name: Run UI package tests with coverage
         run: |
           cd packages/ui

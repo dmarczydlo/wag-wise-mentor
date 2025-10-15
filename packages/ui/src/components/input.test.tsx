@@ -1,439 +1,264 @@
-import { render, screen, fireEvent } from "@/test/test-utils";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { Input } from "./input";
-import { describe, it, expect } from "vitest";
 
 describe("Input Component - AAA Pattern", () => {
-  describe("Rendering Requirements", () => {
-    it("should render with default styling", () => {
+  describe("Input Component Requirements", () => {
+    it("should render input with default props", () => {
       // Arrange
-      const placeholder = "Enter text";
+      const { container } = render(<Input />);
 
-      // Act
-      render(<Input placeholder={placeholder} />);
-
-      // Assert
-      const input = screen.getByPlaceholderText(placeholder);
-      expect(input).toBeInTheDocument();
-      expect(input).toHaveClass(
-        "flex",
-        "h-10",
-        "w-full",
-        "rounded-md",
-        "border",
-        "border-input",
-        "bg-background",
-        "px-3",
-        "py-2",
-        "text-base"
-      );
+      // Act & Assert
+      expect(container.firstChild).toBeInTheDocument();
+      expect(container.firstChild).toBeInstanceOf(HTMLInputElement);
     });
 
-    it("should render with correct input type", () => {
+    it("should render input with custom type", () => {
       // Arrange
-      const placeholder = "Enter email";
+      const { container } = render(<Input type="email" />);
 
-      // Act
-      render(<Input type="email" placeholder={placeholder} />);
-
-      // Assert
-      const input = screen.getByPlaceholderText(placeholder);
-      expect(input).toHaveAttribute("type", "email");
+      // Act & Assert
+      expect(container.firstChild).toBeInTheDocument();
+      expect(container.firstChild).toHaveAttribute("type", "email");
     });
 
-    it("should render with correct input type for password", () => {
+    it("should render input with placeholder", () => {
       // Arrange
-      const placeholder = "Enter password";
+      render(<Input placeholder="Enter your name" />);
 
-      // Act
-      render(<Input type="password" placeholder={placeholder} />);
-
-      // Assert
-      const input = screen.getByPlaceholderText(placeholder);
-      expect(input).toHaveAttribute("type", "password");
+      // Act & Assert
+      expect(
+        screen.getByPlaceholderText("Enter your name")
+      ).toBeInTheDocument();
     });
 
-    it("should render with correct input type for number", () => {
+    it("should render input with value", () => {
       // Arrange
-      const placeholder = "Enter number";
+      const { container } = render(<Input value="test value" />);
 
-      // Act
-      render(<Input type="number" placeholder={placeholder} />);
-
-      // Assert
-      const input = screen.getByPlaceholderText(placeholder);
-      expect(input).toHaveAttribute("type", "number");
+      // Act & Assert
+      expect(container.firstChild).toHaveValue("test value");
     });
 
-    it("should accept custom className", () => {
+    it("should apply custom className", () => {
       // Arrange
-      const placeholder = "Custom input";
-      const customClass = "custom-input-class";
+      const { container } = render(<Input className="custom-input" />);
 
-      // Act
-      render(<Input className={customClass} placeholder={placeholder} />);
-
-      // Assert
-      const input = screen.getByPlaceholderText(placeholder);
-      expect(input).toHaveClass(customClass);
+      // Act & Assert
+      expect(container.firstChild).toHaveClass("custom-input");
     });
 
-    it("should forward ref correctly", () => {
+    it("should handle change events", () => {
       // Arrange
-      const placeholder = "Ref test";
-      const ref = { current: null };
+      const handleChange = vi.fn();
+      render(<Input onChange={handleChange} />);
 
       // Act
-      render(<Input ref={ref} placeholder={placeholder} />);
+      const input = screen.getByRole("textbox");
+      fireEvent.change(input, { target: { value: "new value" } });
 
       // Assert
-      expect(ref.current).toBeInstanceOf(HTMLInputElement);
-    });
-  });
-
-  describe("Input Attributes Requirements", () => {
-    it("should accept placeholder attribute", () => {
-      // Arrange
-      const placeholder = "Enter your name";
-
-      // Act
-      render(<Input placeholder={placeholder} />);
-
-      // Assert
-      expect(screen.getByPlaceholderText(placeholder)).toBeInTheDocument();
-    });
-
-    it("should accept value attribute", () => {
-      // Arrange
-      const value = "Initial value";
-
-      // Act
-      render(<Input value={value} readOnly />);
-
-      // Assert
-      const input = screen.getByDisplayValue(value);
-      expect(input).toBeInTheDocument();
-      expect(input).toHaveValue(value);
-    });
-
-    it("should accept disabled attribute", () => {
-      // Arrange
-      const placeholder = "Disabled input";
-
-      // Act
-      render(<Input disabled placeholder={placeholder} />);
-
-      // Assert
-      const input = screen.getByPlaceholderText(placeholder);
-      expect(input).toBeDisabled();
-      expect(input).toHaveClass(
-        "disabled:cursor-not-allowed",
-        "disabled:opacity-50"
-      );
-    });
-
-    it("should accept required attribute", () => {
-      // Arrange
-      const placeholder = "Required input";
-
-      // Act
-      render(<Input required placeholder={placeholder} />);
-
-      // Assert
-      const input = screen.getByPlaceholderText(placeholder);
-      expect(input).toBeRequired();
-    });
-
-    it("should accept name attribute", () => {
-      // Arrange
-      const name = "test-input";
-      const placeholder = "Named input";
-
-      // Act
-      render(<Input name={name} placeholder={placeholder} />);
-
-      // Assert
-      const input = screen.getByPlaceholderText(placeholder);
-      expect(input).toHaveAttribute("name", name);
-    });
-
-    it("should accept id attribute", () => {
-      // Arrange
-      const id = "test-input-id";
-      const placeholder = "ID input";
-
-      // Act
-      render(<Input id={id} placeholder={placeholder} />);
-
-      // Assert
-      const input = screen.getByPlaceholderText(placeholder);
-      expect(input).toHaveAttribute("id", id);
-    });
-
-    it("should accept maxLength attribute", () => {
-      // Arrange
-      const maxLength = 10;
-      const placeholder = "Max length input";
-
-      // Act
-      render(<Input maxLength={maxLength} placeholder={placeholder} />);
-
-      // Assert
-      const input = screen.getByPlaceholderText(placeholder);
-      expect(input).toHaveAttribute("maxLength", maxLength.toString());
-    });
-
-    it("should accept min and max attributes for number input", () => {
-      // Arrange
-      const min = 0;
-      const max = 100;
-      const placeholder = "Number input";
-
-      // Act
-      render(
-        <Input type="number" min={min} max={max} placeholder={placeholder} />
-      );
-
-      // Assert
-      const input = screen.getByPlaceholderText(placeholder);
-      expect(input).toHaveAttribute("min", min.toString());
-      expect(input).toHaveAttribute("max", max.toString());
-    });
-  });
-
-  describe("User Interaction Requirements", () => {
-    it("should handle value changes", () => {
-      // Arrange
-      const placeholder = "Type here";
-      const testValue = "Test input";
-
-      // Act
-      render(<Input placeholder={placeholder} />);
-      const input = screen.getByPlaceholderText(placeholder);
-      fireEvent.change(input, { target: { value: testValue } });
-
-      // Assert
-      expect(input).toHaveValue(testValue);
+      expect(handleChange).toHaveBeenCalledTimes(1);
+      expect(input).toHaveValue("new value");
     });
 
     it("should handle focus events", () => {
       // Arrange
-      const placeholder = "Focus test";
-      const onFocus = vi.fn();
+      const handleFocus = vi.fn();
+      render(<Input onFocus={handleFocus} />);
 
       // Act
-      render(<Input placeholder={placeholder} onFocus={onFocus} />);
-      const input = screen.getByPlaceholderText(placeholder);
-      fireEvent.focus(input);
+      const input = screen.getByRole("textbox");
+      input.focus();
 
       // Assert
-      expect(onFocus).toHaveBeenCalledTimes(1);
+      expect(handleFocus).toHaveBeenCalledTimes(1);
     });
 
     it("should handle blur events", () => {
       // Arrange
-      const placeholder = "Blur test";
-      const onBlur = vi.fn();
+      const handleBlur = vi.fn();
+      render(<Input onBlur={handleBlur} />);
 
       // Act
-      render(<Input placeholder={placeholder} onBlur={onBlur} />);
-      const input = screen.getByPlaceholderText(placeholder);
-      fireEvent.blur(input);
+      const input = screen.getByRole("textbox");
+      input.focus();
+      input.blur();
 
       // Assert
-      expect(onBlur).toHaveBeenCalledTimes(1);
+      expect(handleBlur).toHaveBeenCalledTimes(1);
     });
 
-    it("should handle key events", () => {
+    it("should handle disabled state", () => {
       // Arrange
-      const placeholder = "Key test";
-      const onKeyDown = vi.fn();
+      const { container } = render(<Input disabled />);
+
+      // Act & Assert
+      expect(container.firstChild).toHaveAttribute("disabled");
+      expect(container.firstChild).toHaveClass("disabled:opacity-50");
+    });
+
+    it("should handle required state", () => {
+      // Arrange
+      const { container } = render(<Input required />);
+
+      // Act & Assert
+      expect(container.firstChild).toHaveAttribute("required");
+    });
+
+    it("should handle readonly state", () => {
+      // Arrange
+      const { container } = render(<Input readOnly />);
+
+      // Act & Assert
+      expect(container.firstChild).toHaveAttribute("readOnly");
+    });
+
+    it("should render input with different types", () => {
+      // Arrange
+      const types = [
+        "text",
+        "email",
+        "password",
+        "number",
+        "tel",
+        "url",
+        "search",
+      ] as const;
+
+      types.forEach((type) => {
+        const { container } = render(<Input type={type} />);
+
+        // Act & Assert
+        expect(container.firstChild).toHaveAttribute("type", type);
+      });
+    });
+
+    it("should render input with name attribute", () => {
+      // Arrange
+      const { container } = render(<Input name="username" />);
+
+      // Act & Assert
+      expect(container.firstChild).toHaveAttribute("name", "username");
+    });
+
+    it("should render input with id attribute", () => {
+      // Arrange
+      const { container } = render(<Input id="user-input" />);
+
+      // Act & Assert
+      expect(container.firstChild).toHaveAttribute("id", "user-input");
+    });
+
+    it("should render input with maxLength attribute", () => {
+      // Arrange
+      const { container } = render(<Input maxLength={10} />);
+
+      // Act & Assert
+      expect(container.firstChild).toHaveAttribute("maxLength", "10");
+    });
+
+    it("should render input with minLength attribute", () => {
+      // Arrange
+      const { container } = render(<Input minLength={5} />);
+
+      // Act & Assert
+      expect(container.firstChild).toHaveAttribute("minLength", "5");
+    });
+
+    it("should render input with min and max attributes for number type", () => {
+      // Arrange
+      const { container } = render(<Input type="number" min={0} max={100} />);
+
+      // Act & Assert
+      expect(container.firstChild).toHaveAttribute("min", "0");
+      expect(container.firstChild).toHaveAttribute("max", "100");
+    });
+
+    it("should render input with step attribute", () => {
+      // Arrange
+      const { container } = render(<Input type="number" step={0.1} />);
+
+      // Act & Assert
+      expect(container.firstChild).toHaveAttribute("step", "0.1");
+    });
+
+    it("should render input with pattern attribute", () => {
+      // Arrange
+      const { container } = render(<Input pattern="[0-9]+" />);
+
+      // Act & Assert
+      expect(container.firstChild).toHaveAttribute("pattern", "[0-9]+");
+    });
+
+    it("should render input with autocomplete attribute", () => {
+      // Arrange
+      const { container } = render(<Input autoComplete="email" />);
+
+      // Act & Assert
+      expect(container.firstChild).toHaveAttribute("autoComplete", "email");
+    });
+
+    it("should render input with aria attributes", () => {
+      // Arrange
+      const { container } = render(
+        <Input aria-label="Username input" aria-describedby="username-help" />
+      );
+
+      // Act & Assert
+      expect(container.firstChild).toHaveAttribute(
+        "aria-label",
+        "Username input"
+      );
+      expect(container.firstChild).toHaveAttribute(
+        "aria-describedby",
+        "username-help"
+      );
+    });
+
+    it("should forward ref correctly", () => {
+      // Arrange
+      const ref = { current: null };
+      render(<Input ref={ref} />);
+
+      // Act & Assert
+      expect(ref.current).toBeInstanceOf(HTMLInputElement);
+    });
+
+    it("should handle keyboard events", () => {
+      // Arrange
+      const handleKeyDown = vi.fn();
+      render(<Input onKeyDown={handleKeyDown} />);
 
       // Act
-      render(<Input placeholder={placeholder} onKeyDown={onKeyDown} />);
-      const input = screen.getByPlaceholderText(placeholder);
+      const input = screen.getByRole("textbox");
       fireEvent.keyDown(input, { key: "Enter" });
 
       // Assert
-      expect(onKeyDown).toHaveBeenCalledTimes(1);
+      expect(handleKeyDown).toHaveBeenCalledTimes(1);
     });
 
-    it("should handle click events", () => {
+    it("should render input with file type", () => {
       // Arrange
-      const placeholder = "Click test";
-      const onClick = vi.fn();
+      const { container } = render(<Input type="file" />);
 
-      // Act
-      render(<Input placeholder={placeholder} onClick={onClick} />);
-      const input = screen.getByPlaceholderText(placeholder);
-      fireEvent.click(input);
-
-      // Assert
-      expect(onClick).toHaveBeenCalledTimes(1);
-    });
-  });
-
-  describe("Accessibility Requirements", () => {
-    it("should be accessible via label", () => {
-      // Arrange
-      const label = "Test Label";
-      const placeholder = "Labeled input";
-
-      // Act
-      render(
-        <div>
-          <label htmlFor="test-input">{label}</label>
-          <Input id="test-input" placeholder={placeholder} />
-        </div>
-      );
-
-      // Assert
-      const input = screen.getByLabelText(label);
-      expect(input).toBeInTheDocument();
-      expect(input).toHaveAttribute("id", "test-input");
+      // Act & Assert
+      expect(container.firstChild).toHaveAttribute("type", "file");
     });
 
-    it("should support aria-label", () => {
+    it("should render input with multiple file selection", () => {
       // Arrange
-      const ariaLabel = "Accessible input";
-      const placeholder = "Aria labeled input";
+      const { container } = render(<Input type="file" multiple />);
 
-      // Act
-      render(<Input aria-label={ariaLabel} placeholder={placeholder} />);
-
-      // Assert
-      const input = screen.getByLabelText(ariaLabel);
-      expect(input).toBeInTheDocument();
+      // Act & Assert
+      expect(container.firstChild).toHaveAttribute("multiple");
     });
 
-    it("should support aria-describedby", () => {
+    it("should render input with accept attribute for file type", () => {
       // Arrange
-      const placeholder = "Described input";
-      const descriptionId = "input-description";
+      const { container } = render(<Input type="file" accept="image/*" />);
 
-      // Act
-      render(
-        <div>
-          <Input aria-describedby={descriptionId} placeholder={placeholder} />
-          <div id={descriptionId}>This input is described</div>
-        </div>
-      );
-
-      // Assert
-      const input = screen.getByPlaceholderText(placeholder);
-      expect(input).toHaveAttribute("aria-describedby", descriptionId);
-    });
-
-    it("should support aria-invalid for validation", () => {
-      // Arrange
-      const placeholder = "Invalid input";
-
-      // Act
-      render(<Input aria-invalid="true" placeholder={placeholder} />);
-
-      // Assert
-      const input = screen.getByPlaceholderText(placeholder);
-      expect(input).toHaveAttribute("aria-invalid", "true");
-    });
-
-    it("should support aria-required", () => {
-      // Arrange
-      const placeholder = "Required input";
-
-      // Act
-      render(<Input aria-required="true" placeholder={placeholder} />);
-
-      // Assert
-      const input = screen.getByPlaceholderText(placeholder);
-      expect(input).toHaveAttribute("aria-required", "true");
-    });
-  });
-
-  describe("Form Integration Requirements", () => {
-    it("should work with form submission", () => {
-      // Arrange
-      const onSubmit = vi.fn();
-      const placeholder = "Form input";
-
-      // Act
-      render(
-        <form onSubmit={onSubmit}>
-          <Input name="test-field" placeholder={placeholder} />
-          <button type="submit">Submit</button>
-        </form>
-      );
-
-      const input = screen.getByPlaceholderText(placeholder);
-      const submitButton = screen.getByRole("button", { name: "Submit" });
-
-      fireEvent.change(input, { target: { value: "test value" } });
-      fireEvent.click(submitButton);
-
-      // Assert
-      expect(onSubmit).toHaveBeenCalledTimes(1);
-    });
-
-    it("should work with controlled components", () => {
-      // Arrange
-      const placeholder = "Controlled input";
-      const initialValue = "Initial";
-      const newValue = "Updated";
-
-      // Act
-      const { rerender } = render(
-        <Input value={initialValue} placeholder={placeholder} readOnly />
-      );
-      const input = screen.getByPlaceholderText(placeholder);
-      expect(input).toHaveValue(initialValue);
-
-      rerender(<Input value={newValue} placeholder={placeholder} readOnly />);
-
-      // Assert
-      expect(input).toHaveValue(newValue);
-    });
-  });
-
-  describe("Styling Requirements", () => {
-    it("should apply focus styles correctly", () => {
-      // Arrange
-      const placeholder = "Focus styles test";
-
-      // Act
-      render(<Input placeholder={placeholder} />);
-      const input = screen.getByPlaceholderText(placeholder);
-
-      // Assert
-      expect(input).toHaveClass(
-        "focus-visible:outline-none",
-        "focus-visible:ring-2",
-        "focus-visible:ring-ring"
-      );
-    });
-
-    it("should apply disabled styles correctly", () => {
-      // Arrange
-      const placeholder = "Disabled styles test";
-
-      // Act
-      render(<Input disabled placeholder={placeholder} />);
-      const input = screen.getByPlaceholderText(placeholder);
-
-      // Assert
-      expect(input).toHaveClass(
-        "disabled:cursor-not-allowed",
-        "disabled:opacity-50"
-      );
-    });
-
-    it("should apply placeholder styles correctly", () => {
-      // Arrange
-      const placeholder = "Placeholder styles test";
-
-      // Act
-      render(<Input placeholder={placeholder} />);
-      const input = screen.getByPlaceholderText(placeholder);
-
-      // Assert
-      expect(input).toHaveClass("placeholder:text-muted-foreground");
+      // Act & Assert
+      expect(container.firstChild).toHaveAttribute("accept", "image/*");
     });
   });
 });

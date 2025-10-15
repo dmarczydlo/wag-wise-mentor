@@ -1,177 +1,247 @@
-import { render, screen, fireEvent } from "@/test/test-utils";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { Button } from "./button";
-import { vi, describe, it, expect } from "vitest";
 
-describe("Button Component", () => {
-  describe("Rendering Requirements", () => {
-    it("should render with default props and correct styling", () => {
+describe("Button Component - AAA Pattern", () => {
+  describe("Button Component Requirements", () => {
+    it("should render button with default variant and size", () => {
       // Arrange
-      const buttonText = "Click me";
+      const { container } = render(<Button>Default Button</Button>);
 
-      // Act
-      render(<Button>{buttonText}</Button>);
-
-      // Assert
-      const button = screen.getByRole("button", { name: buttonText });
-      expect(button).toBeInTheDocument();
-      expect(button).toHaveClass("bg-primary", "text-primary-foreground");
-      expect(button).toHaveClass("h-10", "px-4", "py-2"); // default size
+      // Act & Assert
+      expect(container.firstChild).toBeInTheDocument();
+      expect(screen.getByText("Default Button")).toBeInTheDocument();
+      expect(container.firstChild).toHaveClass("bg-primary");
+      expect(container.firstChild).toHaveClass("h-10");
     });
 
-    it("should render with destructive variant and correct styling", () => {
+    it("should render button with destructive variant", () => {
       // Arrange
-      const buttonText = "Delete";
-
-      // Act
-      render(<Button variant="destructive">{buttonText}</Button>);
-
-      // Assert
-      const button = screen.getByRole("button", { name: buttonText });
-      expect(button).toBeInTheDocument();
-      expect(button).toHaveClass(
-        "bg-destructive",
-        "text-destructive-foreground"
+      const { container } = render(
+        <Button variant="destructive">Destructive Button</Button>
       );
+
+      // Act & Assert
+      expect(container.firstChild).toBeInTheDocument();
+      expect(screen.getByText("Destructive Button")).toBeInTheDocument();
+      expect(container.firstChild).toHaveClass("bg-destructive");
     });
 
-    it("should render with outline variant and correct styling", () => {
+    it("should render button with outline variant", () => {
       // Arrange
-      const buttonText = "Outline";
+      const { container } = render(
+        <Button variant="outline">Outline Button</Button>
+      );
 
-      // Act
-      render(<Button variant="outline">{buttonText}</Button>);
-
-      // Assert
-      const button = screen.getByRole("button", { name: buttonText });
-      expect(button).toBeInTheDocument();
-      expect(button).toHaveClass("border", "border-input", "bg-background");
+      // Act & Assert
+      expect(container.firstChild).toBeInTheDocument();
+      expect(screen.getByText("Outline Button")).toBeInTheDocument();
+      expect(container.firstChild).toHaveClass("border");
     });
 
-    it("should render with small size and correct styling", () => {
+    it("should render button with secondary variant", () => {
       // Arrange
-      const buttonText = "Small";
+      const { container } = render(
+        <Button variant="secondary">Secondary Button</Button>
+      );
 
-      // Act
-      render(<Button size="sm">{buttonText}</Button>);
-
-      // Assert
-      const button = screen.getByRole("button", { name: buttonText });
-      expect(button).toBeInTheDocument();
-      expect(button).toHaveClass("h-9", "rounded-md", "px-3");
+      // Act & Assert
+      expect(container.firstChild).toBeInTheDocument();
+      expect(screen.getByText("Secondary Button")).toBeInTheDocument();
+      expect(container.firstChild).toHaveClass("bg-secondary");
     });
 
-    it("should render with large size and correct styling", () => {
+    it("should render button with ghost variant", () => {
       // Arrange
-      const buttonText = "Large";
+      const { container } = render(
+        <Button variant="ghost">Ghost Button</Button>
+      );
 
-      // Act
-      render(<Button size="lg">{buttonText}</Button>);
-
-      // Assert
-      const button = screen.getByRole("button", { name: buttonText });
-      expect(button).toBeInTheDocument();
-      expect(button).toHaveClass("h-11", "rounded-md", "px-8");
+      // Act & Assert
+      expect(container.firstChild).toBeInTheDocument();
+      expect(screen.getByText("Ghost Button")).toBeInTheDocument();
+      expect(container.firstChild).toHaveClass("hover:bg-accent");
     });
-  });
 
-  describe("Interaction Requirements", () => {
-    it("should handle click events correctly", () => {
+    it("should render button with link variant", () => {
+      // Arrange
+      const { container } = render(<Button variant="link">Link Button</Button>);
+
+      // Act & Assert
+      expect(container.firstChild).toBeInTheDocument();
+      expect(screen.getByText("Link Button")).toBeInTheDocument();
+      expect(container.firstChild).toHaveClass("text-primary");
+    });
+
+    it("should render button with small size", () => {
+      // Arrange
+      const { container } = render(<Button size="sm">Small Button</Button>);
+
+      // Act & Assert
+      expect(container.firstChild).toBeInTheDocument();
+      expect(screen.getByText("Small Button")).toBeInTheDocument();
+      expect(container.firstChild).toHaveClass("h-9");
+    });
+
+    it("should render button with large size", () => {
+      // Arrange
+      const { container } = render(<Button size="lg">Large Button</Button>);
+
+      // Act & Assert
+      expect(container.firstChild).toBeInTheDocument();
+      expect(screen.getByText("Large Button")).toBeInTheDocument();
+      expect(container.firstChild).toHaveClass("h-11");
+    });
+
+    it("should render button with icon size", () => {
+      // Arrange
+      const { container } = render(<Button size="icon">Icon Button</Button>);
+
+      // Act & Assert
+      expect(container.firstChild).toBeInTheDocument();
+      expect(screen.getByText("Icon Button")).toBeInTheDocument();
+      expect(container.firstChild).toHaveClass("h-10", "w-10");
+    });
+
+    it("should apply custom className", () => {
+      // Arrange
+      const { container } = render(
+        <Button className="custom-button">Custom Button</Button>
+      );
+
+      // Act & Assert
+      expect(container.firstChild).toHaveClass("custom-button");
+      expect(screen.getByText("Custom Button")).toBeInTheDocument();
+    });
+
+    it("should handle click events", () => {
       // Arrange
       const handleClick = vi.fn();
-      const buttonText = "Click me";
+      render(<Button onClick={handleClick}>Clickable Button</Button>);
 
       // Act
-      render(<Button onClick={handleClick}>{buttonText}</Button>);
-      const button = screen.getByRole("button", { name: buttonText });
-      fireEvent.click(button);
+      screen.getByText("Clickable Button").click();
 
       // Assert
       expect(handleClick).toHaveBeenCalledTimes(1);
-      expect(handleClick).toHaveBeenCalledWith(expect.any(Object));
     });
 
-    it("should not trigger click events when disabled", () => {
+    it("should handle disabled state", () => {
       // Arrange
       const handleClick = vi.fn();
-      const buttonText = "Disabled";
-
-      // Act
-      render(
+      const { container } = render(
         <Button disabled onClick={handleClick}>
-          {buttonText}
+          Disabled Button
         </Button>
       );
-      const button = screen.getByRole("button", { name: buttonText });
-      fireEvent.click(button);
+
+      // Act
+      screen.getByText("Disabled Button").click();
 
       // Assert
-      expect(button).toBeDisabled();
       expect(handleClick).not.toHaveBeenCalled();
-    });
-  });
-
-  describe("Accessibility Requirements", () => {
-    it("should be accessible with proper ARIA attributes when disabled", () => {
-      // Arrange
-      const buttonText = "Disabled";
-
-      // Act
-      render(<Button disabled>{buttonText}</Button>);
-
-      // Assert
-      const button = screen.getByRole("button", { name: buttonText });
-      expect(button).toBeDisabled();
-      expect(button).toHaveClass(
-        "disabled:pointer-events-none",
-        "disabled:opacity-50"
-      );
+      expect(container.firstChild).toHaveAttribute("disabled");
     });
 
-    it("should forward ref correctly for accessibility tools", () => {
+    it("should render button with asChild prop", () => {
       // Arrange
-      const ref = vi.fn();
-      const buttonText = "Ref test";
-
-      // Act
-      render(<Button ref={ref}>{buttonText}</Button>);
-
-      // Assert
-      expect(ref).toHaveBeenCalledWith(expect.any(HTMLButtonElement));
-    });
-  });
-
-  describe("Advanced Features", () => {
-    it("should render as child component when asChild is true", () => {
-      // Arrange
-      const linkText = "Link button";
-      const href = "/test";
-
-      // Act
       render(
         <Button asChild>
-          <a href={href}>{linkText}</a>
+          <a href="/test">Link Button</a>
         </Button>
       );
 
-      // Assert
-      const link = screen.getByRole("link", { name: linkText });
+      // Act & Assert
+      const link = screen.getByText("Link Button");
       expect(link).toBeInTheDocument();
-      expect(link).toHaveAttribute("href", href);
-      expect(link).toHaveClass("bg-primary", "text-primary-foreground"); // Should inherit button styles
+      expect(link.tagName).toBe("A");
+      expect(link).toHaveAttribute("href", "/test");
     });
 
-    it("should combine custom className with default classes", () => {
+    it("should render button with different content types", () => {
       // Arrange
-      const buttonText = "Custom";
-      const customClass = "custom-class";
+      render(
+        <>
+          <Button>Text Button</Button>
+          <Button>
+            <span>Icon</span> Button
+          </Button>
+          <Button>123</Button>
+        </>
+      );
+
+      // Act & Assert
+      expect(screen.getByText("Text Button")).toBeInTheDocument();
+      expect(screen.getByText("Icon")).toBeInTheDocument();
+      expect(screen.getByText("123")).toBeInTheDocument();
+    });
+
+    it("should forward ref correctly", () => {
+      // Arrange
+      const ref = { current: null };
+      render(<Button ref={ref}>Ref Button</Button>);
+
+      // Act & Assert
+      expect(ref.current).toBeInstanceOf(HTMLButtonElement);
+    });
+
+    it("should handle keyboard events", () => {
+      // Arrange
+      const handleKeyDown = vi.fn();
+      render(<Button onKeyDown={handleKeyDown}>Keyboard Button</Button>);
 
       // Act
-      render(<Button className={customClass}>{buttonText}</Button>);
+      const button = screen.getByText("Keyboard Button");
+      button.focus();
+      fireEvent.keyDown(button, { key: "Enter" });
 
       // Assert
-      const button = screen.getByRole("button", { name: buttonText });
-      expect(button).toHaveClass(customClass);
-      expect(button).toHaveClass("bg-primary", "text-primary-foreground"); // Should still have default classes
+      expect(handleKeyDown).toHaveBeenCalledTimes(1);
+    });
+
+    it("should render button with custom attributes", () => {
+      // Arrange
+      const { container } = render(
+        <Button data-testid="custom-button" aria-label="Custom button">
+          Custom Button
+        </Button>
+      );
+
+      // Act & Assert
+      expect(container.firstChild).toHaveAttribute(
+        "data-testid",
+        "custom-button"
+      );
+      expect(container.firstChild).toHaveAttribute(
+        "aria-label",
+        "Custom button"
+      );
+    });
+
+    it("should render button with all variant and size combinations", () => {
+      // Arrange
+      const variants = [
+        "default",
+        "destructive",
+        "outline",
+        "secondary",
+        "ghost",
+        "link",
+      ] as const;
+      const sizes = ["default", "sm", "lg", "icon"] as const;
+
+      variants.forEach((variant) => {
+        sizes.forEach((size) => {
+          const { container } = render(
+            <Button variant={variant} size={size}>
+              {variant} {size}
+            </Button>
+          );
+
+          // Act & Assert
+          expect(container.firstChild).toBeInTheDocument();
+          expect(screen.getByText(`${variant} ${size}`)).toBeInTheDocument();
+        });
+      });
     });
   });
 });

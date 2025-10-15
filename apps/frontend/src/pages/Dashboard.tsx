@@ -2,8 +2,14 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@wag-wise-mentor/ui/components/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@wag-wise-mentor/ui/components/card";
 import { Heart, Calendar, Scale, Bell, Plus, LogOut } from "lucide-react";
 import { toast } from "sonner";
 
@@ -22,7 +28,9 @@ const Dashboard = () => {
       setLoading(false);
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
       if (!session) {
         navigate("/auth");
       } else {
@@ -144,7 +152,12 @@ interface QuickActionCardProps {
   color: "primary" | "secondary" | "accent" | "success";
 }
 
-const QuickActionCard = ({ icon, title, description, color }: QuickActionCardProps) => {
+const QuickActionCard = ({
+  icon,
+  title,
+  description,
+  color,
+}: QuickActionCardProps) => {
   const colorClasses = {
     primary: "text-primary bg-primary/10",
     secondary: "text-secondary bg-secondary/10",
@@ -155,11 +168,15 @@ const QuickActionCard = ({ icon, title, description, color }: QuickActionCardPro
   return (
     <Card className="bg-gradient-card hover:shadow-soft transition-smooth cursor-pointer group">
       <CardContent className="p-6 space-y-4">
-        <div className={`w-16 h-16 rounded-2xl ${colorClasses[color]} flex items-center justify-center group-hover:scale-110 transition-bounce`}>
+        <div
+          className={`w-16 h-16 rounded-2xl ${colorClasses[color]} flex items-center justify-center group-hover:scale-110 transition-bounce`}
+        >
           {icon}
         </div>
         <div>
-          <h3 className="text-lg font-semibold text-foreground mb-1">{title}</h3>
+          <h3 className="text-lg font-semibold text-foreground mb-1">
+            {title}
+          </h3>
           <p className="text-sm text-muted-foreground">{description}</p>
         </div>
       </CardContent>
