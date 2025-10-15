@@ -1,0 +1,11 @@
+---
+alwaysApply: true
+---
+
+### Core Development Principles
+
+- **KISS (Keep It Simple, Stupid)**: Prioritize simplicity and clarity over complexity
+- **DRY (Don't Repeat Yourself)**: Eliminate code duplication through proper abstraction
+- **Domain-Driven Design (DDD)**: Structure code around business domains and use cases
+- **Avoid Nested IF Statements**: Use early returns, guard clauses, and proper error handling instead of deeply nested conditionals
+- **No Comments Policy**: Code should be self-documenting and readable without comments. Comments are considered an anti-pattern. Exception: AAA (Arrange-Act-Assert) comments in tests are allowed for test structure clarity.
