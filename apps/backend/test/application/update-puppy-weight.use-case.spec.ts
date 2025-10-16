@@ -2,7 +2,7 @@ import { describe, it, beforeEach } from "mocha";
 import { expect } from "chai";
 import {
   UpdatePuppyWeightUseCase,
-  UpdatePuppyWeightCommand,
+  type UpdatePuppyWeightCommand,
 } from "../../src/application/puppy/puppy.use-cases";
 import { InMemoryPuppyRepository } from "../../src/infrastructure/puppy/in-memory-puppy.repository";
 import {

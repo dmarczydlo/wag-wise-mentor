@@ -11,11 +11,13 @@ export class MockDataFactory {
   /**
    * Create mock user data
    */
-  static createUser(overrides: Partial<{
-    id: string;
-    email: string;
-    created_at: string;
-  }> = {}) {
+  static createUser(
+    overrides: Partial<{
+      id: string;
+      email: string;
+      created_at: string;
+    }> = {}
+  ) {
     return {
       id: overrides.id || "user-1",
       email: overrides.email || "test@example.com",
@@ -26,11 +28,13 @@ export class MockDataFactory {
   /**
    * Create mock session data
    */
-  static createSession(overrides: Partial<{
-    user: any;
-    access_token: string;
-    refresh_token: string;
-  }> = {}) {
+  static createSession(
+    overrides: Partial<{
+      user: any;
+      access_token: string;
+      refresh_token: string;
+    }> = {}
+  ) {
     return {
       user: overrides.user || this.createUser(),
       access_token: overrides.access_token || "mock-access-token",
@@ -41,15 +45,17 @@ export class MockDataFactory {
   /**
    * Create mock puppy data
    */
-  static createPuppy(overrides: Partial<{
-    id: string;
-    name: string;
-    breed: string;
-    birthDate: string;
-    currentWeight: number;
-    weightUnit: string;
-    ownerId: string;
-  }> = {}) {
+  static createPuppy(
+    overrides: Partial<{
+      id: string;
+      name: string;
+      breed: string;
+      birthDate: string;
+      currentWeight: number;
+      weightUnit: string;
+      ownerId: string;
+    }> = {}
+  ) {
     return {
       id: overrides.id || "puppy-1",
       name: overrides.name || "Buddy",
@@ -115,9 +121,7 @@ const AllTheProviders = ({ children }: { children: ReactNode }) => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        {children}
-      </BrowserRouter>
+      <BrowserRouter>{children}</BrowserRouter>
     </QueryClientProvider>
   );
 };
@@ -146,18 +150,20 @@ export class TestUtils {
   ): Promise<HTMLElement> {
     return new Promise((resolve, reject) => {
       const startTime = Date.now();
-      
+
       const checkElement = () => {
         const element = container.querySelector(selector) as HTMLElement;
         if (element) {
           resolve(element);
         } else if (Date.now() - startTime > timeout) {
-          reject(new Error(`Element ${selector} not found within ${timeout}ms`));
+          reject(
+            new Error(`Element ${selector} not found within ${timeout}ms`)
+          );
         } else {
           setTimeout(checkElement, 10);
         }
       };
-      
+
       checkElement();
     });
   }
@@ -172,12 +178,12 @@ export class TestUtils {
   ): Promise<HTMLElement> {
     return new Promise((resolve, reject) => {
       const startTime = Date.now();
-      
+
       const checkText = () => {
-        const element = Array.from(container.querySelectorAll("*")).find(
-          el => el.textContent?.includes(text)
+        const element = Array.from(container.querySelectorAll("*")).find(el =>
+          el.textContent?.includes(text)
         ) as HTMLElement;
-        
+
         if (element) {
           resolve(element);
         } else if (Date.now() - startTime > timeout) {
@@ -186,7 +192,7 @@ export class TestUtils {
           setTimeout(checkText, 10);
         }
       };
-      
+
       checkText();
     });
   }
@@ -213,7 +219,10 @@ export class TestUtils {
    * Simulate form submission
    */
   static async submitForm(form: HTMLFormElement): Promise<void> {
-    const submitEvent = new Event("submit", { bubbles: true, cancelable: true });
+    const submitEvent = new Event("submit", {
+      bubbles: true,
+      cancelable: true,
+    });
     form.dispatchEvent(submitEvent);
   }
 
@@ -229,7 +238,10 @@ export class TestUtils {
   /**
    * Assert element has specific attributes
    */
-  static assertHasAttributes(element: HTMLElement, attributes: Record<string, string>): void {
+  static assertHasAttributes(
+    element: HTMLElement,
+    attributes: Record<string, string>
+  ): void {
     Object.entries(attributes).forEach(([name, value]) => {
       expect(element).toHaveAttribute(name, value);
     });
@@ -244,9 +256,13 @@ export class TestUtils {
     const hasAriaLabel = element.hasAttribute("aria-label");
     const hasAriaLabelledBy = element.hasAttribute("aria-labelledby");
     const hasRole = element.hasAttribute("role");
-    
+
     // For interactive elements, should have at least one accessibility attribute
-    if (element.tagName === "BUTTON" || element.tagName === "INPUT" || element.tagName === "SELECT") {
+    if (
+      element.tagName === "BUTTON" ||
+      element.tagName === "INPUT" ||
+      element.tagName === "SELECT"
+    ) {
       expect(hasId || hasAriaLabel || hasAriaLabelledBy || hasRole).toBe(true);
     }
   }
@@ -265,11 +281,11 @@ export class ComponentTestHelper {
     expectedText?: string
   ): void {
     const { container } = customRender(<Component {...props} />);
-    
+
     if (expectedText) {
       expect(container).toHaveTextContent(expectedText);
     }
-    
+
     expect(container.firstChild).toBeInTheDocument();
   }
 
@@ -279,15 +295,21 @@ export class ComponentTestHelper {
   static testPropVariations(
     Component: React.ComponentType<any>,
     baseProps: any,
-    variations: Array<{ props: any; expectedText?: string; expectedClass?: string }>
+    variations: Array<{
+      props: any;
+      expectedText?: string;
+      expectedClass?: string;
+    }>
   ): void {
     variations.forEach(({ props, expectedText, expectedClass }) => {
-      const { container } = customRender(<Component {...baseProps} {...props} />);
-      
+      const { container } = customRender(
+        <Component {...baseProps} {...props} />
+      );
+
       if (expectedText) {
         expect(container).toHaveTextContent(expectedText);
       }
-      
+
       if (expectedClass) {
         expect(container.firstChild).toHaveClass(expectedClass);
       }
@@ -308,14 +330,16 @@ export class ComponentTestHelper {
     }>
   ): void {
     const { container } = customRender(<Component {...props} />);
-    
-    eventTests.forEach(({ event, selector, handler, expectedResult }) => {
-      const element = container.querySelector(selector) as HTMLElement;
-      expect(element).toBeInTheDocument();
-      
-      handler(element);
-      expectedResult();
-    });
+
+    eventTests.forEach(
+      ({ event: _event, selector, handler, expectedResult }) => {
+        const element = container.querySelector(selector) as HTMLElement;
+        expect(element).toBeInTheDocument();
+
+        handler(element);
+        expectedResult();
+      }
+    );
   }
 }
 
@@ -337,15 +361,17 @@ export class FormTestHelper {
   ): void {
     validationTests.forEach(({ field, value, expectedError }) => {
       const { container } = customRender(<FormComponent {...props} />);
-      
-      const input = container.querySelector(`[name="${field}"]`) as HTMLInputElement;
+
+      const input = container.querySelector(
+        `[name="${field}"]`
+      ) as HTMLInputElement;
       expect(input).toBeInTheDocument();
-      
+
       // Simulate user input
       input.value = value;
       input.dispatchEvent(new Event("input", { bubbles: true }));
       input.dispatchEvent(new Event("blur", { bubbles: true }));
-      
+
       // Check for error message
       expect(container).toHaveTextContent(expectedError);
     });
@@ -358,26 +384,30 @@ export class FormTestHelper {
     FormComponent: React.ComponentType<any>,
     props: any,
     formData: Record<string, string>,
-    onSubmit: (data: any) => void
+    _onSubmit: (_data: any) => void
   ): void {
     const mockOnSubmit = vi.fn();
-    const { container } = customRender(<FormComponent {...props} onSubmit={mockOnSubmit} />);
-    
+    const { container } = customRender(
+      <FormComponent {...props} onSubmit={mockOnSubmit} />
+    );
+
     // Fill form fields
     Object.entries(formData).forEach(([field, value]) => {
-      const input = container.querySelector(`[name="${field}"]`) as HTMLInputElement;
+      const input = container.querySelector(
+        `[name="${field}"]`
+      ) as HTMLInputElement;
       if (input) {
         input.value = value;
         input.dispatchEvent(new Event("input", { bubbles: true }));
       }
     });
-    
+
     // Submit form
     const form = container.querySelector("form");
     if (form) {
       TestUtils.submitForm(form);
     }
-    
+
     // Verify submission
     expect(mockOnSubmit).toHaveBeenCalledWith(formData);
   }
@@ -429,4 +459,11 @@ afterEach(() => {
 // Re-export everything from testing-library
 export * from "@testing-library/react";
 export { customRender as render };
-export { MockDataFactory, MockServiceFactory, TestUtils, ComponentTestHelper, FormTestHelper, HookTestHelper };
+export {
+  MockDataFactory,
+  MockServiceFactory,
+  TestUtils,
+  ComponentTestHelper,
+  FormTestHelper,
+  HookTestHelper,
+};

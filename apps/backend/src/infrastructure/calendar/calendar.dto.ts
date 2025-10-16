@@ -9,7 +9,11 @@ export const CreateEventDtoSchema = z.object({
 });
 
 export const UpdateEventDtoSchema = z.object({
-  title: z.string().min(1, "Title is required").max(200, "Title is too long").optional(),
+  title: z
+    .string()
+    .min(1, "Title is required")
+    .max(200, "Title is too long")
+    .optional(),
   description: z.string().optional(),
   scheduledDate: z.coerce.date().optional(),
   completed: z.boolean().optional(),
@@ -22,5 +26,6 @@ export const GenerateHealthTimelineDtoSchema = z.object({
 
 export type CreateEventDto = z.infer<typeof CreateEventDtoSchema>;
 export type UpdateEventDto = z.infer<typeof UpdateEventDtoSchema>;
-export type GenerateHealthTimelineDto = z.infer<typeof GenerateHealthTimelineDtoSchema>;
-
+export type GenerateHealthTimelineDto = z.infer<
+  typeof GenerateHealthTimelineDtoSchema
+>;

@@ -4,8 +4,27 @@ alwaysApply: true
 
 ### Core Development Principles
 
-- **KISS (Keep It Simple, Stupid)**: Prioritize simplicity and clarity over complexity
-- **DRY (Don't Repeat Yourself)**: Eliminate code duplication through proper abstraction
-- **Domain-Driven Design (DDD)**: Structure code around business domains and use cases
-- **Avoid Nested IF Statements**: Use early returns, guard clauses, and proper error handling instead of deeply nested conditionals
-- **No Comments Policy**: Code should be self-documenting and readable without comments. Comments are considered an anti-pattern. Exception: AAA (Arrange-Act-Assert) comments in tests are allowed for test structure clarity.
+- Keep code simple and clear; avoid unnecessary complexity.
+- Eliminate duplication through reusable, well-named abstractions.
+- Organize modules and logic around business domains and use cases.
+- Use early returns and guard clauses to prevent nested or deeply indented logic.
+- Ensure code is self-explanatory and readable without comments. Comments are not allowed except when structuring tests, using the AAA (Arrange-Act-Assert) pattern.
+
+### TypeScript Principles
+
+- Do not use `any`. Always define specific interfaces or types representing real domain data.
+- Rely on TypeScript static typing for accuracy, maintainability, and clarity.
+- Adopt type inference and strict typing, minimizing type assertions except when absolutely necessary.
+
+### Node/Bun Principles
+
+- Always use `return await` with Promises so errors propagate as expected.
+- Use `??` for nullish coalescing instead of `||` for fallback values.
+- Never use comments to explain or describe code.
+- Use only relative imports or paths specified in package.json to maintain consistency and portability.
+
+### Test Principles
+
+- Use the AAA (Arrange-Act-Assert) pattern for test clarity; comments are allowed only for structuring tests according to this pattern.
+- All tests must be as self-contained and expressive as possible without explanation outside the AAA exception.
+- Minimize use of mocks; prefer real domain logic in tests whenever possible

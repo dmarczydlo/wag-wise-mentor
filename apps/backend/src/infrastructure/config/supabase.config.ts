@@ -5,4 +5,3 @@ export default registerAs("supabase", () => ({
   serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
   anonKey: process.env.VITE_SUPABASE_PUBLISHABLE_KEY,
 }));
-

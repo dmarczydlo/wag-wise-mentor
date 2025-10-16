@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { BaseEntity, PaginationParams, PaginatedResponse } from "./common.js";
+import type { BaseEntity, PaginatedResponse } from "./common.js";
 
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   success: boolean;
   data?: T;
   error?: string;
@@ -11,7 +11,7 @@ export interface ApiResponse<T = any> {
 export interface ApiError {
   code: string;
   message: string;
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
 }
 
 export interface UserDto extends BaseEntity {

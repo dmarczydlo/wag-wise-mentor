@@ -5,7 +5,7 @@ import {
   User,
   UserId,
   Email,
-  Password,
+  Password as _Password,
 } from "../../src/domain/auth/user.entity";
 
 describe("InMemoryUserRepository - AAA Pattern", () => {

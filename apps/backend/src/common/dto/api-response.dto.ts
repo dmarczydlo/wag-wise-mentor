@@ -1,4 +1,4 @@
-export class ApiSuccessResponse<T = any> {
+export class ApiSuccessResponse<T = unknown> {
   success: true;
   data: T;
   message?: string;
@@ -10,7 +10,7 @@ export class ApiSuccessResponse<T = any> {
     this.data = data;
     this.message = message;
     this.timestamp = new Date().toISOString();
-    this.path = path || '';
+    this.path = path || "";
   }
 }
 
@@ -19,7 +19,7 @@ export class ApiErrorResponse {
   error: {
     code: string;
     message: string;
-    details?: any;
+    details?: unknown;
   };
   timestamp: string;
   path: string;
@@ -29,7 +29,7 @@ export class ApiErrorResponse {
     statusCode: number,
     code: string,
     message: string,
-    details?: any,
+    details?: unknown,
     path?: string
   ) {
     this.success = false;
@@ -40,79 +40,42 @@ export class ApiErrorResponse {
     };
     this.statusCode = statusCode;
     this.timestamp = new Date().toISOString();
-    this.path = path || '';
+    this.path = path || "";
   }
 }
 
 export class ValidationErrorResponse extends ApiErrorResponse {
-  constructor(errors: any[], path?: string) {
-    super(
-      400,
-      'VALIDATION_ERROR',
-      'Request validation failed',
-      errors,
-      path
-    );
+  constructor(errors: unknown[], path?: string) {
+    super(400, "VALIDATION_ERROR", "Request validation failed", errors, path);
   }
 }
 
 export class DomainErrorResponse extends ApiErrorResponse {
   constructor(message: string, path?: string) {
-    super(
-      400,
-      'DOMAIN_ERROR',
-      message,
-      undefined,
-      path
-    );
+    super(400, "DOMAIN_ERROR", message, undefined, path);
   }
 }
 
 export class NotFoundErrorResponse extends ApiErrorResponse {
   constructor(resource: string, path?: string) {
-    super(
-      404,
-      'NOT_FOUND',
-      `${resource} not found`,
-      undefined,
-      path
-    );
+    super(404, "NOT_FOUND", `${resource} not found`, undefined, path);
   }
 }
 
 export class UnauthorizedErrorResponse extends ApiErrorResponse {
-  constructor(message: string = 'Unauthorized access', path?: string) {
-    super(
-      401,
-      'UNAUTHORIZED',
-      message,
-      undefined,
-      path
-    );
+  constructor(message: string = "Unauthorized access", path?: string) {
+    super(401, "UNAUTHORIZED", message, undefined, path);
   }
 }
 
 export class ForbiddenErrorResponse extends ApiErrorResponse {
-  constructor(message: string = 'Forbidden access', path?: string) {
-    super(
-      403,
-      'FORBIDDEN',
-      message,
-      undefined,
-      path
-    );
+  constructor(message: string = "Forbidden access", path?: string) {
+    super(403, "FORBIDDEN", message, undefined, path);
   }
 }
 
 export class InternalServerErrorResponse extends ApiErrorResponse {
-  constructor(message: string = 'Internal server error', path?: string) {
-    super(
-      500,
-      'INTERNAL_SERVER_ERROR',
-      message,
-      undefined,
-      path
-    );
+  constructor(message: string = "Internal server error", path?: string) {
+    super(500, "INTERNAL_SERVER_ERROR", message, undefined, path);
   }
 }
-

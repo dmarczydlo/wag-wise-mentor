@@ -1,6 +1,9 @@
-import { Entity } from "../shared/base.entity";
-import { ValueObject } from "../shared/base.entity";
-import { Result, DomainError, DomainResult } from "../../common/result/result";
+import { Entity, ValueObject } from "../shared/base.entity";
+import {
+  Result,
+  DomainError,
+  type DomainResult,
+} from "../../common/result/result";
 
 export class EventId extends ValueObject {
   constructor(public readonly value: string) {

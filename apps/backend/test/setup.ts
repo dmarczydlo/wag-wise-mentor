@@ -1,6 +1,6 @@
-import 'reflect-metadata';
-import { expect } from 'chai';
-import * as sinon from 'sinon';
+import "reflect-metadata";
+import { expect } from "chai";
+import * as sinon from "sinon";
 
 // Global test utilities
 export const testUtils = {
@@ -15,7 +15,7 @@ export const customAssertions = {
   async shouldThrowAsync(fn: () => Promise<any>, expectedError?: any) {
     try {
       await fn();
-      expect.fail('Expected function to throw an error');
+      expect.fail("Expected function to throw an error");
     } catch (error) {
       if (expectedError) {
         expect(error).to.be.instanceOf(expectedError);

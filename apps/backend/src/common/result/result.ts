@@ -13,22 +13,16 @@ export abstract class Result<T, E = string> {
   }
 
   static combine<T>(results: Result<T>[]): Result<T[]> {
-    const failures = results.filter((r) => r.isFailure());
+    const failures = results.filter(r => r.isFailure());
     if (failures.length > 0) {
       return Result.failure(failures[0].getError());
     }
-    return Result.success(results.map((r) => r.getValue()));
+    return Result.success(results.map(r => r.getValue()));
   }
 
   map<U>(fn: (value: T) => U): Result<U, E> {
     if (this.isSuccess()) {
-      try {
-        return Result.success(fn(this.getValue())) as Result<U, E>;
-      } catch (error) {
-        // For map operations, we need to handle the case where E might not be string
-        // This is a limitation of the current design - map should probably not catch exceptions
-        throw error;
-      }
+      return Result.success(fn(this.getValue())) as Result<U, E>;
     }
     return Result.failure(this.getError());
   }
@@ -117,10 +111,10 @@ export class DomainError {
   constructor(
     public readonly code: string,
     public readonly message: string,
-    public readonly details?: any
+    public readonly details?: unknown
   ) {}
 
-  static validation(message: string, details?: any): DomainError {
+  static validation(message: string, details?: unknown): DomainError {
     return new DomainError("VALIDATION_ERROR", message, details);
   }
 
@@ -139,7 +133,7 @@ export class DomainError {
     return new DomainError("FORBIDDEN", message);
   }
 
-  static conflict(message: string, details?: any): DomainError {
+  static conflict(message: string, details?: unknown): DomainError {
     return new DomainError("CONFLICT", message, details);
   }
 

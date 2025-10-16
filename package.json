@@ -43,9 +43,13 @@
     "coverage:clean:frontend": "cd apps/frontend && bun run coverage:clean",
     "coverage:clean:backend": "cd apps/backend && bun run coverage:clean",
     "coverage:combined": "bun run test:coverage && bun run coverage:report",
-    "lint": "bun run lint:frontend && bun run lint:backend",
+    "lint": "bun run lint:shared && bun run lint:ui && bun run lint:frontend && bun run lint:backend",
+    "lint:shared": "cd packages/shared && bun run lint",
+    "lint:ui": "cd packages/ui && bun run lint",
     "lint:frontend": "cd apps/frontend && bun run lint",
     "lint:backend": "cd apps/backend && bun run lint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "type-check": "bun run type-check:frontend && bun run type-check:backend",
     "type-check:frontend": "cd apps/frontend && bun run type-check",
     "type-check:backend": "cd apps/backend && bun run type-check",
@@ -57,8 +61,14 @@
     "install:all": "bun install && cd apps/frontend && bun install && cd ../backend && bun install"
   },
   "devDependencies": {
+    "@eslint/js": "^9.0.0",
     "@playwright/test": "^1.55.1",
-    "concurrently": "^9.1.0"
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "concurrently": "^9.1.0",
+    "eslint": "^9.0.0",
+    "eslint-config-prettier": "^9.0.0",
+    "prettier": "^3.0.0"
   },
   "engines": {
     "bun": ">=1.0.0"

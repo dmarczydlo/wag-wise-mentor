@@ -16,8 +16,8 @@ export function isValidEmail(email: string): boolean {
  * Validate phone number (basic validation)
  */
 export function isValidPhone(phone: string): boolean {
-  const phoneRegex = /^[\+]?[1-9][\d]{6,14}$/;
-  return phoneRegex.test(phone.replace(/[\s\-\(\)]/g, ""));
+  const phoneRegex = /^[+]?[1-9][\d]{6,14}$/;
+  return phoneRegex.test(phone.replace(/[\s\-()]/g, ""));
 }
 
 /**
@@ -86,7 +86,7 @@ export function sanitizeString(input: string): string {
 /**
  * Validate required fields
  */
-export function validateRequired<T extends Record<string, any>>(
+export function validateRequired<T extends Record<string, unknown>>(
   data: T,
   requiredFields: (keyof T)[]
 ): { isValid: boolean; missingFields: (keyof T)[] } {

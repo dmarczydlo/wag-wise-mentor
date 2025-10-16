@@ -1,6 +1,6 @@
 import { describe, it, beforeEach } from "mocha";
 import { expect } from "chai";
-import { Test, TestingModule } from "@nestjs/testing";
+import { Test, type TestingModule } from "@nestjs/testing";
 import { TrainingController } from "../../src/infrastructure/training/training.controller";
 import { TrainingUseCases } from "../../src/application/training/training.use-cases";
 import { InMemoryTrainingRepository } from "../../src/infrastructure/training/in-memory-training.repository";

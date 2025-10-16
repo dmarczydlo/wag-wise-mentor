@@ -1,10 +1,10 @@
 import { describe, it, beforeEach } from "mocha";
 import { expect } from "chai";
-import { Test, TestingModule } from "@nestjs/testing";
+import { Test, type TestingModule } from "@nestjs/testing";
 import { AnalyticsController } from "../../src/infrastructure/analytics/analytics.controller";
 import { AnalyticsUseCases } from "../../src/application/analytics/analytics.use-cases";
 import { InMemoryAnalyticsRepository } from "../../src/infrastructure/analytics/in-memory-analytics.repository";
-import { NotFoundException } from "@nestjs/common";
+import { NotFoundException as _NotFoundException } from "@nestjs/common";
 
 describe("AnalyticsController Integration Tests - AAA Pattern", () => {
   let controller: AnalyticsController;

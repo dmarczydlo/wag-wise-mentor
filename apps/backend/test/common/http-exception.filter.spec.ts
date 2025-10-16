@@ -10,12 +10,12 @@ import {
 } from "@nestjs/common";
 import { HttpExceptionFilter } from "../../src/common/filters/http-exception.filter";
 import {
-  ValidationErrorResponse,
-  DomainErrorResponse,
-  NotFoundErrorResponse,
-  UnauthorizedErrorResponse,
-  ForbiddenErrorResponse,
-  InternalServerErrorResponse,
+  ValidationErrorResponse as _ValidationErrorResponse,
+  DomainErrorResponse as _DomainErrorResponse,
+  NotFoundErrorResponse as _NotFoundErrorResponse,
+  UnauthorizedErrorResponse as _UnauthorizedErrorResponse,
+  ForbiddenErrorResponse as _ForbiddenErrorResponse,
+  InternalServerErrorResponse as _InternalServerErrorResponse,
 } from "../../src/common/dto/api-response.dto";
 
 describe("HttpExceptionFilter - AAA Pattern", () => {
@@ -28,22 +28,22 @@ describe("HttpExceptionFilter - AAA Pattern", () => {
   beforeEach(() => {
     // Arrange
     filter = new HttpExceptionFilter();
-    
+
     mockJson = {
       data: null,
       called: false,
     };
-    
+
     mockStatus = {
       returnValue: null,
       called: false,
       calledWith: 0,
     };
-    
+
     mockRequest = {
       url: "/test-path",
     };
-    
+
     mockResponse = {
       status: (code: number) => {
         mockStatus.called = true;
@@ -70,12 +70,12 @@ describe("HttpExceptionFilter - AAA Pattern", () => {
           path: ["name"],
         },
       ];
-      
+
       const exception = new BadRequestException({
         message: "Validation failed",
         errors: validationErrors,
       });
-      
+
       const host = {
         switchToHttp: () => ({
           getResponse: () => mockResponse,
@@ -104,7 +104,7 @@ describe("HttpExceptionFilter - AAA Pattern", () => {
         message: "Validation failed",
         errors: [],
       });
-      
+
       const host = {
         switchToHttp: () => ({
           getResponse: () => mockResponse,
@@ -301,7 +301,7 @@ describe("HttpExceptionFilter - AAA Pattern", () => {
       // Arrange
       const originalEnv = process.env.NODE_ENV;
       process.env.NODE_ENV = "production";
-      
+
       const exception = new Error("Sensitive error message");
       const host = {
         switchToHttp: () => ({
@@ -317,7 +317,7 @@ describe("HttpExceptionFilter - AAA Pattern", () => {
       expect(mockJson.data.error.message).to.equal(
         "An unexpected error occurred"
       );
-      
+
       // Cleanup
       process.env.NODE_ENV = originalEnv;
     });
@@ -326,7 +326,7 @@ describe("HttpExceptionFilter - AAA Pattern", () => {
       // Arrange
       const originalEnv = process.env.NODE_ENV;
       process.env.NODE_ENV = "development";
-      
+
       const exception = new Error("Debug error message");
       const host = {
         switchToHttp: () => ({
@@ -340,7 +340,7 @@ describe("HttpExceptionFilter - AAA Pattern", () => {
 
       // Assert
       expect(mockJson.data.error.message).to.equal("Debug error message");
-      
+
       // Cleanup
       process.env.NODE_ENV = originalEnv;
     });
@@ -387,4 +387,3 @@ describe("HttpExceptionFilter - AAA Pattern", () => {
     });
   });
 });
-

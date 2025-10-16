@@ -26,7 +26,7 @@ describe("useIsMobile Hook", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    
+
     mockMediaQueryList = {
       matches: false,
       addEventListener: mockAddEventListener,
@@ -57,7 +57,10 @@ describe("useIsMobile Hook", () => {
 
       // Assert
       expect(mockMatchMedia).toHaveBeenCalledWith("(max-width: 767px)");
-      expect(mockAddEventListener).toHaveBeenCalledWith("change", expect.any(Function));
+      expect(mockAddEventListener).toHaveBeenCalledWith(
+        "change",
+        expect.any(Function)
+      );
     });
 
     it("should clean up event listener on unmount", () => {
@@ -68,7 +71,10 @@ describe("useIsMobile Hook", () => {
       unmount();
 
       // Assert
-      expect(mockRemoveEventListener).toHaveBeenCalledWith("change", expect.any(Function));
+      expect(mockRemoveEventListener).toHaveBeenCalledWith(
+        "change",
+        expect.any(Function)
+      );
     });
   });
 

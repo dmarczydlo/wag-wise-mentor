@@ -1,15 +1,14 @@
 import {
-  ExceptionFilter,
+  type ExceptionFilter,
   Catch,
-  ArgumentsHost,
+  type ArgumentsHost,
   HttpException,
-  HttpStatus,
   BadRequestException,
   NotFoundException,
   UnauthorizedException,
   ForbiddenException,
-} from '@nestjs/common';
-import { Request, Response } from 'express';
+} from "@nestjs/common";
+import type { Request, Response } from "express";
 import {
   ApiErrorResponse,
   ValidationErrorResponse,
@@ -18,7 +17,12 @@ import {
   ForbiddenErrorResponse,
   InternalServerErrorResponse,
   DomainErrorResponse,
-} from '../dto/api-response.dto';
+} from "../dto/api-response.dto";
+
+interface ExceptionResponse {
+  message?: string | string[];
+  errors?: unknown[];
+}
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -31,36 +35,49 @@ export class HttpExceptionFilter implements ExceptionFilter {
     let errorResponse: ApiErrorResponse;
 
     if (exception instanceof BadRequestException) {
-      const exceptionResponse = exception.getResponse() as any;
-      
-      if (exceptionResponse.message === 'Validation failed' && exceptionResponse.errors) {
+      const exceptionResponse = exception.getResponse() as ExceptionResponse;
+
+      if (
+        exceptionResponse.message === "Validation failed" &&
+        exceptionResponse.errors
+      ) {
         errorResponse = new ValidationErrorResponse(
           exceptionResponse.errors,
           path
         );
       } else {
         errorResponse = new DomainErrorResponse(
-          exceptionResponse.message || exception.message,
+          Array.isArray(exceptionResponse.message)
+            ? exceptionResponse.message.join(", ")
+            : exceptionResponse.message || exception.message,
           path
         );
       }
     } else if (exception instanceof NotFoundException) {
-      const exceptionResponse = exception.getResponse() as any;
-      const message = exceptionResponse.message || exception.message;
+      const exceptionResponse = exception.getResponse() as ExceptionResponse;
+      const message = Array.isArray(exceptionResponse.message)
+        ? exceptionResponse.message.join(", ")
+        : exceptionResponse.message || exception.message;
       errorResponse = new NotFoundErrorResponse(message, path);
     } else if (exception instanceof UnauthorizedException) {
-      const exceptionResponse = exception.getResponse() as any;
-      const message = exceptionResponse.message || exception.message;
+      const exceptionResponse = exception.getResponse() as ExceptionResponse;
+      const message = Array.isArray(exceptionResponse.message)
+        ? exceptionResponse.message.join(", ")
+        : exceptionResponse.message || exception.message;
       errorResponse = new UnauthorizedErrorResponse(message, path);
     } else if (exception instanceof ForbiddenException) {
-      const exceptionResponse = exception.getResponse() as any;
-      const message = exceptionResponse.message || exception.message;
+      const exceptionResponse = exception.getResponse() as ExceptionResponse;
+      const message = Array.isArray(exceptionResponse.message)
+        ? exceptionResponse.message.join(", ")
+        : exceptionResponse.message || exception.message;
       errorResponse = new ForbiddenErrorResponse(message, path);
     } else if (exception instanceof HttpException) {
       const status = exception.getStatus();
-      const exceptionResponse = exception.getResponse() as any;
-      const message = exceptionResponse.message || exception.message;
-      
+      const exceptionResponse = exception.getResponse() as ExceptionResponse;
+      const message = Array.isArray(exceptionResponse.message)
+        ? exceptionResponse.message.join(", ")
+        : exceptionResponse.message || exception.message;
+
       errorResponse = new ApiErrorResponse(
         status,
         `HTTP_${status}`,
@@ -70,11 +87,11 @@ export class HttpExceptionFilter implements ExceptionFilter {
       );
     } else {
       const error = exception as Error;
-      console.error('Unhandled exception:', error);
-      
+      console.error("Unhandled exception:", error);
+
       errorResponse = new InternalServerErrorResponse(
-        process.env.NODE_ENV === 'production'
-          ? 'An unexpected error occurred'
+        process.env.NODE_ENV === "production"
+          ? "An unexpected error occurred"
           : error.message,
         path
       );
@@ -83,4 +100,3 @@ export class HttpExceptionFilter implements ExceptionFilter {
     response.status(errorResponse.statusCode).json(errorResponse);
   }
 }
-

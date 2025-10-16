@@ -1,12 +1,20 @@
-import { Controller, Post, Body, Get, Param, Put, UsePipes } from "@nestjs/common";
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  Put,
+  UsePipes,
+} from "@nestjs/common";
 import { ApiTags, ApiOperation, ApiResponse } from "@nestjs/swagger";
 import {
   CreateEventUseCase,
-  CreateEventCommand,
+  type CreateEventCommand,
   UpdateEventUseCase,
-  UpdateEventCommand,
+  type UpdateEventCommand,
   GenerateHealthTimelineUseCase,
-  GenerateHealthTimelineCommand,
+  type GenerateHealthTimelineCommand,
 } from "../../application/calendar/calendar.use-cases";
 import { ZodValidationPipe } from "../../common/pipes/zod-validation.pipe";
 import {
@@ -41,10 +49,7 @@ export class CalendarController {
   @ApiOperation({ summary: "Update an existing event" })
   @ApiResponse({ status: 200, description: "Event updated successfully" })
   @ApiResponse({ status: 404, description: "Event not found" })
-  async updateEvent(
-    @Param("id") eventId: string,
-    @Body() dto: UpdateEventDto
-  ) {
+  async updateEvent(@Param("id") eventId: string, @Body() dto: UpdateEventDto) {
     return await this.updateEventUseCase.execute({
       ...dto,
       eventId,
@@ -60,7 +65,9 @@ export class CalendarController {
   })
   @ApiResponse({ status: 400, description: "Invalid input" })
   async generateHealthTimeline(@Body() dto: GenerateHealthTimelineDto) {
-    return await this.generateHealthTimelineUseCase.execute(dto as GenerateHealthTimelineCommand);
+    return await this.generateHealthTimelineUseCase.execute(
+      dto as GenerateHealthTimelineCommand
+    );
   }
 
   @Get("health-timeline/:puppyId")

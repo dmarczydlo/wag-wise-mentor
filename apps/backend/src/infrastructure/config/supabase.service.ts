@@ -1,6 +1,6 @@
 import { Injectable, Inject } from "@nestjs/common";
 import { ConfigType } from "@nestjs/config";
-import { createClient, SupabaseClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import supabaseConfig from "./supabase.config";
 
 @Injectable()
@@ -36,12 +36,26 @@ export class SupabaseService {
   }
 
   async executeQuery<T>(
-    query: (client: SupabaseClient) => Promise<{ data: T | null; error: any }>
+    query: (
+      client: SupabaseClient
+    ) => Promise<{ data: T | null; error: unknown }>
   ): Promise<T> {
     const { data, error } = await query(this.client);
 
     if (error) {
-      throw new Error(`Supabase query failed: ${error.message}`);
+      let errorMessage: string;
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      } else if (
+        typeof error === "object" &&
+        error !== null &&
+        "message" in error
+      ) {
+        errorMessage = String((error as { message: unknown }).message);
+      } else {
+        errorMessage = String(error);
+      }
+      throw new Error(`Supabase query failed: ${errorMessage}`);
     }
 
     if (!data) {
@@ -52,13 +66,24 @@ export class SupabaseService {
   }
 
   async executeCommand(
-    command: (client: SupabaseClient) => Promise<{ error: any }>
+    command: (client: SupabaseClient) => Promise<{ error: unknown }>
   ): Promise<void> {
     const { error } = await command(this.client);
 
     if (error) {
-      throw new Error(`Supabase command failed: ${error.message}`);
+      let errorMessage: string;
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      } else if (
+        typeof error === "object" &&
+        error !== null &&
+        "message" in error
+      ) {
+        errorMessage = String((error as { message: unknown }).message);
+      } else {
+        errorMessage = String(error);
+      }
+      throw new Error(`Supabase command failed: ${errorMessage}`);
     }
   }
 }
-

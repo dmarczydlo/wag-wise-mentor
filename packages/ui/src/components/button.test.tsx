@@ -229,8 +229,8 @@ describe("Button Component - AAA Pattern", () => {
       ] as const;
       const sizes = ["default", "sm", "lg", "icon"] as const;
 
-      variants.forEach((variant) => {
-        sizes.forEach((size) => {
+      variants.forEach(variant => {
+        sizes.forEach(size => {
           const { container } = render(
             <Button variant={variant} size={size}>
               {variant} {size}

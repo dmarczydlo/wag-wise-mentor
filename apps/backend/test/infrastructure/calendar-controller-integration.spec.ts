@@ -1,9 +1,9 @@
 import { describe, it, beforeEach, afterEach } from "mocha";
 import { expect } from "chai";
-import { Test, TestingModule } from "@nestjs/testing";
+import { Test, type TestingModule } from "@nestjs/testing";
 import { CalendarController } from "../../src/infrastructure/calendar/calendar.controller";
 import { CalendarModule } from "../../src/infrastructure/calendar/calendar.module";
-import { InMemoryEventRepository } from "../../src/infrastructure/calendar/in-memory-event.repository";
+import type { InMemoryEventRepository } from "../../src/infrastructure/calendar/in-memory-event.repository";
 import { EVENT_REPOSITORY } from "../../src/application/calendar/calendar.use-cases";
 import { EventTypeEnum } from "../../src/domain/calendar/event.entity";
 

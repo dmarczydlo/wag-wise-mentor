@@ -125,7 +125,7 @@ describe("Input Component - AAA Pattern", () => {
         "search",
       ] as const;
 
-      types.forEach((type) => {
+      types.forEach(type => {
         const { container } = render(<Input type={type} />);
 
         // Act & Assert

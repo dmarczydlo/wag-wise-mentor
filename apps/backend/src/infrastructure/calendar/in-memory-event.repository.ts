@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import { Event, EventId } from "../../domain/calendar/event.entity";
-import { EventRepository } from "../../domain/calendar/event.repository";
-import { DomainResult, Result } from "../../common/result/result";
+import type { Event, EventId } from "../../domain/calendar/event.entity";
+import type { EventRepository } from "../../domain/calendar/event.repository";
+import { type DomainResult, Result } from "../../common/result/result";
 
 @Injectable()
 export class InMemoryEventRepository implements EventRepository {
@@ -36,7 +36,7 @@ export class InMemoryEventRepository implements EventRepository {
   async findByPuppyId(puppyId: string): Promise<DomainResult<Event[]>> {
     try {
       const events = Array.from(this.events.values()).filter(
-        (event) => event.puppyId === puppyId
+        event => event.puppyId === puppyId
       );
       return Result.success(events);
     } catch (error) {
@@ -56,7 +56,7 @@ export class InMemoryEventRepository implements EventRepository {
   ): Promise<DomainResult<Event[]>> {
     try {
       const events = Array.from(this.events.values()).filter(
-        (event) =>
+        event =>
           event.eventDateTime.value >= startDate &&
           event.eventDateTime.value <= endDate
       );
@@ -75,7 +75,7 @@ export class InMemoryEventRepository implements EventRepository {
   async findByType(eventType: string): Promise<DomainResult<Event[]>> {
     try {
       const events = Array.from(this.events.values()).filter(
-        (event) => event.eventType.value === eventType
+        event => event.eventType.value === eventType
       );
       return Result.success(events);
     } catch (error) {
@@ -127,7 +127,7 @@ export class InMemoryEventRepository implements EventRepository {
 
       const puppyEvents = puppyEventsResult.getValue();
       const upcomingEvents = puppyEvents
-        .filter((event) => event.isUpcoming())
+        .filter(event => event.isUpcoming())
         .sort(
           (a, b) =>
             a.eventDateTime.value.getTime() - b.eventDateTime.value.getTime()

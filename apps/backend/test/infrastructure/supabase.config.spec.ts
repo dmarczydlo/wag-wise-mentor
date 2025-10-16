@@ -95,4 +95,3 @@ describe("SupabaseConfig - AAA Pattern", () => {
     expect(config).to.have.property("anonKey");
   });
 });
-

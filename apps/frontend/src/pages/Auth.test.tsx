@@ -303,7 +303,7 @@ describe("Auth Component", () => {
     it("should show loading state during authentication", async () => {
       // Arrange
       let resolveAuth: (value: any) => void;
-      const authPromise = new Promise((resolve) => {
+      const authPromise = new Promise(resolve => {
         resolveAuth = resolve;
       });
       vi.mocked(supabase.auth.signInWithPassword).mockReturnValue(authPromise);

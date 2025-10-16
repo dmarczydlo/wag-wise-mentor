@@ -1,7 +1,11 @@
 import { Injectable, Inject } from "@nestjs/common";
 import { AnalyticsRepository } from "../../domain/analytics/analytics.repository";
 import { AnalyticsEvent } from "../../domain/analytics/analytics-event.entity";
-import { DomainResult, DomainError, Result } from "../../common/result/result";
+import {
+  type DomainResult,
+  DomainError,
+  Result,
+} from "../../common/result/result";
 
 @Injectable()
 export class AnalyticsUseCases {
@@ -14,7 +18,7 @@ export class AnalyticsUseCases {
     userId: string,
     eventType: string,
     eventName: string,
-    properties: Record<string, any> = {}
+    properties: Record<string, unknown> = {}
   ): Promise<DomainResult<AnalyticsEvent>> {
     const event = AnalyticsEvent.create(
       crypto.randomUUID(),
@@ -60,7 +64,7 @@ export class AnalyticsUseCases {
 
   async enrichEvent(
     id: string,
-    additionalProperties: Record<string, any>
+    additionalProperties: Record<string, unknown>
   ): Promise<DomainResult<AnalyticsEvent>> {
     const eventResult = await this.getEvent(id);
     if (eventResult.isFailure()) {

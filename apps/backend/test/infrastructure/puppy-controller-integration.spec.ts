@@ -1,13 +1,13 @@
 import { describe, it, beforeEach, afterEach } from "mocha";
 import { expect } from "chai";
-import { Test, TestingModule } from "@nestjs/testing";
+import { Test, type TestingModule } from "@nestjs/testing";
 import { PuppyController } from "../../src/infrastructure/puppy/puppy.controller";
 import { PuppyModule } from "../../src/infrastructure/puppy/puppy.module";
-import { InMemoryPuppyRepository } from "../../src/infrastructure/puppy/in-memory-puppy.repository";
+import type { InMemoryPuppyRepository } from "../../src/infrastructure/puppy/in-memory-puppy.repository";
 import { PUPPY_REPOSITORY } from "../../src/application/puppy/puppy.use-cases";
 import {
   ApiSuccessResponse,
-  ApiErrorResponse,
+  ApiErrorResponse as _ApiErrorResponse,
 } from "../../src/common/dto/api-response.dto";
 import {
   Puppy,

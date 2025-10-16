@@ -7,7 +7,7 @@ export class AIRecommendation extends Entity<string> {
     public readonly category: string,
     public readonly recommendation: string,
     public readonly confidence: number,
-    public readonly metadata: Record<string, any>,
+    public readonly metadata: Record<string, unknown>,
     createdAt?: Date,
     updatedAt?: Date
   ) {
@@ -20,7 +20,7 @@ export class AIRecommendation extends Entity<string> {
     category: string,
     recommendation: string,
     confidence: number,
-    metadata: Record<string, any> = {}
+    metadata: Record<string, unknown> = {}
   ): AIRecommendation {
     return new AIRecommendation(
       id,

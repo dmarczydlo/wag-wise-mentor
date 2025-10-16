@@ -1,5 +1,5 @@
-import { Event, EventId } from "./event.entity";
-import { DomainResult } from "../../common/result/result";
+import type { Event, EventId } from "./event.entity";
+import type { DomainResult } from "../../common/result/result";
 
 export abstract class EventRepository {
   abstract save(event: Event): Promise<DomainResult<Event>>;

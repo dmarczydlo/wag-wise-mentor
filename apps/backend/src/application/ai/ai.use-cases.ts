@@ -1,7 +1,11 @@
 import { Injectable, Inject } from "@nestjs/common";
 import { AIRepository } from "../../domain/ai/ai.repository";
 import { AIRecommendation } from "../../domain/ai/ai-recommendation.entity";
-import { DomainResult, DomainError, Result } from "../../common/result/result";
+import {
+  type DomainResult,
+  DomainError,
+  Result,
+} from "../../common/result/result";
 
 @Injectable()
 export class AIUseCases {
@@ -15,7 +19,7 @@ export class AIUseCases {
     category: string,
     recommendation: string,
     confidence: number,
-    metadata: Record<string, any> = {}
+    metadata: Record<string, unknown> = {}
   ): Promise<DomainResult<AIRecommendation>> {
     const aiRecommendation = AIRecommendation.create(
       crypto.randomUUID(),
@@ -33,16 +37,18 @@ export class AIUseCases {
     if (recommendationResult.isFailure()) {
       return recommendationResult;
     }
-    
+
     const recommendation = recommendationResult.getValue();
     if (!recommendation) {
-      return Result.failure(DomainError.notFound('AI recommendation', id));
+      return Result.failure(DomainError.notFound("AI recommendation", id));
     }
-    
+
     return Result.success(recommendation);
   }
 
-  async getPuppyRecommendations(puppyId: string): Promise<DomainResult<AIRecommendation[]>> {
+  async getPuppyRecommendations(
+    puppyId: string
+  ): Promise<DomainResult<AIRecommendation[]>> {
     return await this.aiRepository.findByPuppyId(puppyId);
   }
 
@@ -60,7 +66,7 @@ export class AIUseCases {
     if (recommendationResult.isFailure()) {
       return recommendationResult;
     }
-    
+
     const recommendation = recommendationResult.getValue();
     const updated = recommendation.updateConfidence(confidence);
     return await this.aiRepository.save(updated);

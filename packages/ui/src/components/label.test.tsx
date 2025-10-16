@@ -1,36 +1,40 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { Label } from './label';
+import { render, screen, fireEvent } from "@testing-library/react";
+import { Label } from "./label";
 
-describe('Label Component - AAA Pattern', () => {
-  describe('Label Component Requirements', () => {
-    it('should render label with text content', () => {
+describe("Label Component - AAA Pattern", () => {
+  describe("Label Component Requirements", () => {
+    it("should render label with text content", () => {
       // Arrange
       const { container } = render(<Label>Test Label</Label>);
 
       // Act & Assert
       expect(container.firstChild).toBeInTheDocument();
-      expect(screen.getByText('Test Label')).toBeInTheDocument();
+      expect(screen.getByText("Test Label")).toBeInTheDocument();
     });
 
-    it('should render label with htmlFor attribute', () => {
+    it("should render label with htmlFor attribute", () => {
       // Arrange
-      const { container } = render(<Label htmlFor="test-input">Label for Input</Label>);
+      const { container } = render(
+        <Label htmlFor="test-input">Label for Input</Label>
+      );
 
       // Act & Assert
-      expect(container.firstChild).toHaveAttribute('for', 'test-input');
-      expect(screen.getByText('Label for Input')).toBeInTheDocument();
+      expect(container.firstChild).toHaveAttribute("for", "test-input");
+      expect(screen.getByText("Label for Input")).toBeInTheDocument();
     });
 
-    it('should apply custom className', () => {
+    it("should apply custom className", () => {
       // Arrange
-      const { container } = render(<Label className="custom-label">Custom Label</Label>);
+      const { container } = render(
+        <Label className="custom-label">Custom Label</Label>
+      );
 
       // Act & Assert
-      expect(container.firstChild).toHaveClass('custom-label');
-      expect(screen.getByText('Custom Label')).toBeInTheDocument();
+      expect(container.firstChild).toHaveClass("custom-label");
+      expect(screen.getByText("Custom Label")).toBeInTheDocument();
     });
 
-    it('should render label with complex content', () => {
+    it("should render label with complex content", () => {
       // Arrange
       render(
         <Label>
@@ -39,36 +43,46 @@ describe('Label Component - AAA Pattern', () => {
       );
 
       // Act & Assert
-      expect(screen.getByText('Complex')).toBeInTheDocument();
-      expect(screen.getByText('Label')).toBeInTheDocument();
-      expect(screen.getByText('Content')).toBeInTheDocument();
+      expect(screen.getByText("Complex")).toBeInTheDocument();
+      expect(screen.getByText("Label")).toBeInTheDocument();
+      expect(screen.getByText("Content")).toBeInTheDocument();
     });
 
-    it('should render label with long text', () => {
+    it("should render label with long text", () => {
       // Arrange
-      render(<Label>This is a very long label text that should render correctly</Label>);
+      render(
+        <Label>
+          This is a very long label text that should render correctly
+        </Label>
+      );
 
       // Act & Assert
-      expect(screen.getByText('This is a very long label text that should render correctly')).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          "This is a very long label text that should render correctly"
+        )
+      ).toBeInTheDocument();
     });
 
-    it('should render label with special characters', () => {
+    it("should render label with special characters", () => {
       // Arrange
       render(<Label>Label with @#$% special characters</Label>);
 
       // Act & Assert
-      expect(screen.getByText('Label with @#$% special characters')).toBeInTheDocument();
+      expect(
+        screen.getByText("Label with @#$% special characters")
+      ).toBeInTheDocument();
     });
 
-    it('should render label with numbers', () => {
+    it("should render label with numbers", () => {
       // Arrange
       render(<Label>Label 123 with numbers</Label>);
 
       // Act & Assert
-      expect(screen.getByText('Label 123 with numbers')).toBeInTheDocument();
+      expect(screen.getByText("Label 123 with numbers")).toBeInTheDocument();
     });
 
-    it('should render label with empty content', () => {
+    it("should render label with empty content", () => {
       // Arrange
       const { container } = render(<Label></Label>);
 
@@ -76,7 +90,7 @@ describe('Label Component - AAA Pattern', () => {
       expect(container.firstChild).toBeInTheDocument();
     });
 
-    it('should render label with aria attributes', () => {
+    it("should render label with aria attributes", () => {
       // Arrange
       const { container } = render(
         <Label aria-describedby="help-text" aria-required="true">
@@ -85,12 +99,15 @@ describe('Label Component - AAA Pattern', () => {
       );
 
       // Act & Assert
-      expect(container.firstChild).toHaveAttribute('aria-describedby', 'help-text');
-      expect(container.firstChild).toHaveAttribute('aria-required', 'true');
-      expect(screen.getByText('Required Label')).toBeInTheDocument();
+      expect(container.firstChild).toHaveAttribute(
+        "aria-describedby",
+        "help-text"
+      );
+      expect(container.firstChild).toHaveAttribute("aria-required", "true");
+      expect(screen.getByText("Required Label")).toBeInTheDocument();
     });
 
-    it('should render label with data attributes', () => {
+    it("should render label with data attributes", () => {
       // Arrange
       const { container } = render(
         <Label data-testid="test-label" data-custom="value">
@@ -99,12 +116,12 @@ describe('Label Component - AAA Pattern', () => {
       );
 
       // Act & Assert
-      expect(container.firstChild).toHaveAttribute('data-testid', 'test-label');
-      expect(container.firstChild).toHaveAttribute('data-custom', 'value');
-      expect(screen.getByText('Data Label')).toBeInTheDocument();
+      expect(container.firstChild).toHaveAttribute("data-testid", "test-label");
+      expect(container.firstChild).toHaveAttribute("data-custom", "value");
+      expect(screen.getByText("Data Label")).toBeInTheDocument();
     });
 
-    it('should render multiple labels', () => {
+    it("should render multiple labels", () => {
       // Arrange
       render(
         <>
@@ -115,12 +132,12 @@ describe('Label Component - AAA Pattern', () => {
       );
 
       // Act & Assert
-      expect(screen.getByText('First Label')).toBeInTheDocument();
-      expect(screen.getByText('Second Label')).toBeInTheDocument();
-      expect(screen.getByText('Third Label')).toBeInTheDocument();
+      expect(screen.getByText("First Label")).toBeInTheDocument();
+      expect(screen.getByText("Second Label")).toBeInTheDocument();
+      expect(screen.getByText("Third Label")).toBeInTheDocument();
     });
 
-    it('should forward ref correctly', () => {
+    it("should forward ref correctly", () => {
       // Arrange
       const ref = { current: null };
       render(<Label ref={ref}>Ref Label</Label>);
@@ -129,33 +146,33 @@ describe('Label Component - AAA Pattern', () => {
       expect(ref.current).toBeInstanceOf(HTMLLabelElement);
     });
 
-    it('should handle click events', () => {
+    it("should handle click events", () => {
       // Arrange
       const handleClick = vi.fn();
       render(<Label onClick={handleClick}>Clickable Label</Label>);
 
       // Act
-      screen.getByText('Clickable Label').click();
+      screen.getByText("Clickable Label").click();
 
       // Assert
       expect(handleClick).toHaveBeenCalledTimes(1);
     });
 
-    it('should handle keyboard events', () => {
+    it("should handle keyboard events", () => {
       // Arrange
       const handleKeyDown = vi.fn();
       render(<Label onKeyDown={handleKeyDown}>Keyboard Label</Label>);
 
       // Act
-      const label = screen.getByText('Keyboard Label');
+      const label = screen.getByText("Keyboard Label");
       label.focus();
-      fireEvent.keyDown(label, { key: 'Enter' });
+      fireEvent.keyDown(label, { key: "Enter" });
 
       // Assert
       expect(handleKeyDown).toHaveBeenCalledTimes(1);
     });
 
-    it('should render label with different text sizes', () => {
+    it("should render label with different text sizes", () => {
       // Arrange
       render(
         <>
@@ -166,12 +183,12 @@ describe('Label Component - AAA Pattern', () => {
       );
 
       // Act & Assert
-      expect(screen.getByText('Small Label')).toBeInTheDocument();
-      expect(screen.getByText('Medium Label')).toBeInTheDocument();
-      expect(screen.getByText('Large Label')).toBeInTheDocument();
+      expect(screen.getByText("Small Label")).toBeInTheDocument();
+      expect(screen.getByText("Medium Label")).toBeInTheDocument();
+      expect(screen.getByText("Large Label")).toBeInTheDocument();
     });
 
-    it('should render label with different colors', () => {
+    it("should render label with different colors", () => {
       // Arrange
       render(
         <>
@@ -182,12 +199,12 @@ describe('Label Component - AAA Pattern', () => {
       );
 
       // Act & Assert
-      expect(screen.getByText('Red Label')).toBeInTheDocument();
-      expect(screen.getByText('Blue Label')).toBeInTheDocument();
-      expect(screen.getByText('Green Label')).toBeInTheDocument();
+      expect(screen.getByText("Red Label")).toBeInTheDocument();
+      expect(screen.getByText("Blue Label")).toBeInTheDocument();
+      expect(screen.getByText("Green Label")).toBeInTheDocument();
     });
 
-    it('should render label with form association', () => {
+    it("should render label with form association", () => {
       // Arrange
       render(
         <form>
@@ -197,10 +214,10 @@ describe('Label Component - AAA Pattern', () => {
       );
 
       // Act & Assert
-      const label = screen.getByText('Username');
-      const input = screen.getByRole('textbox');
-      expect(label).toHaveAttribute('for', 'username');
-      expect(input).toHaveAttribute('id', 'username');
+      const label = screen.getByText("Username");
+      const input = screen.getByRole("textbox");
+      expect(label).toHaveAttribute("for", "username");
+      expect(input).toHaveAttribute("id", "username");
     });
   });
 });

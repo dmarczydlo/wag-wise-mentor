@@ -1,5 +1,5 @@
-import { Puppy, PuppyId } from "./puppy.entity";
-import { DomainResult } from "../../common/result/result";
+import type { Puppy, PuppyId } from "./puppy.entity";
+import type { DomainResult } from "../../common/result/result";
 
 export abstract class PuppyRepository {
   abstract findById(id: PuppyId): Promise<DomainResult<Puppy | null>>;
@@ -18,5 +18,5 @@ export abstract class NotificationService {
 }
 
 export abstract class EventPublisher {
-  abstract publish(event: any): Promise<DomainResult<void>>;
+  abstract publish(event: unknown): Promise<DomainResult<void>>;
 }

@@ -1,6 +1,6 @@
 import { describe, it, beforeEach } from "mocha";
 import { expect } from "chai";
-import { Test, TestingModule } from "@nestjs/testing";
+import { Test, type TestingModule } from "@nestjs/testing";
 import { ConfigModule } from "@nestjs/config";
 import { SupabaseService } from "../../src/infrastructure/config/supabase.service";
 import supabaseConfig from "../../src/infrastructure/config/supabase.config";
@@ -160,7 +160,9 @@ describe("SupabaseService - AAA Pattern", () => {
         module.get<SupabaseService>(SupabaseService);
         expect.fail("Should have thrown an error");
       } catch (error) {
-        expect(error.message).to.include("Supabase service role key is required");
+        expect(error.message).to.include(
+          "Supabase service role key is required"
+        );
       }
     });
   });
@@ -190,4 +192,3 @@ describe("SupabaseService - AAA Pattern", () => {
     });
   });
 });
-

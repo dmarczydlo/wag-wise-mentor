@@ -2,7 +2,7 @@ import { describe, it, beforeEach } from "mocha";
 import { expect } from "chai";
 import { UnauthorizedException } from "@nestjs/common";
 import { SupabaseAuthGuard } from "../../src/infrastructure/auth/supabase-auth.guard";
-import { SupabaseService } from "../../src/infrastructure/config/supabase.service";
+import { SupabaseService as _SupabaseService } from "../../src/infrastructure/config/supabase.service";
 
 class MockSupabaseService {
   private mockGetUser: any;
@@ -14,7 +14,9 @@ class MockSupabaseService {
   getClient() {
     return {
       auth: {
-        getUser: this.mockGetUser || (async () => ({ data: { user: null }, error: null })),
+        getUser:
+          this.mockGetUser ||
+          (async () => ({ data: { user: null }, error: null })),
       },
     };
   }
@@ -43,14 +45,14 @@ describe("SupabaseAuthGuard - AAA Pattern", () => {
         id: "user-123",
         email: "test@example.com",
       };
-      
-      mockSupabaseService = new MockSupabaseService(async (token: string) => ({
+
+      mockSupabaseService = new MockSupabaseService(async (_token: string) => ({
         data: { user: mockUser },
         error: null,
       }));
-      
+
       guard = new SupabaseAuthGuard(mockSupabaseService as any);
-      
+
       mockExecutionContext.switchToHttp = () => ({
         getRequest: () => ({
           headers: {
@@ -72,20 +74,20 @@ describe("SupabaseAuthGuard - AAA Pattern", () => {
         id: "user-456",
         email: "john@example.com",
       };
-      
-      mockSupabaseService = new MockSupabaseService(async (token: string) => ({
+
+      mockSupabaseService = new MockSupabaseService(async (_token: string) => ({
         data: { user: mockUser },
         error: null,
       }));
-      
+
       guard = new SupabaseAuthGuard(mockSupabaseService as any);
-      
+
       const mockRequest = {
         headers: {
           authorization: "Bearer valid-token",
         },
       };
-      
+
       mockExecutionContext.switchToHttp = () => ({
         getRequest: () => mockRequest,
       });
@@ -104,7 +106,7 @@ describe("SupabaseAuthGuard - AAA Pattern", () => {
       // Arrange
       mockSupabaseService = new MockSupabaseService();
       guard = new SupabaseAuthGuard(mockSupabaseService as any);
-      
+
       mockExecutionContext.switchToHttp = () => ({
         getRequest: () => ({
           headers: {},
@@ -127,7 +129,7 @@ describe("SupabaseAuthGuard - AAA Pattern", () => {
       // Arrange
       mockSupabaseService = new MockSupabaseService();
       guard = new SupabaseAuthGuard(mockSupabaseService as any);
-      
+
       mockExecutionContext.switchToHttp = () => ({
         getRequest: () => ({
           headers: {
@@ -151,7 +153,7 @@ describe("SupabaseAuthGuard - AAA Pattern", () => {
       // Arrange
       mockSupabaseService = new MockSupabaseService();
       guard = new SupabaseAuthGuard(mockSupabaseService as any);
-      
+
       mockExecutionContext.switchToHttp = () => ({
         getRequest: () => ({
           headers: {
@@ -176,7 +178,7 @@ describe("SupabaseAuthGuard - AAA Pattern", () => {
       // Arrange
       mockSupabaseService = new MockSupabaseService();
       guard = new SupabaseAuthGuard(mockSupabaseService as any);
-      
+
       mockExecutionContext.switchToHttp = () => ({
         getRequest: () => ({
           headers: {
@@ -201,13 +203,13 @@ describe("SupabaseAuthGuard - AAA Pattern", () => {
   describe("Invalid Token", () => {
     it("should throw UnauthorizedException when Supabase returns error", async () => {
       // Arrange
-      mockSupabaseService = new MockSupabaseService(async (token: string) => ({
+      mockSupabaseService = new MockSupabaseService(async (_token: string) => ({
         data: { user: null },
         error: { message: "Invalid JWT" },
       }));
-      
+
       guard = new SupabaseAuthGuard(mockSupabaseService as any);
-      
+
       mockExecutionContext.switchToHttp = () => ({
         getRequest: () => ({
           headers: {
@@ -230,13 +232,13 @@ describe("SupabaseAuthGuard - AAA Pattern", () => {
 
     it("should throw UnauthorizedException when user is null", async () => {
       // Arrange
-      mockSupabaseService = new MockSupabaseService(async (token: string) => ({
+      mockSupabaseService = new MockSupabaseService(async (_token: string) => ({
         data: { user: null },
         error: null,
       }));
-      
+
       guard = new SupabaseAuthGuard(mockSupabaseService as any);
-      
+
       mockExecutionContext.switchToHttp = () => ({
         getRequest: () => ({
           headers: {
@@ -256,12 +258,12 @@ describe("SupabaseAuthGuard - AAA Pattern", () => {
 
     it("should throw UnauthorizedException when Supabase throws exception", async () => {
       // Arrange
-      mockSupabaseService = new MockSupabaseService(async (token: string) => {
+      mockSupabaseService = new MockSupabaseService(async (_token: string) => {
         throw new Error("Network error");
       });
-      
+
       guard = new SupabaseAuthGuard(mockSupabaseService as any);
-      
+
       mockExecutionContext.switchToHttp = () => ({
         getRequest: () => ({
           headers: {
@@ -287,9 +289,9 @@ describe("SupabaseAuthGuard - AAA Pattern", () => {
     it("should extract token correctly from Bearer header", async () => {
       // Arrange
       let extractedToken: string = "";
-      
-      mockSupabaseService = new MockSupabaseService(async (token: string) => {
-        extractedToken = token;
+
+      mockSupabaseService = new MockSupabaseService(async (_token: string) => {
+        extractedToken = _token;
         return {
           data: {
             user: { id: "123", email: "test@example.com" },
@@ -297,11 +299,11 @@ describe("SupabaseAuthGuard - AAA Pattern", () => {
           error: null,
         };
       });
-      
+
       guard = new SupabaseAuthGuard(mockSupabaseService as any);
-      
+
       const testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test";
-      
+
       mockExecutionContext.switchToHttp = () => ({
         getRequest: () => ({
           headers: {
@@ -320,9 +322,9 @@ describe("SupabaseAuthGuard - AAA Pattern", () => {
     it("should handle Bearer token with extra spaces", async () => {
       // Arrange
       let extractedToken: string = "";
-      
-      mockSupabaseService = new MockSupabaseService(async (token: string) => {
-        extractedToken = token;
+
+      mockSupabaseService = new MockSupabaseService(async (_token: string) => {
+        extractedToken = _token;
         return {
           data: {
             user: { id: "123", email: "test@example.com" },
@@ -330,11 +332,11 @@ describe("SupabaseAuthGuard - AAA Pattern", () => {
           error: null,
         };
       });
-      
+
       guard = new SupabaseAuthGuard(mockSupabaseService as any);
-      
+
       const testToken = "token-with-spaces";
-      
+
       mockExecutionContext.switchToHttp = () => ({
         getRequest: () => ({
           headers: {
@@ -352,4 +354,3 @@ describe("SupabaseAuthGuard - AAA Pattern", () => {
     });
   });
 });
-

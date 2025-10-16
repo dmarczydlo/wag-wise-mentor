@@ -12,4 +12,3 @@ export const UpdateProfileDtoSchema = z.object({
 
 export type CreateProfileDto = z.infer<typeof CreateProfileDtoSchema>;
 export type UpdateProfileDto = z.infer<typeof UpdateProfileDtoSchema>;
-

@@ -14,7 +14,7 @@ import { Heart, Calendar, Scale, Bell, Plus, LogOut } from "lucide-react";
 import { toast } from "sonner";
 
 const Dashboard = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const [_user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 

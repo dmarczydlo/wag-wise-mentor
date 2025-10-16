@@ -1,10 +1,9 @@
 import {
   render,
-  act,
-  RenderOptions,
-  RenderResult,
+  type RenderOptions,
+  type RenderResult,
 } from "@testing-library/react";
-import { ReactElement } from "react";
+import type { ReactElement } from "react";
 
 export * from "@testing-library/react";
 

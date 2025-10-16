@@ -1,10 +1,10 @@
 import { describe, it, beforeEach } from "mocha";
 import { expect } from "chai";
-import { Test, TestingModule } from "@nestjs/testing";
+import { Test, type TestingModule } from "@nestjs/testing";
 import { AIController } from "../../src/infrastructure/ai/ai.controller";
 import { AIUseCases } from "../../src/application/ai/ai.use-cases";
 import { InMemoryAIRepository } from "../../src/infrastructure/ai/in-memory-ai.repository";
-import { NotFoundException } from "@nestjs/common";
+import { NotFoundException as _NotFoundException } from "@nestjs/common";
 
 describe("AIController Integration Tests - AAA Pattern", () => {
   let controller: AIController;

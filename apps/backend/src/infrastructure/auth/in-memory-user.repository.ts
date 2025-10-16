@@ -1,7 +1,15 @@
 import { Injectable } from "@nestjs/common";
-import { User, UserId, Email } from "../../domain/auth/user.entity";
-import { UserRepository } from "../../domain/auth/user.repository";
-import { DomainResult, Result } from "../../common/result/result";
+import {
+  type User,
+  type UserId,
+  Email as _Email,
+} from "../../domain/auth/user.entity";
+import type { UserRepository } from "../../domain/auth/user.repository";
+import {
+  type DomainResult,
+  Result,
+  DomainError,
+} from "../../common/result/result";
 
 @Injectable()
 export class InMemoryUserRepository implements UserRepository {
@@ -12,7 +20,7 @@ export class InMemoryUserRepository implements UserRepository {
       this.users.set(user.id.value, user);
       return Result.success(user);
     } catch (error) {
-      return Result.failure(error as any);
+      return Result.failure(DomainError.internal(String(error)));
     }
   }
 
@@ -21,7 +29,7 @@ export class InMemoryUserRepository implements UserRepository {
       const user = this.users.get(id.value) || null;
       return Result.success(user);
     } catch (error) {
-      return Result.failure(error as any);
+      return Result.failure(DomainError.internal(String(error)));
     }
   }
 
@@ -34,7 +42,7 @@ export class InMemoryUserRepository implements UserRepository {
       }
       return Result.success(null);
     } catch (error) {
-      return Result.failure(error as any);
+      return Result.failure(DomainError.internal(String(error)));
     }
   }
 
@@ -43,7 +51,7 @@ export class InMemoryUserRepository implements UserRepository {
       this.users.set(user.id.value, user);
       return Result.success(user);
     } catch (error) {
-      return Result.failure(error as any);
+      return Result.failure(DomainError.internal(String(error)));
     }
   }
 
@@ -52,7 +60,7 @@ export class InMemoryUserRepository implements UserRepository {
       this.users.delete(id.value);
       return Result.success(undefined);
     } catch (error) {
-      return Result.failure(error as any);
+      return Result.failure(DomainError.internal(String(error)));
     }
   }
 
@@ -61,7 +69,7 @@ export class InMemoryUserRepository implements UserRepository {
       const users = Array.from(this.users.values());
       return Result.success(users);
     } catch (error) {
-      return Result.failure(error as any);
+      return Result.failure(DomainError.internal(String(error)));
     }
   }
 

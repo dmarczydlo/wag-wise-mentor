@@ -98,7 +98,7 @@ describe("Date Utilities", () => {
       const birthDate = new Date();
       birthDate.setFullYear(birthDate.getFullYear() - 1);
       birthDate.setMonth(birthDate.getMonth() + 1);
-      
+
       const result = calculateAge(birthDate);
       expect(result.years).toBeGreaterThanOrEqual(0);
       expect(result.months).toBeGreaterThanOrEqual(0);

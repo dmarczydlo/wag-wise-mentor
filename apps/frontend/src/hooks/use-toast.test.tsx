@@ -1,6 +1,11 @@
 import { renderHook, act } from "@testing-library/react";
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
-import { useToast, toast, reducer, clearAllToasts } from "./use-toast";
+import {
+  useToast,
+  toast as _toast,
+  reducer,
+  clearAllToasts,
+} from "./use-toast";
 
 // Mock setTimeout and clearTimeout
 const mockSetTimeout = vi.fn();

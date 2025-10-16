@@ -11,7 +11,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
   beforeEach(() => {
     // Arrange
     interceptor = new TransformResponseInterceptor();
-    
+
     mockExecutionContext = {
       switchToHttp: () => ({
         getRequest: () => ({
@@ -22,7 +22,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
   });
 
   describe("Simple Data Transformation", () => {
-    it("should wrap simple string data in success response", (done) => {
+    it("should wrap simple string data in success response", done => {
       // Arrange
       const testData = "Hello World";
       mockCallHandler = {
@@ -32,7 +32,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
       // Act
       interceptor
         .intercept(mockExecutionContext, mockCallHandler)
-        .subscribe((result) => {
+        .subscribe(result => {
           // Assert
           expect(result).to.have.property("success", true);
           expect(result).to.have.property("data", testData);
@@ -43,7 +43,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
         });
     });
 
-    it("should wrap number data in success response", (done) => {
+    it("should wrap number data in success response", done => {
       // Arrange
       const testData = 42;
       mockCallHandler = {
@@ -53,7 +53,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
       // Act
       interceptor
         .intercept(mockExecutionContext, mockCallHandler)
-        .subscribe((result) => {
+        .subscribe(result => {
           // Assert
           expect(result.success).to.be.true;
           expect(result.data).to.equal(testData);
@@ -61,7 +61,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
         });
     });
 
-    it("should wrap boolean data in success response", (done) => {
+    it("should wrap boolean data in success response", done => {
       // Arrange
       const testData = true;
       mockCallHandler = {
@@ -71,7 +71,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
       // Act
       interceptor
         .intercept(mockExecutionContext, mockCallHandler)
-        .subscribe((result) => {
+        .subscribe(result => {
           // Assert
           expect(result.success).to.be.true;
           expect(result.data).to.equal(testData);
@@ -79,7 +79,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
         });
     });
 
-    it("should wrap null data in success response", (done) => {
+    it("should wrap null data in success response", done => {
       // Arrange
       const testData = null;
       mockCallHandler = {
@@ -89,7 +89,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
       // Act
       interceptor
         .intercept(mockExecutionContext, mockCallHandler)
-        .subscribe((result) => {
+        .subscribe(result => {
           // Assert
           expect(result.success).to.be.true;
           expect(result.data).to.be.null;
@@ -99,7 +99,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
   });
 
   describe("Object Data Transformation", () => {
-    it("should wrap object data in success response", (done) => {
+    it("should wrap object data in success response", done => {
       // Arrange
       const testData = {
         id: "123",
@@ -112,7 +112,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
       // Act
       interceptor
         .intercept(mockExecutionContext, mockCallHandler)
-        .subscribe((result) => {
+        .subscribe(result => {
           // Assert
           expect(result.success).to.be.true;
           expect(result.data).to.deep.equal(testData);
@@ -121,7 +121,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
         });
     });
 
-    it("should wrap array data in success response", (done) => {
+    it("should wrap array data in success response", done => {
       // Arrange
       const testData = [
         { id: "1", name: "Item 1" },
@@ -134,7 +134,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
       // Act
       interceptor
         .intercept(mockExecutionContext, mockCallHandler)
-        .subscribe((result) => {
+        .subscribe(result => {
           // Assert
           expect(result.success).to.be.true;
           expect(result.data).to.deep.equal(testData);
@@ -144,7 +144,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
         });
     });
 
-    it("should wrap empty array in success response", (done) => {
+    it("should wrap empty array in success response", done => {
       // Arrange
       const testData: any[] = [];
       mockCallHandler = {
@@ -154,7 +154,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
       // Act
       interceptor
         .intercept(mockExecutionContext, mockCallHandler)
-        .subscribe((result) => {
+        .subscribe(result => {
           // Assert
           expect(result.success).to.be.true;
           expect(result.data).to.deep.equal([]);
@@ -165,7 +165,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
   });
 
   describe("Objects with success Property", () => {
-    it("should handle response that already has success:true", (done) => {
+    it("should handle response that already has success:true", done => {
       // Arrange
       const testData = {
         success: true,
@@ -178,7 +178,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
       // Act
       interceptor
         .intercept(mockExecutionContext, mockCallHandler)
-        .subscribe((result) => {
+        .subscribe(result => {
           // Assert
           expect(result.success).to.be.true;
           expect(result.data).to.have.property("success", true);
@@ -187,7 +187,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
         });
     });
 
-    it("should handle response with success:false", (done) => {
+    it("should handle response with success:false", done => {
       // Arrange
       const testData = {
         success: false,
@@ -200,7 +200,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
       // Act
       interceptor
         .intercept(mockExecutionContext, mockCallHandler)
-        .subscribe((result) => {
+        .subscribe(result => {
           // Assert
           expect(result.success).to.be.true;
           expect(result.data).to.deep.equal(testData);
@@ -210,7 +210,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
   });
 
   describe("Path Handling", () => {
-    it("should include correct path from request", (done) => {
+    it("should include correct path from request", done => {
       // Arrange
       mockExecutionContext = {
         switchToHttp: () => ({
@@ -219,7 +219,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
           }),
         }),
       };
-      
+
       mockCallHandler = {
         handle: () => of({ id: "123" }),
       };
@@ -227,14 +227,14 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
       // Act
       interceptor
         .intercept(mockExecutionContext, mockCallHandler)
-        .subscribe((result) => {
+        .subscribe(result => {
           // Assert
           expect(result.path).to.equal("/users/123");
           done();
         });
     });
 
-    it("should handle paths with query parameters", (done) => {
+    it("should handle paths with query parameters", done => {
       // Arrange
       mockExecutionContext = {
         switchToHttp: () => ({
@@ -243,7 +243,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
           }),
         }),
       };
-      
+
       mockCallHandler = {
         handle: () => of([]),
       };
@@ -251,7 +251,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
       // Act
       interceptor
         .intercept(mockExecutionContext, mockCallHandler)
-        .subscribe((result) => {
+        .subscribe(result => {
           // Assert
           expect(result.path).to.equal("/users?page=1&limit=10");
           done();
@@ -260,7 +260,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
   });
 
   describe("Timestamp Generation", () => {
-    it("should generate ISO 8601 timestamp", (done) => {
+    it("should generate ISO 8601 timestamp", done => {
       // Arrange
       mockCallHandler = {
         handle: () => of({ test: "data" }),
@@ -269,10 +269,10 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
       // Act
       interceptor
         .intercept(mockExecutionContext, mockCallHandler)
-        .subscribe((result) => {
+        .subscribe(result => {
           // Assert
           expect(result.timestamp).to.be.a("string");
-          
+
           // Check if valid ISO 8601 format
           const timestampDate = new Date(result.timestamp);
           expect(timestampDate.getTime()).to.be.greaterThan(0);
@@ -281,7 +281,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
         });
     });
 
-    it("should generate current timestamp", (done) => {
+    it("should generate current timestamp", done => {
       // Arrange
       const beforeTime = new Date();
       mockCallHandler = {
@@ -291,11 +291,11 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
       // Act
       interceptor
         .intercept(mockExecutionContext, mockCallHandler)
-        .subscribe((result) => {
+        .subscribe(result => {
           // Assert
           const afterTime = new Date();
           const resultTime = new Date(result.timestamp);
-          
+
           expect(resultTime.getTime()).to.be.at.least(beforeTime.getTime());
           expect(resultTime.getTime()).to.be.at.most(afterTime.getTime());
           done();
@@ -304,7 +304,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
   });
 
   describe("Complex Nested Data", () => {
-    it("should handle deeply nested objects", (done) => {
+    it("should handle deeply nested objects", done => {
       // Arrange
       const testData = {
         user: {
@@ -321,7 +321,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
           created: new Date(),
         },
       };
-      
+
       mockCallHandler = {
         handle: () => of(testData),
       };
@@ -329,7 +329,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
       // Act
       interceptor
         .intercept(mockExecutionContext, mockCallHandler)
-        .subscribe((result) => {
+        .subscribe(result => {
           // Assert
           expect(result.success).to.be.true;
           expect(result.data).to.deep.equal(testData);
@@ -338,7 +338,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
         });
     });
 
-    it("should handle mixed array and object data", (done) => {
+    it("should handle mixed array and object data", done => {
       // Arrange
       const testData = {
         users: [
@@ -350,7 +350,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
           total: 2,
         },
       };
-      
+
       mockCallHandler = {
         handle: () => of(testData),
       };
@@ -358,7 +358,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
       // Act
       interceptor
         .intercept(mockExecutionContext, mockCallHandler)
-        .subscribe((result) => {
+        .subscribe(result => {
           // Assert
           expect(result.success).to.be.true;
           expect(result.data.users).to.be.an("array");
@@ -370,7 +370,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
   });
 
   describe("Response Structure", () => {
-    it("should always have required fields", (done) => {
+    it("should always have required fields", done => {
       // Arrange
       mockCallHandler = {
         handle: () => of({ test: "data" }),
@@ -379,7 +379,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
       // Act
       interceptor
         .intercept(mockExecutionContext, mockCallHandler)
-        .subscribe((result) => {
+        .subscribe(result => {
           // Assert
           expect(result).to.have.property("success");
           expect(result).to.have.property("data");
@@ -390,7 +390,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
         });
     });
 
-    it("should have undefined message field by default", (done) => {
+    it("should have undefined message field by default", done => {
       // Arrange
       mockCallHandler = {
         handle: () => of({ test: "data" }),
@@ -399,7 +399,7 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
       // Act
       interceptor
         .intercept(mockExecutionContext, mockCallHandler)
-        .subscribe((result) => {
+        .subscribe(result => {
           // Assert
           expect(result).to.have.property("message");
           expect(result.message).to.be.undefined;
@@ -408,4 +408,3 @@ describe("TransformResponseInterceptor - AAA Pattern", () => {
     });
   });
 });
-
