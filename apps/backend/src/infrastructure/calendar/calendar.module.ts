@@ -13,7 +13,7 @@ import { ConfigurationModule } from "../config/config.module";
 const isTestEnvironment = process.env.NODE_ENV === "test";
 
 @Module({
-  imports: [ConfigurationModule],
+  imports: isTestEnvironment ? [] : [ConfigurationModule],
   controllers: [CalendarController],
   providers: [
     CreateEventUseCase,

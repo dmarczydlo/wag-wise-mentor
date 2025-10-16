@@ -12,10 +12,9 @@ interface AIRecommendationRow {
   id: string;
   puppy_id: string;
   category: string;
-  title: string;
-  description: string;
+  recommendation_text: string;
   confidence_score: number;
-  metadata: Record<string, unknown>;
+  metadata?: Record<string, unknown>;
   created_at: string;
   updated_at: string;
 }
