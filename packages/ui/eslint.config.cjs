@@ -9,7 +9,12 @@ const globals = require("globals");
 module.exports = [
   js.configs.recommended,
   {
-    files: ["**/*.{js,ts,tsx}"],
+    files: ["src/**/*.{js,ts,tsx}"],
+    ignores: [
+      "src/**/*.test.{js,ts,tsx}",
+      "src/**/*.spec.{js,ts,tsx}",
+      "src/test/**/*",
+    ],
     languageOptions: {
       parser: typescriptParser,
       parserOptions: {
@@ -85,8 +90,23 @@ module.exports = [
     },
   },
   {
-    files: ["**/*.test.{js,ts,tsx}", "**/*.spec.{js,ts,tsx}", "**/test/**/*"],
+    files: [
+      "**/*.test.{js,ts,tsx}",
+      "**/*.spec.{js,ts,tsx}",
+      "**/test/**/*",
+      "vitest.config.*",
+      "*.config.*",
+    ],
     languageOptions: {
+      parser: typescriptParser,
+      parserOptions: {
+        ecmaVersion: "latest",
+        sourceType: "module",
+        ecmaFeatures: {
+          jsx: true,
+        },
+        // Don't use project for test and config files
+      },
       globals: {
         // Test globals
         describe: "readonly",
@@ -99,16 +119,41 @@ module.exports = [
         afterAll: "readonly",
         vi: "readonly",
         act: "readonly",
+        // DOM globals for testing
+        document: "readonly",
+        window: "readonly",
+        HTMLElement: "readonly",
+        HTMLButtonElement: "readonly",
+        HTMLDivElement: "readonly",
+        HTMLInputElement: "readonly",
+        HTMLLabelElement: "readonly",
+        HTMLHeadingElement: "readonly",
+        HTMLParagraphElement: "readonly",
+        HTMLTextAreaElement: "readonly",
+        Event: "readonly",
         // Node.js globals
         __dirname: "readonly",
         __filename: "readonly",
         global: "readonly",
       },
     },
+    plugins: {
+      "@typescript-eslint": typescript,
+    },
     rules: {
       // Relax some rules for test files
       "@typescript-eslint/no-explicit-any": "off",
       "no-console": "off",
+      "@typescript-eslint/no-non-null-assertion": "off",
+      "no-unused-vars": "off", // Use TypeScript version
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+        },
+      ],
     },
   },
   {
@@ -118,6 +163,9 @@ module.exports = [
       "coverage/**",
       "*.min.js",
       "eslint.config.js", // Ignore the config file itself
+      "vitest.config.*",
+      "*.config.*",
+      "*.config.*.map",
     ],
   },
   prettier,
