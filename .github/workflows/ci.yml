@@ -64,7 +64,7 @@ jobs:
       - name: Run backend tests
         run: |
           cd apps/backend
-          bun run test
+          NODE_ENV=test bun run test
 
       - name: Run frontend tests
         run: |
@@ -74,7 +74,7 @@ jobs:
       - name: Build backend
         run: |
           cd apps/backend
-          bun run build
+          NODE_ENV=production bun run build
 
       - name: Build frontend
         run: |

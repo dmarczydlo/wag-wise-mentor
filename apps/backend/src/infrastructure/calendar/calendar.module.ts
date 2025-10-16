@@ -7,8 +7,13 @@ import {
   EVENT_REPOSITORY,
 } from "../../application/calendar/calendar.use-cases";
 import { InMemoryEventRepository } from "./in-memory-event.repository";
+import { SupabaseEventRepository } from "./supabase-event.repository";
+import { ConfigurationModule } from "../config/config.module";
+
+const isTestEnvironment = process.env.NODE_ENV === "test";
 
 @Module({
+  imports: isTestEnvironment ? [] : [ConfigurationModule],
   controllers: [CalendarController],
   providers: [
     CreateEventUseCase,
@@ -16,7 +21,9 @@ import { InMemoryEventRepository } from "./in-memory-event.repository";
     GenerateHealthTimelineUseCase,
     {
       provide: EVENT_REPOSITORY,
-      useClass: InMemoryEventRepository,
+      useClass: isTestEnvironment
+        ? InMemoryEventRepository
+        : SupabaseEventRepository,
     },
   ],
   exports: [EVENT_REPOSITORY],
