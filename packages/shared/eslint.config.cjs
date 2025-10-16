@@ -6,7 +6,12 @@ const prettier = require("eslint-config-prettier");
 module.exports = [
   js.configs.recommended,
   {
-    files: ["**/*.{js,ts}"],
+    files: ["src/**/*.{js,ts}"],
+    ignores: [
+      "src/**/*.test.{js,ts}",
+      "src/**/*.spec.{js,ts}",
+      "src/__tests__/**/*",
+    ],
     languageOptions: {
       parser: typescriptParser,
       parserOptions: {
@@ -61,11 +66,54 @@ module.exports = [
     },
   },
   {
-    files: ["**/*.test.{js,ts}", "**/*.spec.{js,ts}", "**/test/**/*"],
+    files: [
+      "**/*.test.{js,ts}",
+      "**/*.spec.{js,ts}",
+      "**/__tests__/**/*",
+      "vitest.config.*",
+      "*.config.*",
+    ],
+    languageOptions: {
+      parser: typescriptParser,
+      parserOptions: {
+        ecmaVersion: "latest",
+        sourceType: "module",
+        // Don't use project for test and config files
+      },
+      globals: {
+        // Test globals
+        describe: "readonly",
+        it: "readonly",
+        test: "readonly",
+        expect: "readonly",
+        beforeEach: "readonly",
+        afterEach: "readonly",
+        beforeAll: "readonly",
+        afterAll: "readonly",
+        vi: "readonly",
+        // Node.js globals
+        __dirname: "readonly",
+        __filename: "readonly",
+        global: "readonly",
+      },
+    },
+    plugins: {
+      "@typescript-eslint": typescript,
+    },
     rules: {
       // Relax some rules for test files
       "@typescript-eslint/no-explicit-any": "off",
       "no-console": "off",
+      "@typescript-eslint/no-non-null-assertion": "off",
+      "no-unused-vars": "off", // Use TypeScript version
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+        },
+      ],
     },
   },
   {
@@ -75,6 +123,9 @@ module.exports = [
       "coverage/**",
       "*.min.js",
       "eslint.config.js", // Ignore the config file itself
+      "vitest.config.*",
+      "*.config.*",
+      "*.config.*.map",
     ],
   },
   prettier,
