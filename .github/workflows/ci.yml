@@ -44,6 +44,16 @@ jobs:
       - name: Check code formatting
         run: bun run format:check
 
+      - name: Build shared package
+        run: |
+          cd packages/shared
+          bun run build
+
+      - name: Build UI package
+        run: |
+          cd packages/ui
+          bun run build
+
       - name: Run shared package tests
         run: |
           cd packages/shared
@@ -63,16 +73,6 @@ jobs:
         run: |
           cd apps/frontend
           bun run test
-
-      - name: Build shared package
-        run: |
-          cd packages/shared
-          bun run build
-
-      - name: Build UI package
-        run: |
-          cd packages/ui
-          bun run build
 
       - name: Build backend
         run: |
