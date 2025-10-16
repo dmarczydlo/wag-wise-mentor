@@ -1,7 +1,11 @@
 import { Injectable } from "@nestjs/common";
-import { AIRepository } from "../../domain/ai/ai.repository";
-import { AIRecommendation } from "../../domain/ai/ai-recommendation.entity";
-import { DomainResult, Result } from "../../common/result/result";
+import type { AIRepository } from "../../domain/ai/ai.repository";
+import type { AIRecommendation } from "../../domain/ai/ai-recommendation.entity";
+import {
+  type DomainResult,
+  Result,
+  DomainError,
+} from "../../common/result/result";
 
 @Injectable()
 export class InMemoryAIRepository implements AIRepository {
@@ -12,7 +16,7 @@ export class InMemoryAIRepository implements AIRepository {
       const recommendation = this.recommendations.get(id) || null;
       return Result.success(recommendation);
     } catch (error) {
-      return Result.failure(error as any);
+      return Result.failure(DomainError.internal(String(error)));
     }
   }
 
@@ -21,11 +25,11 @@ export class InMemoryAIRepository implements AIRepository {
   ): Promise<DomainResult<AIRecommendation[]>> {
     try {
       const recommendations = Array.from(this.recommendations.values()).filter(
-        (rec) => rec.puppyId === puppyId
+        rec => rec.puppyId === puppyId
       );
       return Result.success(recommendations);
     } catch (error) {
-      return Result.failure(error as any);
+      return Result.failure(DomainError.internal(String(error)));
     }
   }
 
@@ -34,11 +38,11 @@ export class InMemoryAIRepository implements AIRepository {
   ): Promise<DomainResult<AIRecommendation[]>> {
     try {
       const recommendations = Array.from(this.recommendations.values()).filter(
-        (rec) => rec.category === category
+        rec => rec.category === category
       );
       return Result.success(recommendations);
     } catch (error) {
-      return Result.failure(error as any);
+      return Result.failure(DomainError.internal(String(error)));
     }
   }
 
@@ -49,7 +53,7 @@ export class InMemoryAIRepository implements AIRepository {
       this.recommendations.set(recommendation.id, recommendation);
       return Result.success(recommendation);
     } catch (error) {
-      return Result.failure(error as any);
+      return Result.failure(DomainError.internal(String(error)));
     }
   }
 
@@ -58,7 +62,7 @@ export class InMemoryAIRepository implements AIRepository {
       this.recommendations.delete(id);
       return Result.success(undefined);
     } catch (error) {
-      return Result.failure(error as any);
+      return Result.failure(DomainError.internal(String(error)));
     }
   }
 }

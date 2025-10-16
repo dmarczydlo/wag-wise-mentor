@@ -7,7 +7,11 @@ import {
   UserRoleType,
 } from "../../domain/auth/user.entity";
 import { UserRepository } from "../../domain/auth/user.repository";
-import { DomainResult, DomainError, Result } from "../../common/result/result";
+import {
+  type DomainResult,
+  DomainError,
+  Result,
+} from "../../common/result/result";
 
 export const USER_REPOSITORY = Symbol("UserRepository");
 

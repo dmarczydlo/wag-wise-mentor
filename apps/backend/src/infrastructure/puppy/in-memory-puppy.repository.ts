@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import { Puppy, PuppyId } from "../../domain/puppy/puppy.entity";
-import { PuppyRepository } from "../../domain/puppy/puppy.repository";
-import { DomainResult, Result } from "../../common/result/result";
+import type { Puppy, PuppyId } from "../../domain/puppy/puppy.entity";
+import type { PuppyRepository } from "../../domain/puppy/puppy.repository";
+import { type DomainResult, Result } from "../../common/result/result";
 
 @Injectable()
 export class InMemoryPuppyRepository implements PuppyRepository {
@@ -23,7 +23,7 @@ export class InMemoryPuppyRepository implements PuppyRepository {
   async findByOwnerId(ownerId: string): Promise<DomainResult<Puppy[]>> {
     try {
       const puppies = Array.from(this.puppies.values()).filter(
-        (puppy) => puppy.ownerId === ownerId
+        puppy => puppy.ownerId === ownerId
       );
       return Result.success(puppies);
     } catch (error) {

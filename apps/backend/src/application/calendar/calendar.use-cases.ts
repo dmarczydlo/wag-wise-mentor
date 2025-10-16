@@ -8,10 +8,14 @@ import {
   EventType,
   EventTypeEnum,
   RecurringPattern,
-  RecurringType,
+  type RecurringType,
 } from "../../domain/calendar/event.entity";
 import { EventRepository } from "../../domain/calendar/event.repository";
-import { DomainResult, DomainError, Result } from "../../common/result/result";
+import {
+  type DomainResult,
+  DomainError,
+  Result,
+} from "../../common/result/result";
 
 export const EVENT_REPOSITORY = Symbol("EventRepository");
 
@@ -102,19 +106,23 @@ export class CreateEventUseCase {
     recurringPattern?: RecurringPattern;
   }> {
     const eventIdResult = EventId.create(this.generateId());
-    if (eventIdResult.isFailure()) return eventIdResult as any;
+    if (eventIdResult.isFailure())
+      return Result.failure(eventIdResult.getError());
 
     const titleResult = EventTitle.create(command.title);
-    if (titleResult.isFailure()) return titleResult as any;
+    if (titleResult.isFailure()) return Result.failure(titleResult.getError());
 
     const descriptionResult = EventDescription.create(command.description);
-    if (descriptionResult.isFailure()) return descriptionResult as any;
+    if (descriptionResult.isFailure())
+      return Result.failure(descriptionResult.getError());
 
     const eventDateTimeResult = EventDateTime.create(command.eventDateTime);
-    if (eventDateTimeResult.isFailure()) return eventDateTimeResult as any;
+    if (eventDateTimeResult.isFailure())
+      return Result.failure(eventDateTimeResult.getError());
 
     const eventTypeResult = EventType.create(command.eventType);
-    if (eventTypeResult.isFailure()) return eventTypeResult as any;
+    if (eventTypeResult.isFailure())
+      return Result.failure(eventTypeResult.getError());
 
     let recurringPattern: RecurringPattern | undefined;
     if (!command.recurringPattern) {
@@ -126,7 +134,7 @@ export class CreateEventUseCase {
         command.recurringPattern.endDate
       );
       if (recurringPatternResult.isFailure()) {
-        return recurringPatternResult as any;
+        return Result.failure(recurringPatternResult.getError());
       }
       recurringPattern = recurringPatternResult.getValue();
     }

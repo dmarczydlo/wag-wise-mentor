@@ -1,5 +1,5 @@
-import { describe, it, expect, vi } from "vitest";
-import { render, screen, act } from "@/test/test-utils";
+import { describe, it, expect } from "vitest";
+import { render, screen } from "@/test/test-utils";
 import { Switch } from "./switch";
 
 describe("Switch Component", () => {

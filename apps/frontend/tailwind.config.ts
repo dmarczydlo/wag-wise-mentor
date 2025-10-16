@@ -2,7 +2,12 @@ import type { Config } from "tailwindcss";
 
 export default {
   darkMode: ["class"],
-  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
+  content: [
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   prefix: "",
   theme: {
     container: {
@@ -65,18 +70,18 @@ export default {
         },
       },
       backgroundImage: {
-        'gradient-hero': 'var(--gradient-hero)',
-        'gradient-warm': 'var(--gradient-warm)',
-        'gradient-card': 'var(--gradient-card)',
+        "gradient-hero": "var(--gradient-hero)",
+        "gradient-warm": "var(--gradient-warm)",
+        "gradient-card": "var(--gradient-card)",
       },
       boxShadow: {
-        'soft': 'var(--shadow-soft)',
-        'glow': 'var(--shadow-glow)',
-        'card': 'var(--shadow-card)',
+        soft: "var(--shadow-soft)",
+        glow: "var(--shadow-glow)",
+        card: "var(--shadow-card)",
       },
       transitionTimingFunction: {
-        'smooth': 'var(--transition-smooth)',
-        'bounce': 'var(--transition-bounce)',
+        smooth: "var(--transition-smooth)",
+        bounce: "var(--transition-bounce)",
       },
       borderRadius: {
         lg: "var(--radius)",

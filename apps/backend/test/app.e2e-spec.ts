@@ -1,11 +1,11 @@
-import 'reflect-metadata';
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
-import { AppModule } from '../src/app.module';
-import { expect } from 'chai';
-import * as request from 'supertest';
+import "reflect-metadata";
+import { Test, type TestingModule } from "@nestjs/testing";
+import type { INestApplication } from "@nestjs/common";
+import { AppModule } from "../src/app.module";
+import { expect } from "chai";
+import * as request from "supertest";
 
-describe('AppController (e2e)', () => {
+describe("AppController (e2e)", () => {
   let app: INestApplication;
 
   beforeEach(async () => {
@@ -21,25 +21,25 @@ describe('AppController (e2e)', () => {
     await app.close();
   });
 
-  describe('/ (GET)', () => {
-    it('should return welcome message', () => {
+  describe("/ (GET)", () => {
+    it("should return welcome message", () => {
       return request(app.getHttpServer())
-        .get('/')
+        .get("/")
         .expect(200)
-        .expect('Wag Wise Mentor API is running! 🐕');
+        .expect("Wag Wise Mentor API is running! 🐕");
     });
   });
 
-  describe('/health (GET)', () => {
-    it('should return health status', () => {
+  describe("/health (GET)", () => {
+    it("should return health status", () => {
       return request(app.getHttpServer())
-        .get('/health')
+        .get("/health")
         .expect(200)
-        .expect((res) => {
-          expect(res.body).to.have.property('status', 'ok');
-          expect(res.body).to.have.property('timestamp');
-          expect(res.body).to.have.property('uptime');
-          expect(res.body.uptime).to.be.a('number');
+        .expect(res => {
+          expect(res.body).to.have.property("status", "ok");
+          expect(res.body).to.have.property("timestamp");
+          expect(res.body).to.have.property("uptime");
+          expect(res.body.uptime).to.be.a("number");
         });
     });
   });

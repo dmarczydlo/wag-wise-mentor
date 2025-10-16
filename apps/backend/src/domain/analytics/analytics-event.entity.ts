@@ -6,7 +6,7 @@ export class AnalyticsEvent extends Entity<string> {
     public readonly userId: string,
     public readonly eventType: string,
     public readonly eventName: string,
-    public readonly properties: Record<string, any>,
+    public readonly properties: Record<string, unknown>,
     public readonly timestamp: Date,
     createdAt?: Date,
     updatedAt?: Date
@@ -19,7 +19,7 @@ export class AnalyticsEvent extends Entity<string> {
     userId: string,
     eventType: string,
     eventName: string,
-    properties: Record<string, any> = {},
+    properties: Record<string, unknown> = {},
     timestamp: Date
   ): AnalyticsEvent {
     return new AnalyticsEvent(
@@ -33,7 +33,7 @@ export class AnalyticsEvent extends Entity<string> {
   }
 
   public enrichProperties(
-    additionalProperties: Record<string, any>
+    additionalProperties: Record<string, unknown>
   ): AnalyticsEvent {
     return new AnalyticsEvent(
       this.id,

@@ -113,9 +113,9 @@ describe("Dashboard Component", () => {
   describe("Loading States", () => {
     it("should show loading state initially", () => {
       // Arrange
-      let resolveSession: (value: any) => void;
-      const sessionPromise = new Promise((resolve) => {
-        resolveSession = resolve;
+      let _resolveSession: (value: any) => void;
+      const sessionPromise = new Promise(resolve => {
+        _resolveSession = resolve;
       });
       vi.mocked(supabase.auth.getSession).mockReturnValue(sessionPromise);
 
@@ -169,7 +169,7 @@ describe("Dashboard Component", () => {
       // Arrange
       const mockOnAuthStateChange = vi.fn();
       vi.mocked(supabase.auth.onAuthStateChange).mockImplementation(
-        (callback) => {
+        callback => {
           mockOnAuthStateChange.mockImplementation(callback);
           return { data: { subscription: { unsubscribe: vi.fn() } } };
         }

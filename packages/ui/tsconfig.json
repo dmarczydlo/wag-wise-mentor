@@ -21,13 +21,13 @@
     "verbatimModuleSyntax": false,
     "jsx": "react-jsx"
   },
-  "include": ["src/**/*"],
-  "exclude": [
-    "node_modules",
-    "dist",
+  "include": [
+    "src/**/*",
     "**/*.test.ts",
     "**/*.test.tsx",
     "**/*.spec.ts",
-    "**/*.spec.tsx"
-  ]
+    "**/*.spec.tsx",
+    "vitest.config.ts"
+  ],
+  "exclude": ["node_modules", "dist"]
 }

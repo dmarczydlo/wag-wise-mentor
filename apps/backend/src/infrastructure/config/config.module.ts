@@ -16,4 +16,3 @@ import supabaseConfig from "./supabase.config";
   exports: [SupabaseService],
 })
 export class ConfigurationModule {}
-

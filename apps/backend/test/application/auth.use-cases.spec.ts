@@ -1,19 +1,19 @@
 import { describe, it, beforeEach } from "mocha";
 import { expect } from "chai";
-import { Test, TestingModule } from "@nestjs/testing";
+import { Test, type TestingModule } from "@nestjs/testing";
 import {
   GetUserUseCase,
   CreateUserProfileUseCase,
   UpdateUserProfileUseCase,
   DeleteUserProfileUseCase,
-  GetUserCommand,
-  CreateUserProfileCommand,
-  UpdateUserProfileCommand,
-  DeleteUserProfileCommand,
+  type GetUserCommand,
+  type CreateUserProfileCommand,
+  type UpdateUserProfileCommand,
+  type DeleteUserProfileCommand,
   USER_REPOSITORY,
 } from "../../src/application/auth/auth.use-cases";
 import { InMemoryUserRepository } from "../../src/infrastructure/auth/in-memory-user.repository";
-import { UserRepository } from "../../src/domain/auth/user.repository";
+import type { UserRepository } from "../../src/domain/auth/user.repository";
 import {
   User,
   UserId,

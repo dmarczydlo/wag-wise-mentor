@@ -135,10 +135,10 @@ export function calculateVaccinationSchedule(ageInWeeks: number): {
   ];
 
   const due = schedule
-    .filter((vaccine) => ageInWeeks >= vaccine.weeks)
-    .map((vaccine) => vaccine.name);
+    .filter(vaccine => ageInWeeks >= vaccine.weeks)
+    .map(vaccine => vaccine.name);
 
-  const next = schedule.find((vaccine) => ageInWeeks < vaccine.weeks);
+  const next = schedule.find(vaccine => ageInWeeks < vaccine.weeks);
 
   return {
     due,

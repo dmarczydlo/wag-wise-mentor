@@ -1,5 +1,5 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { ConfigModule } from '@nestjs/config';
+import { Test, type TestingModule } from "@nestjs/testing";
+import { ConfigModule } from "@nestjs/config";
 
 export class TestDatabase {
   private static instance: TestDatabase;
@@ -19,7 +19,7 @@ export class TestDatabase {
       imports: [
         ConfigModule.forRoot({
           isGlobal: true,
-          envFilePath: '.env.test',
+          envFilePath: ".env.test",
         }),
         moduleClass,
       ],

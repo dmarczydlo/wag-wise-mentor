@@ -6,10 +6,14 @@ import {
   Breed,
   BirthDate,
   Weight,
-  WeightUnit,
+  type WeightUnit,
 } from "../../domain/puppy/puppy.entity";
 import { PuppyRepository } from "../../domain/puppy/puppy.repository";
-import { DomainResult, DomainError, Result } from "../../common/result/result";
+import {
+  type DomainResult,
+  DomainError,
+  Result,
+} from "../../common/result/result";
 
 export const PUPPY_REPOSITORY = Symbol("PuppyRepository");
 
@@ -102,12 +106,6 @@ export class GetPuppiesByOwnerUseCase {
   async execute(ownerId: string): Promise<DomainResult<Puppy[]>> {
     return await this.puppyRepository.findByOwnerId(ownerId);
   }
-}
-
-export interface UpdatePuppyWeightCommand {
-  puppyId: string;
-  newWeight: number;
-  weightUnit: WeightUnit;
 }
 
 @Injectable()

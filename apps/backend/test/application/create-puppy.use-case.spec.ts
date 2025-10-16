@@ -1,13 +1,13 @@
 import { describe, it, beforeEach } from "mocha";
 import { expect } from "chai";
-import { Test, TestingModule } from "@nestjs/testing";
+import { Test, type TestingModule } from "@nestjs/testing";
 import {
   CreatePuppyUseCase,
-  CreatePuppyCommand,
+  type CreatePuppyCommand,
   PUPPY_REPOSITORY,
 } from "../../src/application/puppy/puppy.use-cases";
 import { InMemoryPuppyRepository } from "../../src/infrastructure/puppy/in-memory-puppy.repository";
-import { PuppyRepository } from "../../src/domain/puppy/puppy.repository";
+import type { PuppyRepository } from "../../src/domain/puppy/puppy.repository";
 import { WeightUnit } from "../../src/domain/puppy/puppy.entity";
 
 describe("CreatePuppyUseCase - AAA Pattern", () => {
@@ -52,12 +52,12 @@ describe("CreatePuppyUseCase - AAA Pattern", () => {
 
       // Assert
       expect(result.isSuccess()).to.be.true;
-      const puppy = result.getValue();
-      expect(puppy.name.value).to.equal("Buddy");
-      expect(puppy.breed.value).to.equal("Golden Retriever");
-      expect(puppy.currentWeight.value).to.equal(5.5);
-      expect(puppy.currentWeight.unit).to.equal(WeightUnit.KG);
-      expect(puppy.ownerId).to.equal("owner-123");
+      const _puppy = result.getValue();
+      expect(_puppy.name.value).to.equal("Buddy");
+      expect(_puppy.breed.value).to.equal("Golden Retriever");
+      expect(_puppy.currentWeight.value).to.equal(5.5);
+      expect(_puppy.currentWeight.unit).to.equal(WeightUnit.KG);
+      expect(_puppy.ownerId).to.equal("owner-123");
     });
 
     it("should return error when puppy name is empty", async () => {
@@ -176,7 +176,7 @@ describe("CreatePuppyUseCase - AAA Pattern", () => {
 
       // Assert
       expect(result.isSuccess()).to.be.true;
-      const puppy = result.getValue();
+      const _puppy = result.getValue();
       expect(repository.getCount()).to.equal(1);
 
       const savedPuppies = repository.getAllPuppies();

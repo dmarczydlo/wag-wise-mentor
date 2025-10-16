@@ -1,3 +1,3 @@
 export * from "./common.js";
 export * from "./api.js";
-export * from "./database.js";
+export type * from "./database.js";

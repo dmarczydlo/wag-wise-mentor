@@ -100,8 +100,10 @@ const Auth = () => {
 
         toast.success("Account created! Welcome to Puppy Mentor!");
       }
-    } catch (error: any) {
-      toast.error(error.message || "An error occurred");
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -134,7 +136,7 @@ const Auth = () => {
                 type="email"
                 placeholder="you@example.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={e => setEmail(e.target.value)}
                 required
                 className="transition-smooth"
               />
@@ -146,7 +148,7 @@ const Auth = () => {
                 type="password"
                 placeholder="••••••••"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={e => setPassword(e.target.value)}
                 required
                 className="transition-smooth"
               />

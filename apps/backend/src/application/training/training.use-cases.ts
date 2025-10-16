@@ -1,7 +1,11 @@
 import { Injectable, Inject } from "@nestjs/common";
 import { TrainingRepository } from "../../domain/training/training.repository";
 import { TrainingSession } from "../../domain/training/training-session.entity";
-import { DomainResult, DomainError, Result } from "../../common/result/result";
+import {
+  type DomainResult,
+  DomainError,
+  Result,
+} from "../../common/result/result";
 
 @Injectable()
 export class TrainingUseCases {

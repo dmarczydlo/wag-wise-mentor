@@ -142,7 +142,7 @@ describe("Index Page", () => {
         "AI Care Plans",
       ];
 
-      expectedFeatures.forEach((feature) => {
+      expectedFeatures.forEach(feature => {
         expect(screen.getByText(feature)).toBeInTheDocument();
       });
     });

@@ -1,4 +1,3 @@
-
 export abstract class Entity<T> {
   protected readonly _id: T;
   protected readonly _createdAt: Date;
@@ -69,5 +68,4 @@ export interface Repository<T, ID> {
   delete(id: ID): Promise<void>;
 }
 
-export interface DomainService {
-}
+export interface DomainService {}

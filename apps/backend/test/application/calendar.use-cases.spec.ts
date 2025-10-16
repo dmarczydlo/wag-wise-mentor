@@ -1,26 +1,26 @@
 import { describe, it, beforeEach } from "mocha";
 import { expect } from "chai";
-import { Test, TestingModule } from "@nestjs/testing";
+import { Test, type TestingModule } from "@nestjs/testing";
 import {
   CreateEventUseCase,
   UpdateEventUseCase,
   GenerateHealthTimelineUseCase,
-  CreateEventCommand,
-  UpdateEventCommand,
-  GenerateHealthTimelineCommand,
+  type CreateEventCommand,
+  type UpdateEventCommand,
+  type GenerateHealthTimelineCommand,
   EVENT_REPOSITORY,
 } from "../../src/application/calendar/calendar.use-cases";
-import { EventTypeEnum } from "../../src/domain/calendar/event.entity";
-import { InMemoryEventRepository } from "../../src/infrastructure/calendar/in-memory-event.repository";
-import { EventRepository } from "../../src/domain/calendar/event.repository";
 import {
-  Event,
-  EventId,
-  EventType,
-  EventDateTime,
-  EventTitle,
-  EventDescription,
+  EventTypeEnum,
+  type Event,
+  EventId as _EventId,
+  EventType as _EventType,
+  EventDateTime as _EventDateTime,
+  EventTitle as _EventTitle,
+  EventDescription as _EventDescription,
 } from "../../src/domain/calendar/event.entity";
+import { InMemoryEventRepository } from "../../src/infrastructure/calendar/in-memory-event.repository";
+import type { EventRepository } from "../../src/domain/calendar/event.repository";
 
 describe("Calendar Use Cases - AAA Pattern", () => {
   let createEventUseCase: CreateEventUseCase;
@@ -135,7 +135,7 @@ describe("Calendar Use Cases - AAA Pattern", () => {
 
       // Assert
       expect(result.isSuccess()).to.be.true;
-      const event = result.getValue();
+      const _event = result.getValue();
       expect(repository.getCount()).to.equal(1);
 
       const savedEvents = repository.getAllEvents();

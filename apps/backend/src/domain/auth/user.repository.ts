@@ -1,5 +1,5 @@
-import { User, UserId } from "./user.entity";
-import { DomainResult } from "../../common/result/result";
+import type { User, UserId } from "./user.entity";
+import type { DomainResult } from "../../common/result/result";
 
 export abstract class UserRepository {
   abstract save(user: User): Promise<DomainResult<User>>;

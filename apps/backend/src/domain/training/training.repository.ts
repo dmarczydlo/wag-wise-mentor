@@ -1,5 +1,5 @@
-import { TrainingSession } from "./training-session.entity";
-import { DomainResult } from "../../common/result/result";
+import type { TrainingSession } from "./training-session.entity";
+import type { DomainResult } from "../../common/result/result";
 
 export interface TrainingRepository {
   findById(id: string): Promise<DomainResult<TrainingSession | null>>;

@@ -1,4 +1,4 @@
-import { describe, it, beforeEach, afterEach } from "mocha";
+import { describe, it, beforeEach, afterEach as _afterEach } from "mocha";
 import { expect } from "chai";
 import { InMemoryPuppyRepository } from "../../src/infrastructure/puppy/in-memory-puppy.repository";
 import {
@@ -47,7 +47,10 @@ export class PuppyTestDataBuilder {
     return this;
   }
 
-  withWeight(value: number, unit: WeightUnit = WeightUnit.KG): PuppyTestDataBuilder {
+  withWeight(
+    value: number,
+    unit: WeightUnit = WeightUnit.KG
+  ): PuppyTestDataBuilder {
     this.currentWeight = new Weight(value, unit);
     return this;
   }
@@ -58,7 +61,7 @@ export class PuppyTestDataBuilder {
   }
 
   build(): Puppy {
-    return Puppy.create(
+    const result = Puppy.create(
       this.puppyId,
       this.name,
       this.breed,
@@ -66,6 +69,12 @@ export class PuppyTestDataBuilder {
       this.currentWeight,
       this.ownerId
     );
+
+    if (result.isFailure()) {
+      throw new Error(`Failed to create puppy: ${result.getError().message}`);
+    }
+
+    return result.getValue();
   }
 
   // Convenience methods for common test scenarios
@@ -140,12 +149,21 @@ export class RepositoryTestHelper {
     if (overrides.breed) builder.withBreed(overrides.breed);
     if (overrides.birthDate) builder.withBirthDate(overrides.birthDate);
     if (overrides.weight !== undefined) {
-      builder.withWeight(overrides.weight, overrides.weightUnit || WeightUnit.KG);
+      builder.withWeight(
+        overrides.weight,
+        overrides.weightUnit || WeightUnit.KG
+      );
     }
     if (overrides.ownerId) builder.withOwnerId(overrides.ownerId);
 
     const puppy = builder.build();
-    return await this.repository.save(puppy);
+    const result = await this.repository.save(puppy);
+
+    if (result.isFailure()) {
+      throw new Error(`Failed to save puppy: ${result.getError().message}`);
+    }
+
+    return result.getValue();
   }
 
   /**
@@ -524,7 +542,9 @@ describe("TestDataBuilder Example", () => {
       .build();
 
     // Act
-    const savedPuppy = await repository.save(puppy);
+    const saveResult = await repository.save(puppy);
+    expect(saveResult.isSuccess()).to.be.true;
+    const savedPuppy = saveResult.getValue();
 
     // Assert
     expect(savedPuppy.name.value).to.equal("Max");

@@ -11,7 +11,7 @@ import {
 } from "../../application/auth/auth.use-cases";
 import { SupabaseAuthGuard } from "./supabase-auth.guard";
 
-const isTestEnvironment = process.env.NODE_ENV === "test";
+const _isTestEnvironment = process.env.NODE_ENV === "test";
 
 @Module({
   controllers: [AuthController],

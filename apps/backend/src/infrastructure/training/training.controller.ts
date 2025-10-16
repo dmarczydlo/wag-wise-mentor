@@ -7,7 +7,7 @@ import {
   Body,
   Param,
   UsePipes,
-  HttpStatus,
+  _HttpStatus,
   HttpException,
 } from "@nestjs/common";
 import { TrainingUseCases } from "../../application/training/training.use-cases";

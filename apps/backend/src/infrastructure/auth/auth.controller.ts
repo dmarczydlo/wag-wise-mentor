@@ -18,13 +18,13 @@ import {
 } from "@nestjs/swagger";
 import {
   GetUserUseCase,
-  GetUserCommand,
+  type GetUserCommand,
   CreateUserProfileUseCase,
-  CreateUserProfileCommand,
+  type CreateUserProfileCommand,
   UpdateUserProfileUseCase,
-  UpdateUserProfileCommand,
+  type UpdateUserProfileCommand,
   DeleteUserProfileUseCase,
-  DeleteUserProfileCommand,
+  type DeleteUserProfileCommand,
 } from "../../application/auth/auth.use-cases";
 import { SupabaseAuthGuard } from "./supabase-auth.guard";
 import { ZodValidationPipe } from "../../common/pipes/zod-validation.pipe";

@@ -1,8 +1,7 @@
 import { describe, it, beforeEach } from "mocha";
 import { expect } from "chai";
-import { Test, TestingModule } from "@nestjs/testing";
-import { INestApplication } from "@nestjs/common";
-import { HttpStatus } from "@nestjs/common";
+import { Test, type TestingModule } from "@nestjs/testing";
+import type { INestApplication, HttpStatus } from "@nestjs/common";
 import * as request from "supertest";
 import { PuppyModule } from "../../src/infrastructure/puppy/puppy.module";
 import { WeightUnit } from "../../src/domain/puppy/puppy.entity";
