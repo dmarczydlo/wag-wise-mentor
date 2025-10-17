@@ -1,7 +1,7 @@
 import { describe, it, beforeEach } from "mocha";
 import { expect } from "chai";
 import { Test, type TestingModule } from "@nestjs/testing";
-import { ConfigModule } from "@nestjs/config";
+import { ConfigModule, ConfigType } from "@nestjs/config";
 import { SupabaseService } from "../../src/infrastructure/config/supabase.service";
 import supabaseConfig from "../../src/infrastructure/config/supabase.config";
 
@@ -123,17 +123,20 @@ describe("SupabaseService - AAA Pattern", () => {
 
       // Act & Assert
       expect(() => {
-        const service = new SupabaseService(config as any);
+        new SupabaseService(config as ConfigType<typeof supabaseConfig>);
       }).to.throw("Supabase URL is required");
     });
 
     it("should throw error when SUPABASE_SERVICE_ROLE_KEY is missing", () => {
       // Arrange
-      const config = { url: "https://test.supabase.co", serviceRoleKey: undefined };
+      const config = {
+        url: "https://test.supabase.co",
+        serviceRoleKey: undefined,
+      };
 
       // Act & Assert
       expect(() => {
-        const service = new SupabaseService(config as any);
+        new SupabaseService(config as ConfigType<typeof supabaseConfig>);
       }).to.throw("Supabase service role key is required");
     });
   });
