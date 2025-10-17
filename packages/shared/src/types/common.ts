@@ -31,34 +31,35 @@ export const PaginationSchema = z.object({
 
 export const IdSchema = z.string().uuid();
 
-export enum UserRole {
-  ADMIN = "admin",
-  USER = "user",
-  MODERATOR = "moderator",
+export enum LanguagePreference {
+  ENGLISH = "en",
+  POLISH = "pl",
 }
 
-export enum NotificationType {
-  FEEDING_REMINDER = "feeding_reminder",
-  VET_APPOINTMENT = "vet_appointment",
-  VACCINATION = "vaccination",
-  TRAINING = "training",
-  GENERAL = "general",
+export enum ActivityLevel {
+  LOW = "low",
+  MODERATE = "moderate",
+  HIGH = "high",
 }
 
 export enum EventType {
-  FEEDING = "feeding",
-  VET_APPOINTMENT = "vet_appointment",
+  VET = "vet",
   VACCINATION = "vaccination",
-  TRAINING = "training",
-  MEDICATION = "medication",
   GROOMING = "grooming",
+  TRAINING = "training",
   OTHER = "other",
 }
 
-export enum RecurrencePattern {
+export enum RoutineType {
+  FEEDING = "feeding",
+  EXERCISE = "exercise",
+  TRAINING = "training",
+  SLEEP = "sleep",
+  SOCIALIZATION = "socialization",
+}
+
+export enum RoutineFrequency {
   DAILY = "daily",
   WEEKLY = "weekly",
   MONTHLY = "monthly",
-  YEARLY = "yearly",
-  CUSTOM = "custom",
 }
