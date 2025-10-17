@@ -1,0 +1,16 @@
+# Task ID: 30
+# Title: Complete API integration and testing
+# Status: pending
+# Dependencies: 8, 9, 10, 11, 23
+# Priority: high
+# Description: Connect frontend to backend with comprehensive testing
+# Details:
+Connect all frontend components to backend APIs. Implement error handling and retry logic. Build loading states and skeleton screens. Create integration tests for API endpoints. Implement E2E testing with Playwright. All integration code must be self-documenting through clear service and hook names.
+
+**MANDATORY DOCUMENTATION REFERENCES:**
+- Follow integration testing patterns from docs/project-plan.md Phase 6 system integration requirements
+- Use API configuration and error handling guidelines from docs/environment-variables.md
+- Implement comprehensive E2E testing using Playwright and AAA pattern per docs/testing-strategy.md
+
+# Test Strategy:
+All API calls work correctly, error handling functions, tests pass, comprehensive testing follows AAA pattern from docs/testing-strategy.md, and integration code is comment-free

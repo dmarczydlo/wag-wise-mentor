@@ -1,0 +1,36 @@
+# Task ID: 18
+# Title: Build comprehensive UI components package
+# Status: pending
+# Dependencies: 4
+# Priority: high
+# Description: Create design system with all necessary components
+# Details:
+Build Button, Input, Select components with variants. Create Card, Modal, Toast components. Implement Form components with validation display. Build responsive layout components. Create data display components like Tables and Charts. All UI components must be self-documenting through clear prop names and component structure.
+
+**MANDATORY DOCUMENTATION REFERENCES:**
+- Follow UI package structure and build configuration from docs/project-plan.md shared packages section
+- Ensure components work with environment configuration for any external dependencies from docs/environment-variables.md
+- Implement comprehensive component testing using AAA pattern per docs/testing-strategy.md
+
+# Test Strategy:
+All components render correctly and are responsive, comprehensive testing follows AAA pattern from docs/testing-strategy.md, and component code is comment-free
+
+# Subtasks:
+## 1. Move shadcn/ui components to packages/ui structure [pending]
+### Dependencies: None
+### Description: Relocate existing shadcn/ui components from current location to packages/ui/ directory
+### Details:
+Create packages/ui/ directory structure following docs/project-plan.md monorepo architecture. Move all existing shadcn/ui components (Button, Input, Select, Card, Modal, Toast, Form components, layout components, Tables, Charts) from their current location to packages/ui/src/components/. Preserve component structure and existing implementations. Ensure component names remain descriptive and self-explanatory.
+
+## 2. Configure UI package build process and exports [pending]
+### Dependencies: 18.1
+### Description: Set up build configuration and package exports for the UI components package
+### Details:
+Create package.json for packages/ui with proper exports configuration following docs/project-plan.md package configuration guidelines. Set up TypeScript build configuration (tsconfig.json). Configure build scripts using Bun. Create index.ts files to export all components. Set up proper module resolution and build output structure. Configuration should be self-explanatory through clear structure and naming.
+
+## 3. Update import paths across application to use UI package [pending]
+### Dependencies: 18.2
+### Description: Refactor all component imports throughout the application to use the new package structure
+### Details:
+Search and replace all import statements that reference the old shadcn/ui component paths. Update imports to use the new packages/ui package structure (e.g., import { Button } from '@wag-wise-mentor/ui'). Verify all components still work correctly after the import path updates. Test that the application builds and runs successfully. Import statements should clearly indicate component source packages.
+

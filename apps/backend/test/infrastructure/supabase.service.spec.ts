@@ -1,7 +1,7 @@
 import { describe, it, beforeEach } from "mocha";
 import { expect } from "chai";
 import { Test, type TestingModule } from "@nestjs/testing";
-import { ConfigModule } from "@nestjs/config";
+import { ConfigModule, ConfigType } from "@nestjs/config";
 import { SupabaseService } from "../../src/infrastructure/config/supabase.service";
 import supabaseConfig from "../../src/infrastructure/config/supabase.config";
 
@@ -117,53 +117,27 @@ describe("SupabaseService - AAA Pattern", () => {
   });
 
   describe("with missing configuration", () => {
-    it("should throw error when SUPABASE_URL is missing", async () => {
+    it("should throw error when SUPABASE_URL is missing", () => {
       // Arrange
-      delete process.env.SUPABASE_URL;
-      delete process.env.VITE_SUPABASE_URL;
-      process.env.SUPABASE_SERVICE_ROLE_KEY = "test-service-role-key";
+      const config = { url: undefined, serviceRoleKey: "test-key" };
 
       // Act & Assert
-      try {
-        const module: TestingModule = await Test.createTestingModule({
-          imports: [
-            ConfigModule.forRoot({
-              load: [supabaseConfig],
-            }),
-          ],
-          providers: [SupabaseService],
-        }).compile();
-
-        const _service = module.get<SupabaseService>(SupabaseService);
-        expect.fail("Should have thrown an error");
-      } catch (error) {
-        expect(error.message).to.include("Supabase URL is required");
-      }
+      expect(() => {
+        new SupabaseService(config as ConfigType<typeof supabaseConfig>);
+      }).to.throw("Supabase URL is required");
     });
 
-    it("should throw error when SUPABASE_SERVICE_ROLE_KEY is missing", async () => {
+    it("should throw error when SUPABASE_SERVICE_ROLE_KEY is missing", () => {
       // Arrange
-      process.env.SUPABASE_URL = "https://test.supabase.co";
-      delete process.env.SUPABASE_SERVICE_ROLE_KEY;
+      const config = {
+        url: "https://test.supabase.co",
+        serviceRoleKey: undefined,
+      };
 
       // Act & Assert
-      try {
-        const module: TestingModule = await Test.createTestingModule({
-          imports: [
-            ConfigModule.forRoot({
-              load: [supabaseConfig],
-            }),
-          ],
-          providers: [SupabaseService],
-        }).compile();
-
-        const _service = module.get<SupabaseService>(SupabaseService);
-        expect.fail("Should have thrown an error");
-      } catch (error) {
-        expect(error.message).to.include(
-          "Supabase service role key is required"
-        );
-      }
+      expect(() => {
+        new SupabaseService(config as ConfigType<typeof supabaseConfig>);
+      }).to.throw("Supabase service role key is required");
     });
   });
 

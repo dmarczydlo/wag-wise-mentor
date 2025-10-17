@@ -1,0 +1,77 @@
+# Task ID: 36
+# Title: Define comprehensive E2E testing strategy for FE + BE integration
+# Status: pending
+# Dependencies: 2, 32, 33, 34
+# Priority: medium
+# Description: Establish complete end-to-end testing framework with environment setup, database management, authentication flows, critical user journeys, API integration testing, cross-browser support, and CI/CD integration for comprehensive system validation.
+# Details:
+Implement comprehensive E2E testing strategy building on existing Playwright infrastructure:
+
+**1. Test Environment Setup**
+- Configure dedicated test environment with isolated frontend (localhost:5174) and backend (localhost:3002) instances
+- Set up test-specific environment variables in `.env.test` with proper database isolation
+- Create Docker Compose configuration for consistent test environment across local and CI
+- Implement test environment health checks and startup/teardown scripts
+
+**2. Database Setup and Seeding**
+- Create separate test database instance with automated migration and seeding
+- Implement database cleanup and reset between test suites using transactions or database recreation
+- Build test data factories for consistent, realistic test data (users, puppies, feeding schedules)
+- Set up database connection pooling and isolation for parallel test execution
+
+**3. Authentication Flow Testing**
+- Test complete user registration, login, logout flows
+- Validate JWT token handling, refresh token mechanisms
+- Test password reset and email verification flows
+- Verify session persistence and security boundaries
+
+**4. Critical User Journey Testing**
+- **Puppy Management**: Registration → Profile creation → Medical history → Weight tracking
+- **Feeding Schedules**: Creation → Modification → Notifications → Completion tracking
+- **Dashboard Interactions**: Navigation → Data visualization → Quick actions
+- **Notifications**: Creation → Delivery → User preferences → Read/unread states
+
+**5. API Integration Testing**
+- Test all CRUD operations for puppies, feeding, notifications, analytics modules
+- Validate request/response formats, error handling, and status codes
+- Test file upload functionality (puppy photos, medical documents)
+- Verify real-time features using WebSocket/SSE connections
+
+**6. Cross-Browser Testing Setup**
+- Configure Playwright for Chrome, Firefox, Safari, and mobile viewports
+- Implement responsive design testing across device types
+- Set up browser-specific configuration and capability testing
+- Create visual regression testing for UI consistency
+
+**7. CI/CD Integration**
+- Extend existing GitHub Actions workflow with E2E test stage
+- Configure test parallelization and retry mechanisms
+- Implement test result reporting with screenshots/videos on failure
+- Set up test environment provisioning and cleanup in CI
+- Add E2E test coverage reporting and integration with existing coverage system
+
+**Test Structure:**
+```
+e2e/
+├── fixtures/           # Test data and mock files
+├── page-objects/       # Page object models
+├── tests/
+│   ├── auth/          # Authentication flows
+│   ├── puppies/       # Puppy management
+│   ├── feeding/       # Feeding schedules
+│   ├── notifications/ # Notification system
+│   └── integration/   # Full user journeys
+├── utils/             # Test utilities and helpers
+├── global-setup.ts    # Environment setup
+└── global-teardown.ts # Cleanup
+```
+
+All test implementation must be self-documenting through clear test names and page object methods. Only AAA comments allowed for test structure.
+
+**MANDATORY DOCUMENTATION REFERENCES:**
+- Follow E2E testing framework from docs/testing-strategy.md with Playwright and browser MCP integration
+- Configure test environment variables following docs/environment-variables.md test setup guidelines
+- Implement testing strategy aligned with docs/project-plan.md Phase 6 integration requirements
+
+# Test Strategy:
+1. Verify test environment spins up both FE and BE correctly with isolated test database, 2. Validate all authentication flows work end-to-end with real JWT tokens, 3. Test complete user journeys from registration to advanced features, 4. Verify API integration with real HTTP calls and database operations, 5. Ensure cross-browser compatibility across Chrome, Firefox, Safari, and mobile, 6. Confirm CI/CD pipeline runs E2E tests successfully with proper reporting, 7. Validate test data seeding and cleanup works consistently, 8. Test error scenarios and edge cases in real environment conditions, following comprehensive E2E strategy from docs/testing-strategy.md, with only AAA comments in test code

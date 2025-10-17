@@ -1,6 +1,8 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
+import { BrowserRouter } from "react-router-dom";
 import Auth from "./Auth";
+import { AuthProvider } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -11,6 +13,7 @@ vi.mock("react-router-dom", async () => {
   return {
     ...actual,
     useNavigate: () => mockNavigate,
+    BrowserRouter: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   };
 });
 
@@ -35,6 +38,16 @@ vi.mock("sonner", () => ({
 }));
 
 describe("Auth Component", () => {
+  const renderAuth = () => {
+    return render(
+      <BrowserRouter>
+        <AuthProvider>
+          <Auth />
+        </AuthProvider>
+      </BrowserRouter>
+    );
+  };
+
   beforeEach(async () => {
     vi.clearAllMocks();
     mockNavigate.mockClear();
@@ -50,7 +63,7 @@ describe("Auth Component", () => {
   describe("Component Rendering", () => {
     it("should render login form by default", () => {
       // Arrange & Act
-      render(<Auth />);
+      renderAuth();
 
       // Assert
       expect(screen.getByText("Welcome Back")).toBeInTheDocument();
@@ -66,7 +79,7 @@ describe("Auth Component", () => {
 
     it("should render sign up form when toggled", () => {
       // Arrange & Act
-      render(<Auth />);
+      renderAuth();
       const toggleButton = screen.getByText("Sign Up");
       fireEvent.click(toggleButton);
 
@@ -82,7 +95,7 @@ describe("Auth Component", () => {
 
     it("should render heart icon", () => {
       // Arrange & Act
-      render(<Auth />);
+      renderAuth();
 
       // Assert
       const heartIcon = screen
@@ -96,7 +109,7 @@ describe("Auth Component", () => {
   describe("Form Validation", () => {
     it("should show validation error for invalid email", async () => {
       // Arrange
-      render(<Auth />);
+      renderAuth();
       const emailInput = screen.getByLabelText("Email");
       const passwordInput = screen.getByLabelText("Password");
       const form = emailInput.closest("form");
@@ -116,7 +129,7 @@ describe("Auth Component", () => {
 
     it("should show validation error for short password", async () => {
       // Arrange
-      render(<Auth />);
+      renderAuth();
       const emailInput = screen.getByLabelText("Email");
       const passwordInput = screen.getByLabelText("Password");
       const submitButton = screen.getByRole("button", { name: "Sign In" });
@@ -139,7 +152,7 @@ describe("Auth Component", () => {
       vi.mocked(supabase.auth.signInWithPassword).mockResolvedValue({
         error: null,
       });
-      render(<Auth />);
+      renderAuth();
       const emailInput = screen.getByLabelText("Email");
       const passwordInput = screen.getByLabelText("Password");
       const submitButton = screen.getByRole("button", { name: "Sign In" });
@@ -165,7 +178,7 @@ describe("Auth Component", () => {
       vi.mocked(supabase.auth.signInWithPassword).mockResolvedValue({
         error: null,
       });
-      render(<Auth />);
+      renderAuth();
       const emailInput = screen.getByLabelText("Email");
       const passwordInput = screen.getByLabelText("Password");
       const submitButton = screen.getByRole("button", { name: "Sign In" });
@@ -186,7 +199,7 @@ describe("Auth Component", () => {
       vi.mocked(supabase.auth.signInWithPassword).mockResolvedValue({
         error: { message: "Invalid login credentials" },
       });
-      render(<Auth />);
+      renderAuth();
       const emailInput = screen.getByLabelText("Email");
       const passwordInput = screen.getByLabelText("Password");
       const submitButton = screen.getByRole("button", { name: "Sign In" });
@@ -207,7 +220,7 @@ describe("Auth Component", () => {
     it("should handle successful sign up", async () => {
       // Arrange
       vi.mocked(supabase.auth.signUp).mockResolvedValue({ error: null });
-      render(<Auth />);
+      renderAuth();
       const toggleButton = screen.getByText("Sign Up");
       fireEvent.click(toggleButton);
 
@@ -242,7 +255,7 @@ describe("Auth Component", () => {
       vi.mocked(supabase.auth.signUp).mockResolvedValue({
         error: { message: "User already registered" },
       });
-      render(<Auth />);
+      renderAuth();
       const toggleButton = screen.getByText("Sign Up");
       fireEvent.click(toggleButton);
 
@@ -271,7 +284,7 @@ describe("Auth Component", () => {
   describe("Form Toggle", () => {
     it("should toggle between login and sign up modes", () => {
       // Arrange
-      render(<Auth />);
+      renderAuth();
 
       // Act & Assert - Start with login
       expect(screen.getByText("Welcome Back")).toBeInTheDocument();
@@ -308,7 +321,7 @@ describe("Auth Component", () => {
       });
       vi.mocked(supabase.auth.signInWithPassword).mockReturnValue(authPromise);
 
-      render(<Auth />);
+      renderAuth();
       const emailInput = screen.getByLabelText("Email");
       const passwordInput = screen.getByLabelText("Password");
       const submitButton = screen.getByRole("button", { name: "Sign In" });
@@ -339,7 +352,7 @@ describe("Auth Component", () => {
       });
 
       // Act
-      render(<Auth />);
+      renderAuth();
 
       // Assert
       await waitFor(() => {
@@ -349,7 +362,7 @@ describe("Auth Component", () => {
 
     it("should set up auth state change listener", () => {
       // Arrange & Act
-      render(<Auth />);
+      renderAuth();
 
       // Assert
       expect(supabase.auth.onAuthStateChange).toHaveBeenCalled();
@@ -359,7 +372,7 @@ describe("Auth Component", () => {
   describe("Accessibility", () => {
     it("should have proper form labels", () => {
       // Arrange & Act
-      render(<Auth />);
+      renderAuth();
 
       // Assert
       expect(screen.getByLabelText("Email")).toBeInTheDocument();
@@ -368,7 +381,7 @@ describe("Auth Component", () => {
 
     it("should have proper button roles", () => {
       // Arrange & Act
-      render(<Auth />);
+      renderAuth();
 
       // Assert
       expect(
@@ -378,7 +391,7 @@ describe("Auth Component", () => {
 
     it("should have proper form structure", () => {
       // Arrange & Act
-      render(<Auth />);
+      renderAuth();
 
       // Assert
       const form = screen.getByLabelText("Email").closest("form");

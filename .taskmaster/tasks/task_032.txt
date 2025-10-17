@@ -1,0 +1,43 @@
+# Task ID: 32
+# Title: Setup comprehensive testing infrastructure
+# Status: done
+# Dependencies: None
+# Priority: high
+# Description: Implement complete testing strategy with Mocha (BE), Vitest (FE), and Playwright (E2E)
+# Details:
+Configure testing frameworks for all layers: Backend unit/integration tests with Mocha+Chai, Frontend component tests with Vitest, E2E tests with Playwright. Focus on behavior testing over mocking. Set up test coverage reporting and CI/CD integration.
+
+# Test Strategy:
+All test suites run successfully, coverage reports generated, E2E tests pass in CI/CD
+
+# Subtasks:
+## 1. Setup Backend testing with Mocha + Chai [done]
+### Dependencies: None
+### Description: Configure Mocha and Chai for backend unit and integration testing
+### Details:
+Install mocha, chai, chai-http, sinon. Configure test scripts in package.json. Set up test database for integration tests. Create test utilities and helpers.
+
+## 2. Setup Frontend testing with Vitest [done]
+### Dependencies: None
+### Description: Configure Vitest for React component and utility testing
+### Details:
+Install vitest, @testing-library/react, @testing-library/jest-dom, jsdom. Configure vitest.config.ts. Set up test utilities and custom render functions.
+
+## 3. Setup Playwright E2E testing [done]
+### Dependencies: None
+### Description: Configure Playwright for end-to-end testing with browser MCP integration
+### Details:
+Install playwright, configure playwright.config.ts. Set up browser MCP integration for automated testing. Create E2E test utilities and page objects.
+
+## 4. Implement test coverage reporting [done]
+### Dependencies: 32.1, 32.2
+### Description: Set up comprehensive test coverage reporting for all test types
+### Details:
+Configure coverage tools: nyc for Mocha, @vitest/coverage for Vitest. Set up coverage thresholds and reporting. Integrate with CI/CD for coverage tracking.
+
+## 5. Create comprehensive test suites [done]
+### Dependencies: 32.1, 32.2, 32.3
+### Description: Write extensive test suites for all business logic and critical paths
+### Details:
+Write unit tests for all services, utilities, and business logic. Create integration tests for API endpoints. Write component tests for React components. Create E2E tests for critical user flows.
+

@@ -1,0 +1,36 @@
+# Task ID: 11
+# Title: Build training backend module
+# Status: pending
+# Dependencies: 8
+# Priority: medium
+# Description: Implement training exercises and progress tracking
+# Details:
+Create training exercises database service. Implement training progress tracking. Build training session management endpoints. Create behavioral milestones tracking. Implement training recommendation algorithms. All training logic must be self-documenting through clear naming conventions.
+
+**MANDATORY DOCUMENTATION REFERENCES:**
+- Follow DDD architecture patterns with proper domain modeling as outlined in docs/project-plan.md Phase 1
+- Configure any external service integrations following docs/environment-variables.md security guidelines
+- Implement comprehensive testing using AAA pattern with in-memory providers per docs/testing-strategy.md
+
+# Test Strategy:
+Training sessions track correctly, recommendations generate appropriately, testing follows AAA pattern from docs/testing-strategy.md, and all training logic is comment-free
+
+# Subtasks:
+## 1. Create training exercises database service [pending]
+### Dependencies: None
+### Description: Build database models and service layer for managing training exercises
+### Details:
+Create training exercise entity with fields for name, description, difficulty level, duration, and category. Implement CRUD operations for exercises. Create exercise categories and tags system. Build database migrations and seeders with common training exercises. Follow DDD Domain Layer patterns from docs/project-plan.md. Entity and service names should clearly indicate their training-related purpose.
+
+## 2. Implement training progress tracking system [pending]
+### Dependencies: 11.1
+### Description: Build progress tracking service and behavioral milestones management
+### Details:
+Create training session entity to track completed exercises. Implement progress calculation algorithms based on completion rates and improvement metrics. Build behavioral milestones tracking with configurable goals. Create progress aggregation endpoints for analytics. Follow DDD Domain Services patterns from docs/project-plan.md. Progress calculation methods should have descriptive names indicating metric types.
+
+## 3. Build training session management and recommendation endpoints [pending]
+### Dependencies: 11.1, 11.2
+### Description: Create API endpoints for session management and implement training recommendation algorithms
+### Details:
+Build REST endpoints for creating, updating, and managing training sessions. Implement recommendation algorithms based on puppy age, breed, and progress history. Create session scheduling and reminder system. Build endpoints for retrieving personalized training plans. Follow DDD Application Layer patterns from docs/project-plan.md. Recommendation algorithm names should clearly describe their recommendation criteria.
+

@@ -1,0 +1,55 @@
+# Task ID: 38
+# Title: Separate marketing website from authenticated app
+# Status: pending
+# Dependencies: 4, 5
+# Priority: high
+# Description: Create separate applications: marketing website (SSR/SEO optimized) and authenticated dashboard app, both using shared packages with NX monorepo management and Vercel deployment strategy.
+# Details:
+1. **Evaluate NX vs Current Bun Workspaces**: Analyze current Bun workspace setup in package.json (workspaces: apps/*, packages/*) and assess migration path to NX monorepo management. Consider benefits of NX build system, dependency graph, and caching vs current setup.
+
+2. **Create Marketing Website (apps/marketing)**:
+   - Initialize Next.js app with App Router for SSR/SEO optimization
+   - Move Index.tsx marketing content to Next.js pages/components
+   - Implement static generation for landing pages, features, pricing
+   - Configure SEO metadata, Open Graph tags, structured data
+   - Set up Tailwind CSS with existing design system from @wag-wise-mentor/ui
+   - Create responsive marketing layouts optimized for conversion
+   - Import shared types from @wag-wise-mentor/shared for API integration
+
+3. **Refactor Dashboard App (apps/dashboard)**:
+   - Extract authenticated routes from current apps/frontend/
+   - Keep React SPA architecture with Vite for optimal user experience
+   - Move Dashboard.tsx and all authenticated pages to new structure
+   - Configure React Router for client-side navigation within dashboard
+   - Maintain existing Supabase auth integration and user session handling
+   - Import UI components from @wag-wise-mentor/ui package
+   - Use shared types from @wag-wise-mentor/shared for consistency
+
+4. **Configure Shared Package Usage**:
+   - Ensure both apps import from @wag-wise-mentor/shared for types, utilities
+   - Update @wag-wise-mentor/ui to support both Next.js SSR and React SPA contexts
+   - Configure proper build dependencies and watch modes for development
+   - Update root package.json scripts for new app structure
+
+5. **Setup Vercel Deployment Strategy**:
+   - Configure vercel.json for monorepo with multiple apps
+   - Set up separate Vercel projects: marketing.wagwisementor.com, app.wagwisementor.com
+   - Configure build commands and environment variables per app
+   - Set up domain routing and redirects between marketing and app
+   - Configure preview deployments for both applications
+
+6. **Maintain Development Workflow**:
+   - Update development scripts to run both apps concurrently
+   - Configure hot reloading for shared package changes
+   - Ensure TypeScript path mappings work across all applications
+   - Update testing configuration for new app structure
+
+All application separation must be implemented with self-documenting code structure and clear naming conventions.
+
+**MANDATORY DOCUMENTATION REFERENCES:**
+- Follow dual-application architecture strategy from docs/project-plan.md Phase 3 marketing website separation
+- Configure environment variables for both apps following docs/environment-variables.md multi-app guidelines
+- Implement comprehensive testing for both applications using AAA pattern per docs/testing-strategy.md
+
+# Test Strategy:
+Verify both marketing and dashboard apps build successfully and can import shared packages. Test SSR functionality on marketing site with proper SEO metadata rendering. Confirm dashboard app maintains authentication flow and all existing functionality. Validate development workflow with concurrent app serving and shared package hot reloading. Test Vercel deployment configuration with proper domain routing between marketing and authenticated app, following AAA testing pattern from docs/testing-strategy.md, with all application code being comment-free

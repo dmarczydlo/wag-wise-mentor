@@ -1,0 +1,16 @@
+# Task ID: 37
+# Title: Setup i18n internationalization support
+# Status: pending
+# Dependencies: 17, 6
+# Priority: high
+# Description: Implement comprehensive internationalization infrastructure supporting Polish and English languages with translation management, locale formatting, and RTL/LTR support for both frontend and backend.
+# Details:
+Frontend: Install react-i18next, i18next, and i18next-browser-languagedetector. Configure i18next with namespace support for different app sections (common, dashboard, auth, feeding, training). Create translation files in public/locales/{en,pl}/ directories. Implement useTranslation hooks throughout React components. Add language switcher component in main navigation. Configure date-fns locale support for Polish date formatting. Setup number and currency formatting for locale-specific display. Backend: Install i18next, i18next-fs-backend, and i18next-http-middleware for NestJS. Create backend translation files for API responses, validation messages, and email templates. Implement i18n decorator for controller methods. Configure locale detection from Accept-Language headers. Setup email template localization for notifications. Shared: Create TypeScript interfaces for translation keys to ensure type safety. Implement locale persistence in localStorage and user preferences. Setup proper RTL/LTR CSS support with Tailwind directives. Configure build pipeline to validate translation completeness across locales. All i18n implementation must be self-documenting through clear naming and structure.
+
+**MANDATORY DOCUMENTATION REFERENCES:**
+- Follow frontend and backend architecture patterns from docs/project-plan.md for i18n integration
+- Configure locale environment variables following docs/environment-variables.md guidelines
+- Implement comprehensive i18n testing using AAA pattern per docs/testing-strategy.md
+
+# Test Strategy:
+Verify language switching updates all UI text immediately. Test translation key validation prevents missing translations. Confirm date/number formatting respects selected locale. Validate API responses return localized error messages. Test email templates render correctly in both languages. Ensure localStorage persists language preference across sessions, following AAA testing pattern from docs/testing-strategy.md, with all i18n code being comment-free

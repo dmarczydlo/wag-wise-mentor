@@ -1,0 +1,31 @@
+# Task ID: 3
+# Title: Move existing frontend to apps/frontend
+# Status: done
+# Dependencies: 1
+# Priority: high
+# Description: Relocate current React frontend code to new monorepo structure
+# Details:
+Move src/, public/, index.html, vite.config.ts to apps/frontend/. Update all import paths to use absolute imports. Update package.json scripts for frontend-specific commands. Configure TypeScript paths for workspace packages.
+
+# Test Strategy:
+Frontend builds and runs successfully from new location
+
+# Subtasks:
+## 1. Create apps/frontend directory structure and move core files [done]
+### Dependencies: None
+### Description: Create the new directory structure and move essential frontend files to apps/frontend
+### Details:
+Create apps/frontend/ directory. Move src/, public/, index.html, and vite.config.ts from root to apps/frontend/. Update package.json to reflect new structure. Ensure all static assets and configuration files are properly relocated.
+
+## 2. Update import paths and TypeScript configuration [done]
+### Dependencies: 3.1
+### Description: Convert relative imports to absolute imports and configure TypeScript paths for workspace packages
+### Details:
+Update all import statements in src/ to use absolute paths. Configure tsconfig.json with baseUrl and paths mapping for workspace packages. Update vite.config.ts to handle new import structure. Ensure TypeScript can resolve imports from packages/shared and other workspace packages.
+
+## 3. Update build scripts and validate frontend functionality [done]
+### Dependencies: 3.2
+### Description: Configure package.json scripts for frontend-specific commands and verify everything works
+### Details:
+Update package.json scripts to work from apps/frontend/ location. Configure build, dev, and test scripts. Update any CI/CD references to new frontend path. Test that frontend builds successfully, dev server starts, and all imports resolve correctly from new location.
+

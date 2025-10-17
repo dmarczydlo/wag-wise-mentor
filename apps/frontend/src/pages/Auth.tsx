@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@wag-wise-mentor/ui/components/card";
 import { Label } from "@wag-wise-mentor/ui/components/label";
-import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { Heart } from "lucide-react";
 import { z } from "zod";
@@ -26,24 +26,13 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { user, signIn, signUp } = useAuth();
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        navigate("/dashboard");
-      }
-    });
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
-      if (session) {
-        navigate("/dashboard");
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [navigate]);
+    if (user) {
+      navigate("/dashboard");
+    }
+  }, [user, navigate]);
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,10 +50,7 @@ const Auth = () => {
 
     try {
       if (isLogin) {
-        const { error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
+        const { error } = await signIn(email, password);
 
         if (error) {
           if (error.message.includes("Invalid login credentials")) {
@@ -77,15 +63,7 @@ const Auth = () => {
 
         toast.success("Welcome back!");
       } else {
-        const redirectUrl = `${window.location.origin}/dashboard`;
-
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: redirectUrl,
-          },
-        });
+        const { error } = await signUp(email, password);
 
         if (error) {
           if (error.message.includes("already registered")) {

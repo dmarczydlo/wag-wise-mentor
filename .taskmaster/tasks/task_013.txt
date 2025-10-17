@@ -1,0 +1,36 @@
+# Task ID: 13
+# Title: Build family sharing backend module
+# Status: pending
+# Dependencies: 8
+# Priority: medium
+# Description: Implement multi-user family sharing functionality
+# Details:
+Create family groups management service. Implement invitation system with email tokens. Build RBAC for family member permissions. Implement real-time updates with Supabase subscriptions. Create activity logging and audit trail. All family sharing logic must be expressed through descriptive service and method names.
+
+**MANDATORY DOCUMENTATION REFERENCES:**
+- Follow DDD architecture patterns with proper domain modeling as outlined in docs/project-plan.md Phase 1
+- Configure email service integrations following docs/environment-variables.md security guidelines
+- Implement comprehensive testing using AAA pattern with in-memory providers per docs/testing-strategy.md
+
+# Test Strategy:
+Family invitations work, permissions enforce correctly, real-time updates function, testing follows AAA pattern from docs/testing-strategy.md, and sharing logic is comment-free
+
+# Subtasks:
+## 1. Create family groups management service [pending]
+### Dependencies: None
+### Description: Implement core family group CRUD operations and database schema
+### Details:
+Create family groups database table with fields for group name, admin user, creation date, and settings. Implement NestJS service with methods for creating, reading, updating, and deleting family groups. Add validation for group creation limits and naming constraints. Create DTOs for family group operations. Follow DDD Domain Layer patterns from docs/project-plan.md. Service method names should clearly indicate family group operations.
+
+## 2. Build invitation system with email tokens [pending]
+### Dependencies: 13.1
+### Description: Implement secure invitation flow with email verification and token management
+### Details:
+Create invitation tokens table with expiration dates and security tokens. Implement email service integration for sending family invitations. Build invitation acceptance endpoint with token validation. Add invitation status tracking (pending, accepted, expired, revoked). Create rate limiting for invitation sending. Follow email configuration from docs/environment-variables.md. Token and validation method names should clearly describe security operations.
+
+## 3. Implement RBAC and real-time features [pending]
+### Dependencies: 13.2
+### Description: Build role-based access control system and real-time updates with activity logging
+### Details:
+Create family member roles system (admin, member, viewer) with permission matrices. Implement middleware for role-based endpoint protection. Set up Supabase real-time subscriptions for family data changes. Create activity logging service for audit trail of family actions. Build notification system for family updates. Follow DDD Domain Services patterns from docs/project-plan.md. Role and permission method names should clearly indicate access control operations.
+

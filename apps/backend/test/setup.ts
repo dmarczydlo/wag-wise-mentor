@@ -2,6 +2,9 @@ import "reflect-metadata";
 import { expect } from "chai";
 import * as sinon from "sinon";
 
+// Set NODE_ENV to test for proper repository injection
+process.env.NODE_ENV = "test";
+
 // Global test utilities
 export const testUtils = {
   createMock: sinon.stub,
