@@ -12,19 +12,8 @@ import {
   CreatePuppySchema,
   UpdatePuppySchema,
   CreateWeightRecordSchema,
-  UpdateWeightRecordSchema,
-  CreateFoodTypeSchema,
-  UpdateFoodTypeSchema,
-  CreateFoodAssignmentSchema,
-  UpdateFoodAssignmentSchema,
-  CreateFeedingScheduleSchema,
-  UpdateFeedingScheduleSchema,
-  CreateFeedingLogSchema,
-  UpdateFeedingLogSchema,
   CreateEventSchema,
-  UpdateEventSchema,
   CreateRoutineSchema,
-  UpdateRoutineSchema,
 } from "../types/index.js";
 
 describe("Type Definitions and Schemas", () => {
