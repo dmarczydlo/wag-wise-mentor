@@ -1,6 +1,7 @@
 import { z } from "zod";
-import type { BaseEntity, PaginatedResponse } from "./common.js";
 import {
+  BaseEntity,
+  PaginatedResponse,
   LanguagePreference,
   ActivityLevel,
   EventType,
