@@ -134,7 +134,7 @@ describe("SupabaseService - AAA Pattern", () => {
           providers: [SupabaseService],
         }).compile();
 
-        module.get<SupabaseService>(SupabaseService);
+        const _service = module.get<SupabaseService>(SupabaseService);
         expect.fail("Should have thrown an error");
       } catch (error) {
         expect(error.message).to.include("Supabase URL is required");
@@ -157,7 +157,7 @@ describe("SupabaseService - AAA Pattern", () => {
           providers: [SupabaseService],
         }).compile();
 
-        module.get<SupabaseService>(SupabaseService);
+        const _service = module.get<SupabaseService>(SupabaseService);
         expect.fail("Should have thrown an error");
       } catch (error) {
         expect(error.message).to.include(
