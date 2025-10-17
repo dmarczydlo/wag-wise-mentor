@@ -1,0 +1,11 @@
+# Task ID: 40
+# Title: Enforce Git Workflow Requirements
+# Status: pending
+# Dependencies: 1
+# Priority: high
+# Description: Update all tasks to enforce proper Git workflow: always create feature branches, never commit directly to main, use Pull Requests for all changes
+# Details:
+
+
+# Test Strategy:
+

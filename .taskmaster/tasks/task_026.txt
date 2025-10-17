@@ -1,0 +1,16 @@
+# Task ID: 26
+# Title: Build AI care plans frontend
+# Status: pending
+# Dependencies: 17, 18
+# Priority: low
+# Description: Create AI-powered care recommendations interface
+# Details:
+Create care plan display components with sections. Implement AI recommendation UI with accept/reject. Build care plan customization interface. Create feedback collection forms for AI improvements. All AI interface components must be self-explanatory through clear naming.
+
+**MANDATORY DOCUMENTATION REFERENCES:**
+- Follow frontend architecture patterns from docs/project-plan.md Phase 4 requirements
+- Configure AI service endpoints using docs/environment-variables.md for API access
+- Implement comprehensive testing using AAA pattern per docs/testing-strategy.md
+
+# Test Strategy:
+Care plans display correctly, recommendations can be accepted, feedback submits, testing follows AAA pattern from docs/testing-strategy.md, and AI interface code is comment-free

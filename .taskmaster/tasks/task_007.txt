@@ -1,0 +1,48 @@
+# Task ID: 7
+# Title: Implement shared type definitions
+# Status: done
+# Dependencies: 4
+# Priority: high
+# Description: Create comprehensive TypeScript types based on existing Supabase schema
+# Details:
+Extract database types from existing types.ts into packages/shared/. Create API DTOs for request/response interfaces. Build Zod validation schemas for all data models. Define enums and constants. Export all types properly. All TypeScript interfaces and types must be self-explanatory through naming - no comments allowed.
+
+**MANDATORY DOCUMENTATION REFERENCES:**
+- Follow package structure and TypeScript configuration guidelines from docs/project-plan.md shared packages section
+- Implement validation using patterns from docs/testing-strategy.md with comprehensive testing coverage
+- Use environment-agnostic type definitions that work with configuration from docs/environment-variables.md
+
+# Test Strategy:
+Types compile without errors, can be imported in frontend and backend, validation tests follow AAA pattern from docs/testing-strategy.md, and all type definitions are comment-free
+
+# Subtasks:
+## 1. Extract and reorganize Supabase database types [done]
+### Dependencies: None
+### Description: Move existing database types from types.ts to packages/shared/types/database.ts
+### Details:
+Extract all Supabase-generated types from the existing types.ts file and organize them into a dedicated database types module in the shared package. Clean up and organize the type definitions for better maintainability. Follow packages/shared/ structure from docs/project-plan.md and implement proper TypeScript configuration. Use descriptive type names that eliminate need for comments.
+
+## 2. Create API DTO interfaces [done]
+### Dependencies: 7.1
+### Description: Define request and response interfaces for all API endpoints
+### Details:
+Create comprehensive DTO (Data Transfer Object) interfaces for all API request and response payloads. Include user authentication, dog profiles, care plans, notifications, and other domain-specific DTOs. Follow DDD principles from docs/project-plan.md and ensure DTOs align with backend architecture. Use clear interface names that describe their purpose without requiring comments.
+
+## 3. Build Zod validation schemas [done]
+### Dependencies: 7.1, 7.2
+### Description: Create Zod schemas for runtime validation of all data models
+### Details:
+Implement Zod validation schemas that correspond to the database types and API DTOs. Include proper validation rules for all fields, including optional fields, enums, and complex nested objects. Follow validation patterns from docs/testing-strategy.md and ensure schemas work with environment configuration from docs/environment-variables.md. Schema names and structure should be self-explanatory.
+
+## 4. Define application enums and constants [done]
+### Dependencies: 7.1
+### Description: Create shared enums and constants used across the application
+### Details:
+Define all application-wide enums (user roles, notification types, care plan statuses, etc.) and constants (validation limits, default values, configuration options) in a centralized location. Follow domain language principles from docs/project-plan.md DDD architecture. Use descriptive enum and constant names that convey meaning without comments.
+
+## 5. Configure package exports and TypeScript compilation [done]
+### Dependencies: 7.1, 7.2, 7.3, 7.4
+### Description: Set up proper package.json exports and TypeScript configuration for the shared types package
+### Details:
+Configure package.json with proper exports mapping, set up TypeScript compilation with appropriate tsconfig.json, ensure all types are properly exported and can be imported by both frontend and backend packages. Follow monorepo configuration guidelines from docs/project-plan.md. Configuration files should be self-explanatory through clear structure.
+

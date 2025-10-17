@@ -1,0 +1,16 @@
+# Task ID: 35
+# Title: Implement E2E tests for critical user flows
+# Status: pending
+# Dependencies: 32.3
+# Priority: high
+# Description: Create end-to-end tests for complete user journeys using Playwright
+# Details:
+Write E2E tests for user registration, puppy profile creation, feeding schedule setup, notification management, and dashboard interactions. Test cross-browser compatibility and responsive design. All test code must use only AAA comments for structure.
+
+**MANDATORY DOCUMENTATION REFERENCES:**
+- Follow E2E testing strategy with Playwright from docs/testing-strategy.md
+- Use browser MCP integration and cross-browser testing as specified in docs/testing-strategy.md E2E guidelines
+- Configure test environment following docs/environment-variables.md test setup procedures
+
+# Test Strategy:
+All critical user flows tested end-to-end, cross-browser compatibility verified, following comprehensive E2E strategy from docs/testing-strategy.md, and test code contains only AAA comments

@@ -1,0 +1,36 @@
+# Task ID: 9
+# Title: Build calendar and events backend module
+# Status: pending
+# Dependencies: 8
+# Priority: medium
+# Description: Implement event scheduling and calendar management
+# Details:
+Create events controller with CRUD operations. Implement recurring event logic. Build breed-specific health timeline generator. Create vaccination scheduling service. Implement Google Calendar integration service. All business logic must be expressed through clear method and class names without requiring explanatory comments.
+
+**MANDATORY DOCUMENTATION REFERENCES:**
+- Follow DDD architecture with Domain, Application, and Infrastructure layers as outlined in docs/project-plan.md Phase 1
+- Configure external API keys and integrations following docs/environment-variables.md security guidelines
+- Implement comprehensive testing using AAA pattern with in-memory providers per docs/testing-strategy.md
+
+# Test Strategy:
+Events can be created, recurring events generate properly, calendar sync works, testing follows AAA pattern from docs/testing-strategy.md, and all code is self-documenting without comments
+
+# Subtasks:
+## 1. Create events controller with CRUD operations [pending]
+### Dependencies: None
+### Description: Build NestJS controller for event management with create, read, update, delete endpoints
+### Details:
+Create EventsController with endpoints for POST /events (create), GET /events (list), GET /events/:id (get single), PUT /events/:id (update), DELETE /events/:id (delete). Implement proper validation using DTOs and Zod schemas from packages/shared. Add error handling and response formatting. Include pagination for list endpoint. Follow DDD Infrastructure layer patterns from docs/project-plan.md. Use descriptive endpoint and method names.
+
+## 2. Implement recurring event logic and scheduling service [pending]
+### Dependencies: 9.1
+### Description: Build service to handle recurring events and vaccination scheduling with breed-specific timelines
+### Details:
+Create RecurringEventsService to generate event instances from recurring patterns (daily, weekly, monthly, yearly). Build VaccinationScheduleService with breed-specific health timeline templates. Implement logic to auto-generate vaccination events based on puppy breed and birthdate. Handle timezone considerations and daylight saving time. Follow DDD Domain Services patterns from docs/project-plan.md. Service names should clearly indicate their responsibility.
+
+## 3. Build Google Calendar integration service [pending]
+### Dependencies: 9.2
+### Description: Implement two-way sync with Google Calendar API for event management
+### Details:
+Create GoogleCalendarService with OAuth2 authentication. Implement sync methods to push events to Google Calendar and pull external events. Build webhook handlers for real-time calendar updates. Add conflict resolution for overlapping events. Include proper error handling for API rate limits and network failures. Configure API keys following docs/environment-variables.md security guidelines. Method names should describe integration actions clearly.
+

@@ -1,0 +1,16 @@
+# Task ID: 20
+# Title: Build calendar and events frontend
+# Status: pending
+# Dependencies: 17, 18
+# Priority: medium
+# Description: Create event scheduling and calendar interface
+# Details:
+Create calendar component using react-day-picker. Build event creation/editing modal forms. Implement recurring event UI with options. Create vaccination schedule interface. Build appointment management with reminders. All calendar components must be self-documenting through clear naming and structure.
+
+**MANDATORY DOCUMENTATION REFERENCES:**
+- Follow frontend architecture patterns from docs/project-plan.md Phase 4 requirements
+- Configure calendar integrations using environment variables from docs/environment-variables.md
+- Implement comprehensive testing using AAA pattern per docs/testing-strategy.md
+
+# Test Strategy:
+Calendar displays events correctly, event creation works, recurring events show properly, testing follows AAA pattern from docs/testing-strategy.md, and calendar code is comment-free

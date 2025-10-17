@@ -1,0 +1,16 @@
+# Task ID: 33
+# Title: Implement Backend unit and integration tests
+# Status: pending
+# Dependencies: 32.1
+# Priority: high
+# Description: Write comprehensive tests for all backend services, controllers, and business logic
+# Details:
+Create unit tests for all services (puppies, feeding, notifications, analytics). Write integration tests for API endpoints. Test database operations and external service integrations. Focus on behavior testing over mocking. All test code must use only AAA comments for structure - no other comments allowed.
+
+**MANDATORY DOCUMENTATION REFERENCES:**
+- Follow backend testing strategy with Mocha + Chai from docs/testing-strategy.md
+- Use AAA pattern and in-memory providers as specified in docs/testing-strategy.md backend testing guidelines
+- Test environment configuration following docs/environment-variables.md test setup procedures
+
+# Test Strategy:
+All backend services have >90% test coverage, integration tests pass, following AAA pattern and behavior testing approach from docs/testing-strategy.md, and test code contains only AAA comments

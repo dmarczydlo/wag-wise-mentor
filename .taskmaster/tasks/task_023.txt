@@ -1,0 +1,16 @@
+# Task ID: 23
+# Title: Implement dashboard and routines frontend
+# Status: pending
+# Dependencies: 19, 20, 21, 22
+# Priority: high
+# Description: Create main dashboard with daily agenda and routines
+# Details:
+Build main dashboard layout with responsive design. Create daily agenda view with timeline. Implement routine management UI. Build quick action cards for common tasks. Create progress widgets and summary stats. All dashboard components must be self-documenting through clear component names and structure.
+
+**MANDATORY DOCUMENTATION REFERENCES:**
+- Follow dashboard architecture patterns from docs/project-plan.md Phase 4 implementation guidelines
+- Use API configuration from docs/environment-variables.md for data fetching
+- Implement comprehensive testing using AAA pattern per docs/testing-strategy.md with focus on user interactions
+
+# Test Strategy:
+Dashboard loads quickly, agenda displays correctly, routines function, testing follows AAA pattern from docs/testing-strategy.md, and dashboard code contains no comments

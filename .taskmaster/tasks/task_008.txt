@@ -1,0 +1,36 @@
+# Task ID: 8
+# Title: Build authentication backend module
+# Status: pending
+# Dependencies: 6, 7
+# Priority: high
+# Description: Implement NestJS auth module with Supabase integration
+# Details:
+Create auth module with JWT guards. Implement Supabase Auth integration. Build role-based access control guards. Create user registration/login endpoints. Implement password reset functionality. Add email verification endpoints. All authentication logic must be self-documenting through clear method names and structure - no comments in production code.
+
+**MANDATORY DOCUMENTATION REFERENCES:**
+- Follow environment configuration for Supabase Auth keys from docs/environment-variables.md
+- Implement DDD architecture patterns from docs/project-plan.md Phase 1 backend requirements
+- Use AAA testing pattern with in-memory providers as specified in docs/testing-strategy.md
+
+# Test Strategy:
+Authentication endpoints work correctly, JWT tokens validate properly, comprehensive testing follows AAA pattern from docs/testing-strategy.md, and all production code is comment-free
+
+# Subtasks:
+## 1. Set up NestJS auth module structure with Supabase integration [pending]
+### Dependencies: None
+### Description: Create the foundational auth module with Supabase client configuration and basic JWT setup
+### Details:
+Generate NestJS auth module using CLI. Install and configure Supabase client for authentication. Set up JWT module and strategy configuration. Create auth service with basic Supabase Auth integration. Configure environment variables for Supabase credentials following docs/environment-variables.md security guidelines. Use descriptive service and method names that eliminate need for comments.
+
+## 2. Implement user authentication endpoints and guards [pending]
+### Dependencies: 8.1
+### Description: Build registration, login, password reset, and email verification endpoints with JWT guards
+### Details:
+Create user registration endpoint with Supabase Auth signup. Implement login endpoint with JWT token generation. Build password reset functionality using Supabase Auth. Create email verification endpoints. Implement JWT guards for protected routes. Add input validation and error handling following DDD patterns from docs/project-plan.md. Method names should clearly indicate their purpose.
+
+## 3. Build role-based access control system [pending]
+### Dependencies: 8.2
+### Description: Implement RBAC guards and decorators for fine-grained authorization
+### Details:
+Create role-based guard using JWT payload. Implement role decorator for controller methods. Build permission checking service. Create admin, user, and moderator role definitions. Add role assignment functionality. Implement route-level authorization controls following DDD domain services patterns from docs/project-plan.md. Use clear naming conventions for roles and permissions.
+

@@ -1,0 +1,16 @@
+# Task ID: 31
+# Title: Performance optimization and deployment
+# Status: pending
+# Dependencies: 30
+# Priority: high
+# Description: Optimize performance and set up production deployment
+# Details:
+Implement code splitting and lazy loading. Optimize bundle sizes with analysis. Set up image optimization. Implement caching strategies. Configure CI/CD pipeline. Set up frontend deployment (Vercel) and backend deployment (Railway/Render). All optimization and deployment configuration must be self-explanatory.
+
+**MANDATORY DOCUMENTATION REFERENCES:**
+- Follow deployment strategies from docs/project-plan.md Phase 6 deployment requirements
+- Configure production environment variables following docs/environment-variables.md production guidelines
+- Implement performance testing using patterns from docs/testing-strategy.md
+
+# Test Strategy:
+Performance metrics meet targets, deployments succeed, monitoring active, testing follows AAA pattern from docs/testing-strategy.md, and deployment configuration contains no comments

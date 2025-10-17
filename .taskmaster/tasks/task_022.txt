@@ -1,0 +1,16 @@
+# Task ID: 22
+# Title: Build training library frontend
+# Status: pending
+# Dependencies: 17, 18
+# Priority: medium
+# Description: Create training exercises and progress interface
+# Details:
+Create training exercise library with search/filter. Build progress tracking interface with charts. Create training session scheduler. Implement milestone tracking UI. Build exercise video player components. All training components must be self-documenting through clear naming conventions.
+
+**MANDATORY DOCUMENTATION REFERENCES:**
+- Follow frontend architecture patterns from docs/project-plan.md Phase 4 requirements
+- Configure media handling using environment variables from docs/environment-variables.md
+- Implement comprehensive testing using AAA pattern per docs/testing-strategy.md
+
+# Test Strategy:
+Training library loads, progress tracks correctly, videos play, testing follows AAA pattern from docs/testing-strategy.md, and training code is comment-free
