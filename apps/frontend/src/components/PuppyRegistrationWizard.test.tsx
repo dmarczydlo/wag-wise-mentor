@@ -12,11 +12,9 @@ vi.mock("react-router-dom", async () => {
   return {
     ...actual,
     useNavigate: () => mockNavigate,
-    BrowserRouter: ({
-      children,
-    }: {
-      children: React.ReactNode;
-    }) => <div>{children}</div>,
+    BrowserRouter: ({ children }: { children: React.ReactNode }) => (
+      <div>{children}</div>
+    ),
   };
 });
 
@@ -40,18 +38,26 @@ vi.mock("sonner", () => ({
 }));
 
 vi.mock("./BreedAutocomplete", () => ({
-  BreedAutocomplete: ({ value, onChange, required }: any) => (
-    <div>
-      <label htmlFor="breed">Breed{required && <span>*</span>}</label>
-      <input
-        id="breed"
-        type="text"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder="Select breed..."
-      />
-    </div>
-  ),
+  BreedAutocomplete: ({ value, onChange, required }: any) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newValue = e.target.value;
+      onChange(newValue);
+    };
+
+    return (
+      <div>
+        <label htmlFor="breed">Breed{required && <span>*</span>}</label>
+        <input
+          id="breed"
+          type="text"
+          value={value || ""}
+          onChange={handleChange}
+          placeholder="Select breed..."
+          data-testid="breed-input"
+        />
+      </div>
+    );
+  },
 }));
 
 describe("PuppyRegistrationWizard", () => {
@@ -85,9 +91,7 @@ describe("PuppyRegistrationWizard", () => {
       renderWizard();
 
       expect(screen.getByText("Basic Info")).toBeInTheDocument();
-      expect(
-        screen.getByText("Tell us about your puppy")
-      ).toBeInTheDocument();
+      expect(screen.getByText("Tell us about your puppy")).toBeInTheDocument();
       expect(screen.getByLabelText("Puppy Name")).toBeInTheDocument();
       expect(screen.getByLabelText("Birthday")).toBeInTheDocument();
     });
@@ -130,7 +134,7 @@ describe("PuppyRegistrationWizard", () => {
       fireEvent.click(nextButton);
 
       await waitFor(() => {
-        expect(screen.getByLabelText("Breed")).toBeInTheDocument();
+        expect(screen.getByLabelText(/breed/i)).toBeInTheDocument();
       });
     });
 
@@ -187,7 +191,7 @@ describe("PuppyRegistrationWizard", () => {
       fireEvent.click(nextButton);
 
       await waitFor(() => {
-        expect(screen.getByLabelText("Breed")).toBeInTheDocument();
+        expect(screen.getByLabelText(/breed/i)).toBeInTheDocument();
       });
 
       const backButton = screen.getByRole("button", { name: /back/i });
@@ -214,12 +218,18 @@ describe("PuppyRegistrationWizard", () => {
       fireEvent.click(screen.getByRole("button", { name: /next/i }));
 
       await waitFor(() => {
-        expect(screen.getByLabelText("Breed")).toBeInTheDocument();
+        expect(screen.getByLabelText(/breed/i)).toBeInTheDocument();
       });
 
-      fireEvent.change(screen.getByLabelText("Breed"), {
+      const breedInput = screen.getByLabelText(/breed/i);
+      fireEvent.change(breedInput, {
         target: { value: "Golden Retriever" },
       });
+
+      await waitFor(() => {
+        expect(breedInput).toHaveValue("Golden Retriever");
+      });
+
       fireEvent.click(screen.getByRole("button", { name: /next/i }));
 
       await waitFor(() => {
@@ -251,7 +261,7 @@ describe("PuppyRegistrationWizard", () => {
       fireEvent.click(screen.getByRole("button", { name: /next/i }));
 
       await waitFor(() => {
-        expect(screen.getByLabelText("Breed")).toBeInTheDocument();
+        expect(screen.getByLabelText(/breed/i)).toBeInTheDocument();
       });
 
       fireEvent.click(screen.getByRole("button", { name: /next/i }));
@@ -279,10 +289,10 @@ describe("PuppyRegistrationWizard", () => {
       fireEvent.click(screen.getByRole("button", { name: /next/i }));
 
       await waitFor(() => {
-        expect(screen.getByLabelText("Breed")).toBeInTheDocument();
+        expect(screen.getByLabelText(/breed/i)).toBeInTheDocument();
       });
 
-      const breedInput = screen.getByLabelText("Breed");
+      const breedInput = screen.getByLabelText(/breed/i);
       fireEvent.change(breedInput, { target: { value: "Labrador" } });
       expect(breedInput).toHaveValue("Labrador");
     });
@@ -305,13 +315,25 @@ describe("PuppyRegistrationWizard", () => {
       fireEvent.click(screen.getByRole("button", { name: /next/i }));
 
       await waitFor(() => {
-        expect(screen.getByLabelText("Breed")).toBeInTheDocument();
+        expect(screen.getByLabelText(/breed/i)).toBeInTheDocument();
       });
 
-      fireEvent.change(screen.getByLabelText("Breed"), {
-        target: { value: "Golden Retriever" },
+      const breedInput = screen.getByLabelText(/breed/i);
+      fireEvent.change(breedInput, {
+        target: { value: "Labrador Retriever" },
       });
+
+      await waitFor(() => {
+        expect(breedInput).toHaveValue("Labrador Retriever");
+      });
+
       fireEvent.click(screen.getByRole("button", { name: /next/i }));
+
+      await waitFor(() => {
+        expect(
+          screen.getByLabelText("Current Weight (kg)")
+        ).toBeInTheDocument();
+      });
 
       await waitFor(() => {
         expect(screen.getByText("Physical Details")).toBeInTheDocument();
@@ -321,9 +343,7 @@ describe("PuppyRegistrationWizard", () => {
     it("should render weight and activity level inputs", async () => {
       await navigateToStep3();
 
-      expect(
-        screen.getByLabelText("Current Weight (kg)")
-      ).toBeInTheDocument();
+      expect(screen.getByLabelText("Current Weight (kg)")).toBeInTheDocument();
       expect(screen.getByLabelText("Target Weight (kg)")).toBeInTheDocument();
       expect(screen.getByLabelText("Activity Level")).toBeInTheDocument();
     });
@@ -351,6 +371,10 @@ describe("PuppyRegistrationWizard", () => {
     const navigateToStep4 = async () => {
       renderWizard();
 
+      await waitFor(() => {
+        expect(screen.getByLabelText("Puppy Name")).toBeInTheDocument();
+      });
+
       fireEvent.change(screen.getByLabelText("Puppy Name"), {
         target: { value: "Max" },
       });
@@ -360,16 +384,24 @@ describe("PuppyRegistrationWizard", () => {
       fireEvent.click(screen.getByRole("button", { name: /next/i }));
 
       await waitFor(() => {
-        expect(screen.getByLabelText("Breed")).toBeInTheDocument();
+        expect(screen.getByLabelText(/breed/i)).toBeInTheDocument();
       });
 
-      fireEvent.change(screen.getByLabelText("Breed"), {
+      const breedInput = screen.getByLabelText(/breed/i);
+      fireEvent.change(breedInput, {
         target: { value: "Golden Retriever" },
       });
+
+      await waitFor(() => {
+        expect(breedInput).toHaveValue("Golden Retriever");
+      });
+
       fireEvent.click(screen.getByRole("button", { name: /next/i }));
 
       await waitFor(() => {
-        expect(screen.getByText("Physical Details")).toBeInTheDocument();
+        expect(
+          screen.getByLabelText("Current Weight (kg)")
+        ).toBeInTheDocument();
       });
 
       fireEvent.click(screen.getByRole("button", { name: /next/i }));
@@ -382,9 +414,7 @@ describe("PuppyRegistrationWizard", () => {
     it("should render photo URL input", async () => {
       await navigateToStep4();
 
-      expect(
-        screen.getByLabelText("Photo URL (optional)")
-      ).toBeInTheDocument();
+      expect(screen.getByLabelText("Photo URL (optional)")).toBeInTheDocument();
       expect(
         screen.getByText("Photo upload feature coming soon")
       ).toBeInTheDocument();
@@ -417,16 +447,24 @@ describe("PuppyRegistrationWizard", () => {
       fireEvent.click(screen.getByRole("button", { name: /next/i }));
 
       await waitFor(() => {
-        expect(screen.getByLabelText("Breed")).toBeInTheDocument();
+        expect(screen.getByLabelText(/breed/i)).toBeInTheDocument();
       });
 
-      fireEvent.change(screen.getByLabelText("Breed"), {
+      const breedInput = screen.getByLabelText(/breed/i);
+      fireEvent.change(breedInput, {
         target: { value: "Golden Retriever" },
       });
+
+      await waitFor(() => {
+        expect(breedInput).toHaveValue("Golden Retriever");
+      });
+
       fireEvent.click(screen.getByRole("button", { name: /next/i }));
 
       await waitFor(() => {
-        expect(screen.getByText("Physical Details")).toBeInTheDocument();
+        expect(
+          screen.getByLabelText("Current Weight (kg)")
+        ).toBeInTheDocument();
       });
 
       fireEvent.click(screen.getByRole("button", { name: /next/i }));
@@ -435,9 +473,7 @@ describe("PuppyRegistrationWizard", () => {
         expect(screen.getByText("Photo")).toBeInTheDocument();
       });
 
-      fireEvent.click(
-        screen.getByRole("button", { name: /register puppy/i })
-      );
+      fireEvent.click(screen.getByRole("button", { name: /register puppy/i }));
 
       await waitFor(() => {
         expect(mockInsert).toHaveBeenCalledWith({
@@ -477,16 +513,24 @@ describe("PuppyRegistrationWizard", () => {
       fireEvent.click(screen.getByRole("button", { name: /next/i }));
 
       await waitFor(() => {
-        expect(screen.getByLabelText("Breed")).toBeInTheDocument();
+        expect(screen.getByLabelText(/breed/i)).toBeInTheDocument();
       });
 
-      fireEvent.change(screen.getByLabelText("Breed"), {
+      const breedInput = screen.getByLabelText(/breed/i);
+      fireEvent.change(breedInput, {
         target: { value: "Golden Retriever" },
       });
+
+      await waitFor(() => {
+        expect(breedInput).toHaveValue("Golden Retriever");
+      });
+
       fireEvent.click(screen.getByRole("button", { name: /next/i }));
 
       await waitFor(() => {
-        expect(screen.getByText("Physical Details")).toBeInTheDocument();
+        expect(
+          screen.getByLabelText("Current Weight (kg)")
+        ).toBeInTheDocument();
       });
 
       fireEvent.click(screen.getByRole("button", { name: /next/i }));
@@ -495,9 +539,7 @@ describe("PuppyRegistrationWizard", () => {
         expect(screen.getByText("Photo")).toBeInTheDocument();
       });
 
-      fireEvent.click(
-        screen.getByRole("button", { name: /register puppy/i })
-      );
+      fireEvent.click(screen.getByRole("button", { name: /register puppy/i }));
 
       await waitFor(() => {
         expect(vi.mocked(toast.error)).toHaveBeenCalledWith(
@@ -527,16 +569,24 @@ describe("PuppyRegistrationWizard", () => {
       fireEvent.click(screen.getByRole("button", { name: /next/i }));
 
       await waitFor(() => {
-        expect(screen.getByLabelText("Breed")).toBeInTheDocument();
+        expect(screen.getByLabelText(/breed/i)).toBeInTheDocument();
       });
 
-      fireEvent.change(screen.getByLabelText("Breed"), {
+      const breedInput = screen.getByLabelText(/breed/i);
+      fireEvent.change(breedInput, {
         target: { value: "Golden Retriever" },
       });
+
+      await waitFor(() => {
+        expect(breedInput).toHaveValue("Golden Retriever");
+      });
+
       fireEvent.click(screen.getByRole("button", { name: /next/i }));
 
       await waitFor(() => {
-        expect(screen.getByText("Physical Details")).toBeInTheDocument();
+        expect(
+          screen.getByLabelText("Current Weight (kg)")
+        ).toBeInTheDocument();
       });
 
       fireEvent.click(screen.getByRole("button", { name: /next/i }));
@@ -545,9 +595,7 @@ describe("PuppyRegistrationWizard", () => {
         expect(screen.getByText("Photo")).toBeInTheDocument();
       });
 
-      fireEvent.click(
-        screen.getByRole("button", { name: /register puppy/i })
-      );
+      fireEvent.click(screen.getByRole("button", { name: /register puppy/i }));
 
       expect(screen.getByText("Registering...")).toBeInTheDocument();
 
