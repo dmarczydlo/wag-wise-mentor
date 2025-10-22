@@ -1,31 +1,35 @@
 # Task ID: 5
-# Title: Create packages/ui foundation
-# Status: done
-# Dependencies: 1
-# Priority: high
-# Description: Initialize shared UI components package
+# Title: Build authentication backend module
+# Status: pending
+# Dependencies: 3
+# Priority: critical
+# Description: Create authentication system with Supabase integration
 # Details:
-Create packages/ui/ for reusable React components. Move current components/ui/ to packages/ui/. Configure build process for UI package. Set up proper exports in package.json for component importing.
+Set up NestJS auth module structure with Supabase integration. Implement user authentication endpoints and guards. Build role-based access control system. All authentication logic must be self-documenting through clear naming and structure.
+
+**MANDATORY DOCUMENTATION REFERENCES:**
+- Implement DDD architecture with proper Domain Layer business logic as specified in docs/project-plan.md Phase 1
+- Follow environment configuration guidelines from docs/environment-variables.md for any external service integrations
+- Use AAA testing pattern with in-memory providers for business logic testing per docs/testing-strategy.md
 
 # Test Strategy:
-UI package builds and components can be imported from other packages
+Authentication endpoints work correctly, guards protect routes, comprehensive testing follows AAA pattern from docs/testing-strategy.md, and authentication code is comment-free
 
 # Subtasks:
-## 1. Create packages/ui directory structure and package.json [done]
+## 1. Set up NestJS auth module structure with Supabase integration [pending]
 ### Dependencies: None
-### Description: Set up the foundational directory structure for the UI package with proper package configuration
+### Description: Create authentication module with Supabase integration
 ### Details:
-Create packages/ui/ directory. Initialize package.json with proper name (@workspace/ui), version, and basic dependencies. Configure proper exports for component importing. Set up TypeScript configuration specific to UI components.
+Create AuthModule with Supabase integration. Set up authentication service and configuration. Follow DDD Infrastructure layer patterns from docs/project-plan.md.
 
-## 2. Move existing components from components/ui to packages/ui [done]
-### Dependencies: 4.1
-### Description: Migrate current UI components to the new packages/ui location while preserving functionality
+## 2. Implement user authentication endpoints and guards [pending]
+### Dependencies: 5.1
+### Description: Create authentication endpoints and route guards
 ### Details:
-Move all files from components/ui/ to packages/ui/src/. Update import paths throughout the codebase to use the new package location. Ensure all existing UI components remain functional after the move.
+Implement authentication endpoints for login, logout, and user management. Create route guards for protecting endpoints. Follow DDD Application Layer patterns from docs/project-plan.md.
 
-## 3. Configure build process and exports for UI package [done]
-### Dependencies: 4.2
-### Description: Set up build tooling and proper package exports for the UI components package
+## 3. Build role-based access control system [pending]
+### Dependencies: 5.2
+### Description: Implement role-based access control
 ### Details:
-Configure Bun build scripts for the UI package. Set up proper module exports in package.json to allow importing components from other packages. Configure TypeScript declaration file generation. Test that components can be imported from other workspace packages.
-
+Create role-based access control system with proper permissions. Implement user roles and permission checking. Follow DDD Domain Services patterns from docs/project-plan.md.

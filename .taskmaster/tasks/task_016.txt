@@ -1,36 +1,47 @@
 # Task ID: 16
-# Title: Build shared utility functions
+# Title: Complete API integration and testing
 # Status: pending
-# Dependencies: 7
-# Priority: medium
-# Description: Create reusable utility functions for monorepo
+# Dependencies: 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
+# Priority: critical
+# Description: Connect frontend to backend with comprehensive testing
 # Details:
-Create date/time utilities. Build formatting helpers. Implement validation utilities. Create calculation helpers for weight, portions, etc. Build error handling utilities. Add logging utilities. All utility functions must be self-explanatory through descriptive names and clear parameter definitions.
+Connect all frontend components to backend APIs. Implement error handling and retry logic. Build loading states and skeleton screens. Create integration tests for API endpoints. Implement E2E testing with Playwright. All integration code must be self-documenting through clear service and hook names.
 
 **MANDATORY DOCUMENTATION REFERENCES:**
-- Follow shared package structure and configuration guidelines from docs/project-plan.md Phase 2
-- Ensure utilities work with environment configuration from docs/environment-variables.md
-- Implement comprehensive testing using AAA pattern per docs/testing-strategy.md
+- Follow integration testing patterns from docs/project-plan.md Phase 6 system integration requirements
+- Use API configuration and error handling guidelines from docs/environment-variables.md
+- Implement comprehensive E2E testing using Playwright and AAA pattern per docs/testing-strategy.md
 
 # Test Strategy:
-All utilities work correctly and are properly exported, comprehensive testing follows AAA pattern from docs/testing-strategy.md, and utility functions are comment-free
+All API calls work correctly, error handling functions, tests pass, comprehensive testing follows AAA pattern from docs/testing-strategy.md, and integration code is comment-free
 
 # Subtasks:
-## 1. Create date/time and formatting utilities [pending]
+## 1. Connect all frontend components to backend APIs [pending]
 ### Dependencies: None
-### Description: Implement date/time manipulation functions and text/number formatting helpers
+### Description: Create API integration layer for frontend-backend communication
 ### Details:
-Create date formatting functions (formatDate, formatTime, calculateAge, etc.). Build text formatters (capitalize, truncate, slugify). Implement number formatters (currency, percentage, decimal places). Add relative time functions (timeAgo, duration). Follow KISS principles from docs/project-plan.md. Function names should clearly describe their formatting purpose and expected output format.
+Create API integration layer for frontend-backend communication. Implement proper API client services and data fetching. Follow integration testing patterns from docs/project-plan.md Phase 6 system integration requirements.
 
-## 2. Build validation and calculation utilities [pending]
+## 2. Implement error handling and retry logic [pending]
 ### Dependencies: 16.1
-### Description: Create validation functions and pet-specific calculation helpers
+### Description: Create comprehensive error handling and retry logic
 ### Details:
-Implement validation utilities (email, phone, required fields, etc.). Create weight conversion functions (pounds to kg, etc.). Build portion calculation helpers for pet feeding. Add age calculation utilities for pets. Create breed-specific validation functions. Follow DRY principles from docs/project-plan.md. Validation and calculation function names should clearly indicate their validation criteria or calculation purpose.
+Implement comprehensive error handling and retry logic for API calls. Include proper error states and user feedback. Follow integration testing patterns from docs/project-plan.md Phase 6 system integration requirements.
 
-## 3. Implement error handling and logging utilities [pending]
-### Dependencies: 16.1, 16.2
-### Description: Create centralized error handling and logging infrastructure
+## 3. Build loading states and skeleton screens [pending]
+### Dependencies: 16.2
+### Description: Create loading states and skeleton screens for better UX
 ### Details:
-Build custom error classes for different error types. Create error formatting and reporting utilities. Implement structured logging functions with different log levels. Add error boundary helpers for React components. Create API error response formatters. Follow error handling patterns from docs/project-plan.md. Error and logging function names should clearly indicate their error handling scope and logging level.
+Build loading states and skeleton screens for better user experience. Include proper loading indicators and skeleton components. Follow integration testing patterns from docs/project-plan.md Phase 6 system integration requirements.
 
+## 4. Create integration tests for API endpoints [pending]
+### Dependencies: 16.3
+### Description: Build comprehensive integration tests for API endpoints
+### Details:
+Create comprehensive integration tests for API endpoints. Include proper test coverage and validation. Follow integration testing patterns from docs/project-plan.md Phase 6 system integration requirements.
+
+## 5. Implement E2E testing with Playwright [pending]
+### Dependencies: 16.4
+### Description: Create end-to-end tests with Playwright
+### Details:
+Implement end-to-end tests with Playwright for complete user flows. Include proper test scenarios and validation. Follow integration testing patterns from docs/project-plan.md Phase 6 system integration requirements.

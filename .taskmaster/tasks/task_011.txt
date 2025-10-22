@@ -1,36 +1,53 @@
 # Task ID: 11
-# Title: Build training backend module
+# Title: Implement puppy profile frontend
 # Status: pending
-# Dependencies: 8
-# Priority: medium
-# Description: Implement training exercises and progress tracking
+# Dependencies: 9, 10
+# Priority: critical
+# Description: Create puppy management interface with registration and profile management
 # Details:
-Create training exercises database service. Implement training progress tracking. Build training session management endpoints. Create behavioral milestones tracking. Implement training recommendation algorithms. All training logic must be self-documenting through clear naming conventions.
+Create puppy registration wizard component. Build breed selection with autocomplete. Implement photo upload with crop/resize. Create puppy profile view and edit forms. Build weight tracking charts. Implement medical history forms. All puppy frontend components must be self-documenting through clear naming and structure.
 
 **MANDATORY DOCUMENTATION REFERENCES:**
-- Follow DDD architecture patterns with proper domain modeling as outlined in docs/project-plan.md Phase 1
-- Configure any external service integrations following docs/environment-variables.md security guidelines
-- Implement comprehensive testing using AAA pattern with in-memory providers per docs/testing-strategy.md
+- Follow frontend architecture patterns from docs/project-plan.md Phase 4 requirements
+- Use authentication and API configuration from docs/environment-variables.md
+- Implement comprehensive testing using AAA pattern per docs/testing-strategy.md
 
 # Test Strategy:
-Training sessions track correctly, recommendations generate appropriately, testing follows AAA pattern from docs/testing-strategy.md, and all training logic is comment-free
+Puppy registration works correctly, profile management functions properly, comprehensive testing follows AAA pattern from docs/testing-strategy.md, and puppy frontend code is comment-free
 
 # Subtasks:
-## 1. Create training exercises database service [pending]
+## 1. Create puppy registration wizard component [pending]
 ### Dependencies: None
-### Description: Build database models and service layer for managing training exercises
+### Description: Build multi-step puppy registration wizard
 ### Details:
-Create training exercise entity with fields for name, description, difficulty level, duration, and category. Implement CRUD operations for exercises. Create exercise categories and tags system. Build database migrations and seeders with common training exercises. Follow DDD Domain Layer patterns from docs/project-plan.md. Entity and service names should clearly indicate their training-related purpose.
+Create multi-step puppy registration wizard with proper validation and error handling. Include all necessary fields for puppy registration. Follow frontend architecture patterns from docs/project-plan.md Phase 4 requirements.
 
-## 2. Implement training progress tracking system [pending]
+## 2. Build breed selection with autocomplete [pending]
 ### Dependencies: 11.1
-### Description: Build progress tracking service and behavioral milestones management
+### Description: Create breed selection component with autocomplete functionality
 ### Details:
-Create training session entity to track completed exercises. Implement progress calculation algorithms based on completion rates and improvement metrics. Build behavioral milestones tracking with configurable goals. Create progress aggregation endpoints for analytics. Follow DDD Domain Services patterns from docs/project-plan.md. Progress calculation methods should have descriptive names indicating metric types.
+Build breed selection component with autocomplete functionality. Include proper breed data and search capabilities. Follow frontend architecture patterns from docs/project-plan.md Phase 4 requirements.
 
-## 3. Build training session management and recommendation endpoints [pending]
-### Dependencies: 11.1, 11.2
-### Description: Create API endpoints for session management and implement training recommendation algorithms
+## 3. Implement photo upload with crop/resize [pending]
+### Dependencies: 11.2
+### Description: Create photo upload component with crop and resize functionality
 ### Details:
-Build REST endpoints for creating, updating, and managing training sessions. Implement recommendation algorithms based on puppy age, breed, and progress history. Create session scheduling and reminder system. Build endpoints for retrieving personalized training plans. Follow DDD Application Layer patterns from docs/project-plan.md. Recommendation algorithm names should clearly describe their recommendation criteria.
+Implement photo upload component with crop and resize functionality. Include proper image handling and validation. Follow frontend architecture patterns from docs/project-plan.md Phase 4 requirements.
 
+## 4. Create puppy profile view and edit forms [pending]
+### Dependencies: 11.3
+### Description: Build puppy profile view and edit forms
+### Details:
+Create puppy profile view and edit forms with proper validation and error handling. Include all necessary fields for puppy profile management. Follow frontend architecture patterns from docs/project-plan.md Phase 4 requirements.
+
+## 5. Build weight tracking charts [pending]
+### Dependencies: 11.4
+### Description: Create weight tracking charts and visualization
+### Details:
+Build weight tracking charts and visualization components. Include proper data visualization and chart interactions. Follow frontend architecture patterns from docs/project-plan.md Phase 4 requirements.
+
+## 6. Implement medical history forms [pending]
+### Dependencies: 11.5
+### Description: Create medical history forms and management
+### Details:
+Implement medical history forms and management components. Include proper validation and data handling. Follow frontend architecture patterns from docs/project-plan.md Phase 4 requirements.

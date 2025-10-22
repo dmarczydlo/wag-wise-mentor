@@ -1,36 +1,41 @@
 # Task ID: 13
-# Title: Build family sharing backend module
+# Title: Implement weight tracking frontend
 # Status: pending
-# Dependencies: 8
-# Priority: medium
-# Description: Implement multi-user family sharing functionality
+# Dependencies: 9, 10, 12
+# Priority: high
+# Description: Create weight tracking interface with charts and data management
 # Details:
-Create family groups management service. Implement invitation system with email tokens. Build RBAC for family member permissions. Implement real-time updates with Supabase subscriptions. Create activity logging and audit trail. All family sharing logic must be expressed through descriptive service and method names.
+Create weight entry form with proper validation. Build weight history chart with trend visualization. Implement weight milestone tracking and alerts. Create weight data export functionality. All weight tracking components must be self-documenting through clear naming and structure.
 
 **MANDATORY DOCUMENTATION REFERENCES:**
-- Follow DDD architecture patterns with proper domain modeling as outlined in docs/project-plan.md Phase 1
-- Configure email service integrations following docs/environment-variables.md security guidelines
-- Implement comprehensive testing using AAA pattern with in-memory providers per docs/testing-strategy.md
+- Follow frontend architecture patterns from docs/project-plan.md Phase 4 requirements
+- Use authentication and API configuration from docs/environment-variables.md
+- Implement comprehensive testing using AAA pattern per docs/testing-strategy.md
 
 # Test Strategy:
-Family invitations work, permissions enforce correctly, real-time updates function, testing follows AAA pattern from docs/testing-strategy.md, and sharing logic is comment-free
+Weight tracking works correctly, charts display properly, comprehensive testing follows AAA pattern from docs/testing-strategy.md, and weight tracking code is comment-free
 
 # Subtasks:
-## 1. Create family groups management service [pending]
+## 1. Create weight entry form with proper validation [pending]
 ### Dependencies: None
-### Description: Implement core family group CRUD operations and database schema
+### Description: Build weight entry form with validation
 ### Details:
-Create family groups database table with fields for group name, admin user, creation date, and settings. Implement NestJS service with methods for creating, reading, updating, and deleting family groups. Add validation for group creation limits and naming constraints. Create DTOs for family group operations. Follow DDD Domain Layer patterns from docs/project-plan.md. Service method names should clearly indicate family group operations.
+Create weight entry form with proper validation and error handling. Include date selection and weight input with proper formatting. Follow frontend architecture patterns from docs/project-plan.md Phase 4 requirements.
 
-## 2. Build invitation system with email tokens [pending]
+## 2. Build weight history chart with trend visualization [pending]
 ### Dependencies: 13.1
-### Description: Implement secure invitation flow with email verification and token management
+### Description: Create weight history chart with trend visualization
 ### Details:
-Create invitation tokens table with expiration dates and security tokens. Implement email service integration for sending family invitations. Build invitation acceptance endpoint with token validation. Add invitation status tracking (pending, accepted, expired, revoked). Create rate limiting for invitation sending. Follow email configuration from docs/environment-variables.md. Token and validation method names should clearly describe security operations.
+Build weight history chart with trend visualization and proper data display. Include interactive features and proper chart styling. Follow frontend architecture patterns from docs/project-plan.md Phase 4 requirements.
 
-## 3. Implement RBAC and real-time features [pending]
+## 3. Implement weight milestone tracking and alerts [pending]
 ### Dependencies: 13.2
-### Description: Build role-based access control system and real-time updates with activity logging
+### Description: Create weight milestone tracking and alert system
 ### Details:
-Create family member roles system (admin, member, viewer) with permission matrices. Implement middleware for role-based endpoint protection. Set up Supabase real-time subscriptions for family data changes. Create activity logging service for audit trail of family actions. Build notification system for family updates. Follow DDD Domain Services patterns from docs/project-plan.md. Role and permission method names should clearly indicate access control operations.
+Implement weight milestone tracking and alert system for important weight milestones. Include proper notifications and milestone tracking. Follow frontend architecture patterns from docs/project-plan.md Phase 4 requirements.
 
+## 4. Create weight data export functionality [pending]
+### Dependencies: 13.3
+### Description: Implement weight data export functionality
+### Details:
+Create weight data export functionality for downloading weight history data. Include proper data formatting and export options. Follow frontend architecture patterns from docs/project-plan.md Phase 4 requirements.

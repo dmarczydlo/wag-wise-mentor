@@ -1,36 +1,35 @@
 # Task ID: 8
-# Title: Build authentication backend module
+# Title: Build calendar and events backend module
 # Status: pending
-# Dependencies: 6, 7
+# Dependencies: 3, 4, 6
 # Priority: high
-# Description: Implement NestJS auth module with Supabase integration
+# Description: Create event scheduling and calendar system
 # Details:
-Create auth module with JWT guards. Implement Supabase Auth integration. Build role-based access control guards. Create user registration/login endpoints. Implement password reset functionality. Add email verification endpoints. All authentication logic must be self-documenting through clear method names and structure - no comments in production code.
+Create events controller with CRUD operations. Implement recurring event logic and scheduling service. Build Google Calendar integration service. Create event management endpoints for vet appointments, vaccinations, and other puppy-related events. All calendar logic must be self-documenting through clear naming and structure.
 
 **MANDATORY DOCUMENTATION REFERENCES:**
-- Follow environment configuration for Supabase Auth keys from docs/environment-variables.md
-- Implement DDD architecture patterns from docs/project-plan.md Phase 1 backend requirements
-- Use AAA testing pattern with in-memory providers as specified in docs/testing-strategy.md
+- Implement DDD architecture with proper Domain Layer business logic as specified in docs/project-plan.md Phase 1
+- Follow environment configuration guidelines from docs/environment-variables.md for any external service integrations
+- Use AAA testing pattern with in-memory providers for business logic testing per docs/testing-strategy.md
 
 # Test Strategy:
-Authentication endpoints work correctly, JWT tokens validate properly, comprehensive testing follows AAA pattern from docs/testing-strategy.md, and all production code is comment-free
+Event CRUD operations work correctly, recurring events function properly, comprehensive testing follows AAA pattern from docs/testing-strategy.md, and calendar code is comment-free
 
 # Subtasks:
-## 1. Set up NestJS auth module structure with Supabase integration [pending]
+## 1. Create events controller with CRUD operations [pending]
 ### Dependencies: None
-### Description: Create the foundational auth module with Supabase client configuration and basic JWT setup
+### Description: Implement REST API endpoints for event management
 ### Details:
-Generate NestJS auth module using CLI. Install and configure Supabase client for authentication. Set up JWT module and strategy configuration. Create auth service with basic Supabase Auth integration. Configure environment variables for Supabase credentials following docs/environment-variables.md security guidelines. Use descriptive service and method names that eliminate need for comments.
+Create EventsController with endpoints for creating, reading, updating, and deleting events. Include proper validation and error handling. Follow DDD Infrastructure layer patterns from docs/project-plan.md.
 
-## 2. Implement user authentication endpoints and guards [pending]
+## 2. Implement recurring event logic and scheduling service [pending]
 ### Dependencies: 8.1
-### Description: Build registration, login, password reset, and email verification endpoints with JWT guards
+### Description: Create recurring event system and scheduling service
 ### Details:
-Create user registration endpoint with Supabase Auth signup. Implement login endpoint with JWT token generation. Build password reset functionality using Supabase Auth. Create email verification endpoints. Implement JWT guards for protected routes. Add input validation and error handling following DDD patterns from docs/project-plan.md. Method names should clearly indicate their purpose.
+Implement recurring event logic for regular appointments and schedules. Create scheduling service for managing event timing and conflicts. Follow DDD Domain Services patterns from docs/project-plan.md.
 
-## 3. Build role-based access control system [pending]
+## 3. Build Google Calendar integration service [pending]
 ### Dependencies: 8.2
-### Description: Implement RBAC guards and decorators for fine-grained authorization
+### Description: Create Google Calendar integration for external calendar sync
 ### Details:
-Create role-based guard using JWT payload. Implement role decorator for controller methods. Build permission checking service. Create admin, user, and moderator role definitions. Add role assignment functionality. Implement route-level authorization controls following DDD domain services patterns from docs/project-plan.md. Use clear naming conventions for roles and permissions.
-
+Implement Google Calendar integration service for syncing events with external calendars. Create proper authentication and API handling. Follow DDD Infrastructure layer patterns from docs/project-plan.md.
