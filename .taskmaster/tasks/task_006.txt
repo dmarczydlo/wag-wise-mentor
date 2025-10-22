@@ -1,42 +1,41 @@
 # Task ID: 6
-# Title: Initialize NestJS backend structure with DDD architecture
-# Status: done
-# Dependencies: 1
-# Priority: high
-# Description: Create NestJS application in apps/backend with Domain-Driven Design architecture
+# Title: Build puppy profile backend module
+# Status: pending
+# Dependencies: 3, 4
+# Priority: critical
+# Description: Create puppy management system with CRUD operations
 # Details:
-Use NestJS CLI to generate apps/backend/. Implement DDD architecture with Domain Layer (entities, value objects, domain services), Application Layer (use cases, application services), Infrastructure Layer (repositories, controllers, adapters). Configure dependency injection with proper abstraction layers. Set up Supabase client integration. Configure environment variables and CORS for frontend communication. All code must be self-documenting through clear naming and structure - no comments allowed except AAA comments in tests.
+Create puppy controller with CRUD operations. Implement puppy repository with Supabase integration. Build puppy validation and business logic. Create puppy-related endpoints for weight tracking and profile management. All puppy logic must be self-documenting through clear naming and structure.
 
 **MANDATORY DOCUMENTATION REFERENCES:**
-- Follow environment setup guidelines in docs/environment-variables.md for .env configuration, symlinks, and security considerations
-- Implement all testing using AAA pattern as specified in docs/testing-strategy.md with Mocha + Chai and in-memory providers
-- Adhere to DDD architecture principles and monorepo structure outlined in docs/project-plan.md Phase 1 requirements
+- Implement DDD architecture with proper Domain Layer business logic as specified in docs/project-plan.md Phase 1
+- Follow environment configuration guidelines from docs/environment-variables.md for any external service integrations
+- Use AAA testing pattern with in-memory providers for business logic testing per docs/testing-strategy.md
 
 # Test Strategy:
-Backend starts successfully, DDD architecture is properly implemented, dependency injection works, comprehensive tests pass with AAA pattern using in-memory providers as per docs/testing-strategy.md, and all production code is comment-free
+Puppy CRUD operations work correctly, validation functions properly, comprehensive testing follows AAA pattern from docs/testing-strategy.md, and puppy code is comment-free
 
 # Subtasks:
-## 1. Generate NestJS application structure with DDD layers [done]
+## 1. Create puppy controller with CRUD operations [pending]
 ### Dependencies: None
-### Description: Use NestJS CLI to create the backend application with DDD architecture
+### Description: Implement REST API endpoints for puppy management
 ### Details:
-Run 'nest new backend' in apps/ directory. Create Domain Layer (src/domain/) with entities, value objects, and domain services. Create Application Layer (src/application/) with use cases and application services. Create Infrastructure Layer (src/infrastructure/) with repositories, controllers, and adapters. Configure dependency injection with proper abstraction layers. Follow docs/environment-variables.md for .env symlink setup and docs/project-plan.md DDD architecture guidelines. Remove all comments from production code - use clear method and variable names instead.
+Create PuppyController with endpoints for creating, reading, updating, and deleting puppies. Include proper validation and error handling. Follow DDD Infrastructure layer patterns from docs/project-plan.md.
 
-## 2. Create core module structure [done]
+## 2. Implement puppy repository with Supabase integration [pending]
 ### Dependencies: 6.1
-### Description: Generate and configure the main application modules for auth, puppies, calendar, training, ai, and analytics
+### Description: Create puppy repository with database operations
 ### Details:
-Use NestJS CLI to generate modules: nest g module auth, nest g module puppies, nest g module calendar, nest g module training, nest g module ai, nest g module analytics. Create basic service and controller files for each module. Configure module imports in app.module.ts. Follow DDD module organization patterns from docs/project-plan.md and implement proper testing setup per docs/testing-strategy.md. All production code must be self-documenting without comments.
+Implement PuppyRepository with Supabase integration. Create proper data mapping and error handling. Follow DDD Infrastructure layer patterns from docs/project-plan.md.
 
-## 3. Configure environment and external integrations [done]
+## 3. Build puppy validation and business logic [pending]
 ### Dependencies: 6.2
-### Description: Set up environment variables, Supabase client integration, and CORS configuration
+### Description: Create puppy validation and business rules
 ### Details:
-Create .env configuration files for development and production following docs/environment-variables.md guidelines. Install and configure @supabase/supabase-js client. Set up ConfigModule for environment variable management. Configure CORS settings in main.ts for frontend communication. Create Supabase service provider for database operations. Ensure all configuration follows security considerations from docs/environment-variables.md. Use descriptive variable and method names instead of comments.
+Implement puppy validation rules and business logic. Create domain services for puppy operations. Follow DDD Domain Services patterns from docs/project-plan.md.
 
-## 4. Implement Supabase repository implementations for production [done]
+## 4. Create puppy-related endpoints for weight tracking and profile management [pending]
 ### Dependencies: 6.3
-### Description: Create production-ready Supabase repository implementations for all modules (Auth, Puppy, Calendar, Training, AI, Analytics)
+### Description: Implement additional puppy-related endpoints
 ### Details:
-Currently all modules use in-memory repositories which are only suitable for testing. Implement concrete Supabase repository classes that extend the abstract repository classes from the domain layer. Each repository must use the SupabaseService for database operations. Create supabase-user.repository.ts, supabase-puppy.repository.ts, supabase-event.repository.ts, supabase-training.repository.ts, supabase-ai.repository.ts, and supabase-analytics.repository.ts. Update module providers to use environment-based repository selection (InMemory for tests, Supabase for production). Map domain entities to/from Supabase table schemas. Implement proper error handling and transaction support. Follow DDD patterns from docs/project-plan.md and ensure all code is self-documenting without comments.
-
+Create endpoints for weight tracking, profile updates, and puppy management. Include proper validation and business logic. Follow DDD Application Layer patterns from docs/project-plan.md.

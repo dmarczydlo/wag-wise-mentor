@@ -1,48 +1,41 @@
 # Task ID: 14
-# Title: Implement AI service integration backend
+# Title: Implement basic feeding schedule frontend
 # Status: pending
-# Dependencies: 8, 9, 10, 11
-# Priority: low
-# Description: Create AI-powered care plan and recommendation system
+# Dependencies: 9, 10, 12
+# Priority: high
+# Description: Create feeding schedule management interface
 # Details:
-Create AI service abstraction layer. Implement OpenAI and Anthropic provider integrations. Build care plan generation service. Create feeding plan optimization algorithms. Implement training progression suggestion engine. All AI integration logic must be self-documenting through clear service abstractions and method names.
+Create feeding schedule setup form with meal planning. Build feeding schedule display with time management. Implement feeding log entry form for tracking actual feedings. Create feeding history view with compliance tracking. All feeding schedule components must be self-documenting through clear naming and structure.
 
 **MANDATORY DOCUMENTATION REFERENCES:**
-- Configure AI provider API keys following docs/environment-variables.md security guidelines
-- Implement DDD architecture with proper domain services as outlined in docs/project-plan.md Phase 1
-- Use AAA testing pattern with proper mocking for external AI services per docs/testing-strategy.md
+- Follow frontend architecture patterns from docs/project-plan.md Phase 4 requirements
+- Use authentication and API configuration from docs/environment-variables.md
+- Implement comprehensive testing using AAA pattern per docs/testing-strategy.md
 
 # Test Strategy:
-AI services generate meaningful recommendations and care plans, comprehensive testing follows AAA pattern from docs/testing-strategy.md, and AI integration code is comment-free
+Feeding schedule works correctly, feeding logs track properly, comprehensive testing follows AAA pattern from docs/testing-strategy.md, and feeding schedule code is comment-free
 
 # Subtasks:
-## 1. Design AI service abstraction layer [pending]
+## 1. Create feeding schedule setup form with meal planning [pending]
 ### Dependencies: None
-### Description: Create abstract interfaces and base classes for AI service providers
+### Description: Build feeding schedule setup form
 ### Details:
-Design provider-agnostic interfaces for AI services. Create base abstract classes for chat completion, embeddings, and structured output. Define error handling patterns and response standardization. Implement configuration management for different AI providers. Follow DDD Domain Services patterns from docs/project-plan.md. Interface and class names should clearly indicate AI service capabilities.
+Create feeding schedule setup form with meal planning and proper validation. Include meal timing, portion sizes, and food type selection. Follow frontend architecture patterns from docs/project-plan.md Phase 4 requirements.
 
-## 2. Implement OpenAI provider integration [pending]
+## 2. Build feeding schedule display with time management [pending]
 ### Dependencies: 14.1
-### Description: Build OpenAI-specific implementation of AI service interfaces
+### Description: Create feeding schedule display component
 ### Details:
-Implement OpenAI SDK integration. Build chat completion service with GPT models. Create structured output handlers using function calling. Implement error handling and rate limiting. Add configuration for API keys and model selection following docs/environment-variables.md security guidelines. Provider method names should clearly indicate OpenAI-specific operations.
+Build feeding schedule display with time management and proper visualization. Include schedule overview and time-based organization. Follow frontend architecture patterns from docs/project-plan.md Phase 4 requirements.
 
-## 3. Implement Anthropic provider integration [pending]
-### Dependencies: 14.1
-### Description: Build Anthropic Claude-specific implementation of AI service interfaces
+## 3. Implement feeding log entry form for tracking actual feedings [pending]
+### Dependencies: 14.2
+### Description: Create feeding log entry form
 ### Details:
-Implement Anthropic SDK integration. Build Claude chat completion service. Create structured output handlers using tool use. Implement error handling and rate limiting. Add configuration for API keys and model selection following docs/environment-variables.md security guidelines. Provider method names should clearly indicate Anthropic-specific operations.
+Implement feeding log entry form for tracking actual feedings with proper validation and data entry. Include portion tracking and feeding notes. Follow frontend architecture patterns from docs/project-plan.md Phase 4 requirements.
 
-## 4. Build care plan generation algorithms [pending]
-### Dependencies: 14.2, 14.3
-### Description: Create AI-powered pet care plan generation service
+## 4. Create feeding history view with compliance tracking [pending]
+### Dependencies: 14.3
+### Description: Build feeding history view with compliance tracking
 ### Details:
-Design prompt templates for care plan generation based on pet profiles. Implement context processing to include pet health, age, breed, and medical history. Build structured output parsing for care recommendations. Create validation logic for generated plans. Follow DDD Domain Services patterns from docs/project-plan.md. Care plan method names should clearly indicate the type of care planning being performed.
-
-## 5. Create feeding and training recommendation engines [pending]
-### Dependencies: 14.2, 14.3
-### Description: Implement AI services for feeding schedules and training progression
-### Details:
-Build feeding plan optimization using pet nutritional needs and activity levels. Create training progression algorithms based on pet behavior and learning patterns. Implement context-aware recommendations using historical data. Build feedback loops for recommendation improvement. Follow DDD Domain Services patterns from docs/project-plan.md. Recommendation method names should clearly describe the optimization criteria and target domain.
-
+Create feeding history view with compliance tracking and proper data visualization. Include feeding patterns and compliance metrics. Follow frontend architecture patterns from docs/project-plan.md Phase 4 requirements.

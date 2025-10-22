@@ -1,36 +1,41 @@
 # Task ID: 15
-# Title: Build analytics backend module
+# Title: Implement simple calendar frontend
 # Status: pending
-# Dependencies: 8, 10
-# Priority: medium
-# Description: Implement data analytics and reporting system
+# Dependencies: 9, 10, 12
+# Priority: high
+# Description: Create basic calendar interface for events and appointments
 # Details:
-Create weight tracking analytics service. Implement growth prediction algorithms. Build breed comparison service. Create trend analysis and alerting system. Implement data aggregation for dashboards. All analytics algorithms must be self-documenting through clear naming and structure.
+Create calendar component using react-day-picker. Build event creation/editing modal forms. Implement basic event management with vet appointments and vaccinations. Create calendar view with event display. All calendar components must be self-documenting through clear naming and structure.
 
 **MANDATORY DOCUMENTATION REFERENCES:**
-- Implement DDD architecture with proper domain analytics services as outlined in docs/project-plan.md Phase 1
-- Follow environment configuration for any external analytics services from docs/environment-variables.md
-- Use AAA testing pattern with in-memory data providers per docs/testing-strategy.md
+- Follow frontend architecture patterns from docs/project-plan.md Phase 4 requirements
+- Use authentication and API configuration from docs/environment-variables.md
+- Implement comprehensive testing using AAA pattern per docs/testing-strategy.md
 
 # Test Strategy:
-Analytics generate accurate insights and predictions, comprehensive testing follows AAA pattern from docs/testing-strategy.md, and analytics logic is comment-free
+Calendar displays events correctly, event creation works, comprehensive testing follows AAA pattern from docs/testing-strategy.md, and calendar code is comment-free
 
 # Subtasks:
-## 1. Create weight tracking analytics service [pending]
+## 1. Create calendar component using react-day-picker [pending]
 ### Dependencies: None
-### Description: Implement service for analyzing puppy weight data and generating growth insights
+### Description: Build calendar component with react-day-picker
 ### Details:
-Build WeightAnalyticsService with methods for weight trend analysis, growth rate calculations, and weight milestone tracking. Include statistical functions for average weight by age/breed, growth velocity analysis, and weight percentile calculations. Integrate with puppy weight records from database. Follow DDD Domain Services patterns from docs/project-plan.md. Analytics method names should clearly indicate the type of weight analysis being performed.
+Create calendar component using react-day-picker with proper styling and functionality. Include proper date selection and event display. Follow frontend architecture patterns from docs/project-plan.md Phase 4 requirements.
 
-## 2. Implement growth prediction algorithms [pending]
+## 2. Build event creation/editing modal forms [pending]
 ### Dependencies: 15.1
-### Description: Develop algorithms to predict puppy growth patterns and adult size estimation
+### Description: Create event creation and editing modal forms
 ### Details:
-Create GrowthPredictionService with machine learning or statistical models for predicting adult weight based on current growth patterns. Implement breed-specific growth curves and prediction accuracy metrics. Include confidence intervals and prediction validation against historical data. Follow DDD Domain Services patterns from docs/project-plan.md. Prediction method names should clearly describe the growth modeling approach and target metrics.
+Build event creation and editing modal forms with proper validation and error handling. Include all necessary fields for event management. Follow frontend architecture patterns from docs/project-plan.md Phase 4 requirements.
 
-## 3. Build analytics aggregation and reporting endpoints [pending]
-### Dependencies: 15.1, 15.2
-### Description: Create API endpoints for analytics data aggregation and dashboard reporting
+## 3. Implement basic event management with vet appointments and vaccinations [pending]
+### Dependencies: 15.2
+### Description: Create basic event management functionality
 ### Details:
-Implement AnalyticsController with endpoints for breed comparison data, trend analysis results, and dashboard metrics. Create data aggregation services for generating summary statistics, alerts for unusual patterns, and export functionality for reports. Include caching for performance optimization. Follow DDD Application Layer patterns from docs/project-plan.md. Endpoint and aggregation method names should clearly indicate the type of analytics data being provided.
+Implement basic event management with vet appointments and vaccinations. Include proper event categorization and management. Follow frontend architecture patterns from docs/project-plan.md Phase 4 requirements.
 
+## 4. Create calendar view with event display [pending]
+### Dependencies: 15.3
+### Description: Build calendar view with proper event display
+### Details:
+Create calendar view with proper event display and visualization. Include event details and proper calendar navigation. Follow frontend architecture patterns from docs/project-plan.md Phase 4 requirements.

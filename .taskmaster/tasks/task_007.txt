@@ -1,48 +1,35 @@
 # Task ID: 7
-# Title: Implement shared type definitions
-# Status: done
-# Dependencies: 4
+# Title: Implement feeding backend module
+# Status: pending
+# Dependencies: 3, 4, 6
 # Priority: high
-# Description: Create comprehensive TypeScript types based on existing Supabase schema
+# Description: Create feeding schedules and tracking system
 # Details:
-Extract database types from existing types.ts into packages/shared/. Create API DTOs for request/response interfaces. Build Zod validation schemas for all data models. Define enums and constants. Export all types properly. All TypeScript interfaces and types must be self-explanatory through naming - no comments allowed.
+Build feeding schedules controller. Create feeding logs tracking service. Implement weight-based portion calculation algorithms. Build food types and assignments management. Create feeding history aggregation endpoints. All calculation logic must be expressed through clear algorithm names and structure.
 
 **MANDATORY DOCUMENTATION REFERENCES:**
-- Follow package structure and TypeScript configuration guidelines from docs/project-plan.md shared packages section
-- Implement validation using patterns from docs/testing-strategy.md with comprehensive testing coverage
-- Use environment-agnostic type definitions that work with configuration from docs/environment-variables.md
+- Implement DDD architecture with proper Domain Layer business logic as specified in docs/project-plan.md Phase 1
+- Follow environment configuration guidelines from docs/environment-variables.md for any external service integrations
+- Use AAA testing pattern with in-memory providers for business logic testing per docs/testing-strategy.md
 
 # Test Strategy:
-Types compile without errors, can be imported in frontend and backend, validation tests follow AAA pattern from docs/testing-strategy.md, and all type definitions are comment-free
+Feeding schedules create correctly, portion calculations are accurate, comprehensive testing follows AAA pattern from docs/testing-strategy.md, and business logic is self-documenting
 
 # Subtasks:
-## 1. Extract and reorganize Supabase database types [done]
+## 1. Build feeding schedules controller and management system [pending]
 ### Dependencies: None
-### Description: Move existing database types from types.ts to packages/shared/types/database.ts
+### Description: Create REST API endpoints for feeding schedule CRUD operations and food type management
 ### Details:
-Extract all Supabase-generated types from the existing types.ts file and organize them into a dedicated database types module in the shared package. Clean up and organize the type definitions for better maintainability. Follow packages/shared/ structure from docs/project-plan.md and implement proper TypeScript configuration. Use descriptive type names that eliminate need for comments.
+Implement feeding schedules controller with endpoints for creating, reading, updating, and deleting feeding schedules. Build food types management system with CRUD operations for different food items. Create food assignments linking pets to specific food types. Include validation for schedule conflicts and proper error handling. Follow DDD Infrastructure layer patterns from docs/project-plan.md.
 
-## 2. Create API DTO interfaces [done]
+## 2. Implement feeding logs tracking service and portion calculations [pending]
 ### Dependencies: 7.1
-### Description: Define request and response interfaces for all API endpoints
+### Description: Create feeding logs tracking system with weight-based portion calculation algorithms
 ### Details:
-Create comprehensive DTO (Data Transfer Object) interfaces for all API request and response payloads. Include user authentication, dog profiles, care plans, notifications, and other domain-specific DTOs. Follow DDD principles from docs/project-plan.md and ensure DTOs align with backend architecture. Use clear interface names that describe their purpose without requiring comments.
+Build feeding logs tracking service to record actual feeding events. Implement weight-based portion calculation algorithms that adjust serving sizes based on pet weight, age, and activity level. Create validation for feeding log entries and automatic portion recommendations. Include business logic for calculating optimal feeding amounts. Follow DDD Domain Services patterns from docs/project-plan.md.
 
-## 3. Build Zod validation schemas [done]
-### Dependencies: 7.1, 7.2
-### Description: Create Zod schemas for runtime validation of all data models
+## 3. Create feeding history aggregation endpoints [pending]
+### Dependencies: 7.2
+### Description: Build API endpoints for feeding history reports and analytics
 ### Details:
-Implement Zod validation schemas that correspond to the database types and API DTOs. Include proper validation rules for all fields, including optional fields, enums, and complex nested objects. Follow validation patterns from docs/testing-strategy.md and ensure schemas work with environment configuration from docs/environment-variables.md. Schema names and structure should be self-explanatory.
-
-## 4. Define application enums and constants [done]
-### Dependencies: 7.1
-### Description: Create shared enums and constants used across the application
-### Details:
-Define all application-wide enums (user roles, notification types, care plan statuses, etc.) and constants (validation limits, default values, configuration options) in a centralized location. Follow domain language principles from docs/project-plan.md DDD architecture. Use descriptive enum and constant names that convey meaning without comments.
-
-## 5. Configure package exports and TypeScript compilation [done]
-### Dependencies: 7.1, 7.2, 7.3, 7.4
-### Description: Set up proper package.json exports and TypeScript configuration for the shared types package
-### Details:
-Configure package.json with proper exports mapping, set up TypeScript compilation with appropriate tsconfig.json, ensure all types are properly exported and can be imported by both frontend and backend packages. Follow monorepo configuration guidelines from docs/project-plan.md. Configuration files should be self-explanatory through clear structure.
-
+Implement feeding history aggregation endpoints that provide comprehensive feeding analytics. Create endpoints for daily, weekly, and monthly feeding summaries. Build feeding pattern analysis and trend reporting. Include feeding compliance tracking and missed feeding alerts. Provide data export capabilities for feeding history. Follow DDD Application Layer patterns from docs/project-plan.md.
