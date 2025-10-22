@@ -1,39 +1,179 @@
 import { useState, useMemo, useRef, useEffect } from "react";
-import { Input } from "@wag-wise-mentor/ui/components/input";
 import { Label } from "@wag-wise-mentor/ui/components/label";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@wag-wise-mentor/ui/components/command";
-import { Popover, PopoverContent, PopoverTrigger } from "@wag-wise-mentor/ui/components/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@wag-wise-mentor/ui/components/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@wag-wise-mentor/ui/components/popover";
 import { Button } from "@wag-wise-mentor/ui/components/button";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const DOG_BREEDS = [
-  { value: "labrador-retriever", label: "Labrador Retriever", size: "Large", temperament: "Friendly, Active, Outgoing" },
-  { value: "golden-retriever", label: "Golden Retriever", size: "Large", temperament: "Intelligent, Friendly, Devoted" },
-  { value: "german-shepherd", label: "German Shepherd", size: "Large", temperament: "Confident, Courageous, Smart" },
-  { value: "french-bulldog", label: "French Bulldog", size: "Small", temperament: "Playful, Adaptable, Smart" },
-  { value: "bulldog", label: "Bulldog", size: "Medium", temperament: "Calm, Courageous, Friendly" },
-  { value: "poodle", label: "Poodle", size: "Medium", temperament: "Intelligent, Active, Elegant" },
-  { value: "beagle", label: "Beagle", size: "Small", temperament: "Friendly, Curious, Merry" },
-  { value: "rottweiler", label: "Rottweiler", size: "Large", temperament: "Loyal, Confident, Guardian" },
-  { value: "yorkshire-terrier", label: "Yorkshire Terrier", size: "Small", temperament: "Affectionate, Sprightly, Tomboyish" },
-  { value: "dachshund", label: "Dachshund", size: "Small", temperament: "Clever, Lively, Courageous" },
-  { value: "boxer", label: "Boxer", size: "Large", temperament: "Playful, Energetic, Bright" },
-  { value: "siberian-husky", label: "Siberian Husky", size: "Large", temperament: "Outgoing, Alert, Gentle" },
-  { value: "shih-tzu", label: "Shih Tzu", size: "Small", temperament: "Affectionate, Playful, Outgoing" },
-  { value: "doberman-pinscher", label: "Doberman Pinscher", size: "Large", temperament: "Loyal, Fearless, Alert" },
-  { value: "miniature-schnauzer", label: "Miniature Schnauzer", size: "Small", temperament: "Friendly, Smart, Obedient" },
-  { value: "great-dane", label: "Great Dane", size: "Extra Large", temperament: "Friendly, Patient, Dependable" },
-  { value: "pomeranian", label: "Pomeranian", size: "Small", temperament: "Inquisitive, Bold, Lively" },
-  { value: "australian-shepherd", label: "Australian Shepherd", size: "Medium", temperament: "Smart, Work-Oriented, Exuberant" },
-  { value: "pembroke-welsh-corgi", label: "Pembroke Welsh Corgi", size: "Small", temperament: "Affectionate, Smart, Alert" },
-  { value: "cocker-spaniel", label: "Cocker Spaniel", size: "Medium", temperament: "Gentle, Smart, Happy" },
-  { value: "border-collie", label: "Border Collie", size: "Medium", temperament: "Affectionate, Smart, Energetic" },
-  { value: "chihuahua", label: "Chihuahua", size: "Small", temperament: "Charming, Graceful, Sassy" },
-  { value: "pug", label: "Pug", size: "Small", temperament: "Charming, Mischievous, Loving" },
-  { value: "boston-terrier", label: "Boston Terrier", size: "Small", temperament: "Friendly, Bright, Amusing" },
-  { value: "maltese", label: "Maltese", size: "Small", temperament: "Gentle, Playful, Charming" },
-  { value: "mixed-breed", label: "Mixed Breed", size: "Varies", temperament: "Unique" },
+  {
+    value: "labrador-retriever",
+    label: "Labrador Retriever",
+    size: "Large",
+    temperament: "Friendly, Active, Outgoing",
+  },
+  {
+    value: "golden-retriever",
+    label: "Golden Retriever",
+    size: "Large",
+    temperament: "Intelligent, Friendly, Devoted",
+  },
+  {
+    value: "german-shepherd",
+    label: "German Shepherd",
+    size: "Large",
+    temperament: "Confident, Courageous, Smart",
+  },
+  {
+    value: "french-bulldog",
+    label: "French Bulldog",
+    size: "Small",
+    temperament: "Playful, Adaptable, Smart",
+  },
+  {
+    value: "bulldog",
+    label: "Bulldog",
+    size: "Medium",
+    temperament: "Calm, Courageous, Friendly",
+  },
+  {
+    value: "poodle",
+    label: "Poodle",
+    size: "Medium",
+    temperament: "Intelligent, Active, Elegant",
+  },
+  {
+    value: "beagle",
+    label: "Beagle",
+    size: "Small",
+    temperament: "Friendly, Curious, Merry",
+  },
+  {
+    value: "rottweiler",
+    label: "Rottweiler",
+    size: "Large",
+    temperament: "Loyal, Confident, Guardian",
+  },
+  {
+    value: "yorkshire-terrier",
+    label: "Yorkshire Terrier",
+    size: "Small",
+    temperament: "Affectionate, Sprightly, Tomboyish",
+  },
+  {
+    value: "dachshund",
+    label: "Dachshund",
+    size: "Small",
+    temperament: "Clever, Lively, Courageous",
+  },
+  {
+    value: "boxer",
+    label: "Boxer",
+    size: "Large",
+    temperament: "Playful, Energetic, Bright",
+  },
+  {
+    value: "siberian-husky",
+    label: "Siberian Husky",
+    size: "Large",
+    temperament: "Outgoing, Alert, Gentle",
+  },
+  {
+    value: "shih-tzu",
+    label: "Shih Tzu",
+    size: "Small",
+    temperament: "Affectionate, Playful, Outgoing",
+  },
+  {
+    value: "doberman-pinscher",
+    label: "Doberman Pinscher",
+    size: "Large",
+    temperament: "Loyal, Fearless, Alert",
+  },
+  {
+    value: "miniature-schnauzer",
+    label: "Miniature Schnauzer",
+    size: "Small",
+    temperament: "Friendly, Smart, Obedient",
+  },
+  {
+    value: "great-dane",
+    label: "Great Dane",
+    size: "Extra Large",
+    temperament: "Friendly, Patient, Dependable",
+  },
+  {
+    value: "pomeranian",
+    label: "Pomeranian",
+    size: "Small",
+    temperament: "Inquisitive, Bold, Lively",
+  },
+  {
+    value: "australian-shepherd",
+    label: "Australian Shepherd",
+    size: "Medium",
+    temperament: "Smart, Work-Oriented, Exuberant",
+  },
+  {
+    value: "pembroke-welsh-corgi",
+    label: "Pembroke Welsh Corgi",
+    size: "Small",
+    temperament: "Affectionate, Smart, Alert",
+  },
+  {
+    value: "cocker-spaniel",
+    label: "Cocker Spaniel",
+    size: "Medium",
+    temperament: "Gentle, Smart, Happy",
+  },
+  {
+    value: "border-collie",
+    label: "Border Collie",
+    size: "Medium",
+    temperament: "Affectionate, Smart, Energetic",
+  },
+  {
+    value: "chihuahua",
+    label: "Chihuahua",
+    size: "Small",
+    temperament: "Charming, Graceful, Sassy",
+  },
+  {
+    value: "pug",
+    label: "Pug",
+    size: "Small",
+    temperament: "Charming, Mischievous, Loving",
+  },
+  {
+    value: "boston-terrier",
+    label: "Boston Terrier",
+    size: "Small",
+    temperament: "Friendly, Bright, Amusing",
+  },
+  {
+    value: "maltese",
+    label: "Maltese",
+    size: "Small",
+    temperament: "Gentle, Playful, Charming",
+  },
+  {
+    value: "mixed-breed",
+    label: "Mixed Breed",
+    size: "Varies",
+    temperament: "Unique",
+  },
   { value: "other", label: "Other", size: "Varies", temperament: "Varies" },
 ];
 
@@ -55,17 +195,20 @@ export const BreedAutocomplete = ({
   const inputRef = useRef<HTMLInputElement>(null);
 
   const selectedBreed = useMemo(() => {
-    return DOG_BREEDS.find((breed) => breed.label.toLowerCase() === value.toLowerCase());
+    return DOG_BREEDS.find(
+      breed => breed.label.toLowerCase() === value.toLowerCase()
+    );
   }, [value]);
 
   const filteredBreeds = useMemo(() => {
     if (!searchQuery) return DOG_BREEDS;
 
     const query = searchQuery.toLowerCase();
-    return DOG_BREEDS.filter((breed) =>
-      breed.label.toLowerCase().includes(query) ||
-      breed.temperament.toLowerCase().includes(query) ||
-      breed.size.toLowerCase().includes(query)
+    return DOG_BREEDS.filter(
+      breed =>
+        breed.label.toLowerCase().includes(query) ||
+        breed.temperament.toLowerCase().includes(query) ||
+        breed.size.toLowerCase().includes(query)
     );
   }, [searchQuery]);
 
@@ -129,7 +272,7 @@ export const BreedAutocomplete = ({
                 )}
               </CommandEmpty>
               <CommandGroup>
-                {filteredBreeds.map((breed) => (
+                {filteredBreeds.map(breed => (
                   <CommandItem
                     key={breed.value}
                     value={breed.label}
@@ -156,8 +299,12 @@ export const BreedAutocomplete = ({
       </Popover>
       {selectedBreed && (
         <div className="text-sm text-muted-foreground mt-2 p-2 bg-muted rounded-md">
-          <p><strong>Size:</strong> {selectedBreed.size}</p>
-          <p><strong>Temperament:</strong> {selectedBreed.temperament}</p>
+          <p>
+            <strong>Size:</strong> {selectedBreed.size}
+          </p>
+          <p>
+            <strong>Temperament:</strong> {selectedBreed.temperament}
+          </p>
         </div>
       )}
     </div>
